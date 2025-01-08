@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(raylib-cpp-cmake-template CXX)
+project(BladeAndStone2 CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -81,14 +81,20 @@ target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 add_definitions( -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} )
 
 # Setting ASSETS_PATH
-if (CMAKE_BUILD_TYPE MATCHES "Debug")
-    SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -O0 -DDEBUG")
-
-    # Set the asset path macro to the absolute path on the dev machine
-    target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/")
+if (MSVC)
+    # Handle Debug and Release modes in Visual Studio
+    target_compile_definitions(${PROJECT_NAME} PRIVATE 
+        "$<$<CONFIG:Debug>:ASSETS_PATH=\"${CMAKE_CURRENT_SOURCE_DIR}/assets/\">"
+        "$<$<CONFIG:Release>:ASSETS_PATH=\"assets/\">"
+    )
 else()
-    # Set the asset path macro in release mode to a relative path that assumes the assets folder is in the same directory as the game executable
-    target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="./assets/")
+    # General handling for single-configuration generators
+    if (CMAKE_BUILD_TYPE MATCHES "Debug")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -DDEBUG")
+        target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/")
+    else()
+        target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="assets/")
+    endif()
 endif()
 
 # Set common compiler flags

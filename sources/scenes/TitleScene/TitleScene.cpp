@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 
 #include <raylib.h>
 
@@ -11,6 +12,7 @@ using namespace std;
 TitleScene::TitleScene()
 {
 	texture = LoadTexture(AppConstants::GetAssetPath("test.png").c_str());
+	std::cout <<"TESET:   " << AppConstants::GetAssetPath("").c_str()<<"   "<<std::endl;
 }
 
 TitleScene::~TitleScene()

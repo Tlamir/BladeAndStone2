@@ -6,4 +6,5 @@ enum Scenes
     UNSET,
     TITLE,
     GAME,
+    BladeAndStone
 };

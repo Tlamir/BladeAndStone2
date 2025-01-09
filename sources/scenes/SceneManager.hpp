@@ -3,6 +3,7 @@
 #include "BaseScene.hpp"
 #include "TitleScene/TitleScene.hpp"
 #include "GameScene/GameScene.hpp"
+#include "BladeAndStoneScene/BladeAndStoneScene.hpp"
 #include "Scenes.hpp"
 
 #include <memory>
@@ -47,6 +48,9 @@ void SceneManager::set_current_screen(Scenes screen)
 		break;
 	case GAME:
 		SceneManager::current_screen = std::make_unique<GameScene>();
+		break;
+	case BladeAndStone:
+		SceneManager::current_screen = std::make_unique<BladeAndStoneScene>();
 		break;
 	case NONE:
 		std::cerr << "Landed in NONE case for switch. This should never happen!" << std::endl;

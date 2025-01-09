@@ -25,7 +25,7 @@ Scenes TitleScene::update(float dt)
 {
 	if (IsKeyPressed(KEY_C))
 	{
-		return Scenes::GAME;
+		return Scenes::BladeAndStone;
 	}
 
 	return Scenes::NONE;

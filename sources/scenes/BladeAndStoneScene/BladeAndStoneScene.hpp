@@ -12,8 +12,13 @@ class BladeAndStoneScene:public BaseScene
 public:
 	BladeAndStoneScene();
 	~BladeAndStoneScene();
+	
 	std::unique_ptr<ldtk::Project> ldtkProject;
 	const ldtk::World* ldtkWorld{};
+	const ldtk::Level* currentLdtkLevel{};
+
+	Texture2D currentTilesetTexture;
+	Texture2D renderedLevelTexture;
 
 	void draw() override;
 	Scenes update(float dt) override;
@@ -22,6 +27,6 @@ public:
 
 private:
 
-	
+	void loadLevel();
 
 };

@@ -12,9 +12,13 @@ class BladeAndStoneScene:public BaseScene
 public:
 	BladeAndStoneScene();
 	~BladeAndStoneScene();
+	std::unique_ptr<ldtk::Project> ldtkProject;
+	const ldtk::World* ldtkWorld{};
 
 	void draw() override;
 	Scenes update(float dt) override;
+	
+
 
 private:
 

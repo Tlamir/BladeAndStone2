@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const int ScreenScale = 2;
+const int ScreenScale = 3;
 namespace GameConstants
 {
     const int WorldWidth = 256;

@@ -1,4 +1,4 @@
-#include <memory> 
+#include <memory>
 #include <raylib.h>
 #include <box2d/box2d.h>
 #include <LDtkLoader/Project.hpp>
@@ -13,10 +13,31 @@
 #include "../Scenes.hpp"
 
 #include "./entities/BaseEntity.hpp"
+#include <raymath.h>
+
+// Character attributes
+Vector2 characterPosition = { AppConstants::ScreenWidth / 2, AppConstants::ScreenHeight / 2 }; // Initial position
+float characterSpeed = 200.0f;            // Movement speed
+
+// Camera system
+Camera2D camera = { 0 };
+
+// Map size (to limit movement)
+float mapWidth = 0.0f;
+float mapHeight = 0.0f;
 
 BladeAndStoneScene::BladeAndStoneScene()
 {
     loadLevel();
+
+    // Initialize camera
+    camera.target = characterPosition;   // Camera focuses on the character
+    camera.offset = { 128, 128 };
+    camera.zoom = 1.0f;                  // Default zoom level
+
+    // Set map size (retrieved from LDtk level)
+    mapWidth = currentLdtkLevel->size.x;
+    mapHeight = currentLdtkLevel->size.y;
 }
 
 BladeAndStoneScene::~BladeAndStoneScene()
@@ -25,90 +46,72 @@ BladeAndStoneScene::~BladeAndStoneScene()
 
 void BladeAndStoneScene::draw()
 {
-	ClearBackground(RAYWHITE);
+    ClearBackground(RAYWHITE);
 
-	//DrawRectangle(20, 20, 20, 20, RED);
+    BeginMode2D(camera); // Start drawing with the camera applied
 
-	for (auto&& layer : currentLdtkLevel->allLayers())
-	{
-		if (layer.hasTileset())
-		{
-			cout << "Drawing Test" << AppConstants::GetAssetPath("BladeAndStoneAssets/" + layer.getTileset().path) << std::endl;
+    // Draw level tiles
+    for (auto&& layer : currentLdtkLevel->allLayers())
+    {
+        if (layer.hasTileset())
+        {
+            currentTilesetTexture = LoadTexture(AppConstants::GetAssetPath("BladeAndStoneAssets/" + layer.getTileset().path).c_str());
+            // If it's a tile layer, draw every tile to the frame buffer
+            for (auto&& tile : layer.allTiles())
+            {
+                auto source_pos = tile.getTextureRect();
+                auto tile_size = float(layer.getTileset().tile_size);
 
+                Rectangle source_rect = {
+                    .x = float(source_pos.x),
+                    .y = float(source_pos.y),
+                    .width = tile.flipX ? -tile_size : tile_size,
+                    .height = tile.flipY ? -tile_size : tile_size,
+                };
 
-			currentTilesetTexture = LoadTexture(AppConstants::GetAssetPath("BladeAndStoneAssets/" + layer.getTileset().path).c_str());
-			// if it is a tile layer then draw every tile to the frame buffer
-			for (auto&& tile : layer.allTiles())
-			{
-				auto source_pos = tile.getTextureRect();
-				auto tile_size = float(layer.getTileset().tile_size);
+                Vector2 target_pos = {
+                    (float)tile.getPosition().x,
+                    (float)tile.getPosition().y,
+                };
 
-				Rectangle source_rect = {
-					.x = float(source_pos.x),
-					.y = float(source_pos.y),
-					.width = tile.flipX ? -tile_size : tile_size,
-					.height = tile.flipY ? -tile_size : tile_size,
-				};
+                DrawTextureRec(currentTilesetTexture, source_rect, target_pos, WHITE);
+            }
+        }
+    }
 
-				Vector2 target_pos = {
-					(float)tile.getPosition().x,
-					(float)tile.getPosition().y,
-				};
+    // Draw character (fixed at the center of the screen)
+    DrawCircleV(characterPosition, 10, RED); // Character as a red circle
 
-				DrawTextureRec(currentTilesetTexture, source_rect, target_pos, WHITE);
-			}
-		}
-	}
-    
+    EndMode2D(); // End drawing with the camera applied
 }
+
 Scenes BladeAndStoneScene::update(float dt)
 {
-	return Scenes::NONE;
+    // Handle input for character movement
+    if (IsKeyDown(KEY_RIGHT)) characterPosition.x += characterSpeed * dt;
+    if (IsKeyDown(KEY_LEFT)) characterPosition.x -= characterSpeed * dt;
+    if (IsKeyDown(KEY_UP)) characterPosition.y -= characterSpeed * dt;
+    if (IsKeyDown(KEY_DOWN)) characterPosition.y += characterSpeed * dt;
 
+    // Limit movement to the map boundaries
+    //characterPosition.x = Clamp(characterPosition.x, 0.0f, mapWidth);
+    //characterPosition.y = Clamp(characterPosition.y, 0.0f, mapHeight);
+
+    // Update camera to follow the character
+    camera.target = characterPosition;
+
+    return Scenes::NONE;
 }
+
 void BladeAndStoneScene::loadLevel()
 {
     ldtkProject = std::make_unique<ldtk::Project>();
-    // Get ldtk map
+    // Get LDtk map
     ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneAssets/BladeAndStoneMap.ldtk"));
     // Get world
     ldtkWorld = &ldtkProject->getWorld();
-    // Get ldtk level
+    // Get LDtk level
     currentLdtkLevel = &ldtkWorld->getLevel("Level_0");
     // Get ground layer
     auto bg_layer = currentLdtkLevel->getLayer("Ground").getTileset();
-    
-   
-
-	// Draw all tileset layers
-	for (auto&& layer : currentLdtkLevel->allLayers())
-	{
-		if (layer.hasTileset())
-		{
-			cout << "Drawing Test" << AppConstants::GetAssetPath("BladeAndStoneAssets/" + layer.getTileset().path) << std::endl;
-		
-
-			currentTilesetTexture = LoadTexture(AppConstants::GetAssetPath("BladeAndStoneAssets/" + layer.getTileset().path).c_str());
-			// if it is a tile layer then draw every tile to the frame buffer
-			for (auto&& tile : layer.allTiles())
-			{
-				auto source_pos = tile.getTextureRect();
-				auto tile_size = float(layer.getTileset().tile_size);
-
-				Rectangle source_rect = {
-					.x = float(source_pos.x),
-					.y = float(source_pos.y),
-					.width = tile.flipX ? -tile_size : tile_size,
-					.height = tile.flipY ? -tile_size : tile_size,
-				};
-
-				Vector2 target_pos = {
-					(float)tile.getPosition().x,
-					(float)tile.getPosition().y,
-				};
-
-				DrawTextureRec(currentTilesetTexture, source_rect, target_pos, WHITE);
-			}
-		}
-	}
 }

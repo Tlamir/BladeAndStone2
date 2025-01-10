@@ -20,7 +20,7 @@ std::unique_ptr<Player> GameScene::player = nullptr;
 std::unique_ptr<b2World> GameScene::world = nullptr;
 
 Vector2 characterPosition2 = { AppConstants::ScreenWidth / 2, AppConstants::ScreenHeight / 2 }; // Initial position
-float characterSpeed2 = 26.6f;            // Movement speed //Adjust CameraSpeed to character speed later !!
+float characterSpeed2 = 37.24f;            // Movement speed //Adjust CameraSpeed to character speed later !!
 
 // Camera system
 Camera2D camera2 = { 0 };

@@ -168,7 +168,7 @@ void Player::set_velocity_xy(float vx, float vy)
 
 void Player::check_if_move()
 {
-    const auto effective_speed = 5.0f;
+    const auto effective_speed = 7.0f;
 
     float vx = 0.0f;
     float vy = 0.0f;

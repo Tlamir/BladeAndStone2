@@ -468,6 +468,70 @@
 							"fieldInstances": [],
 							"__worldX": 16,
 							"__worldY": 16
+						},
+						{
+							"__identifier": "Wall",
+							"__grid": [22,22],
+							"__pivot": [0,0],
+							"__tags": ["Walls"],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "a1f982b0-c210-11ef-91c6-0d66eed4ff12",
+							"width": 58,
+							"height": 34,
+							"defUid": 8,
+							"px": [354,365],
+							"fieldInstances": [],
+							"__worldX": 82,
+							"__worldY": 125
+						},
+						{
+							"__identifier": "Wall",
+							"__grid": [26,18],
+							"__pivot": [0,0],
+							"__tags": ["Walls"],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "b18d1700-c210-11ef-91c6-fdd923fd7dfc",
+							"width": 28,
+							"height": 27,
+							"defUid": 8,
+							"px": [418,290],
+							"fieldInstances": [],
+							"__worldX": 146,
+							"__worldY": 50
+						},
+						{
+							"__identifier": "Wall",
+							"__grid": [38,29],
+							"__pivot": [0,0],
+							"__tags": ["Walls"],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "bab30240-c210-11ef-91c6-39fc5259781c",
+							"width": 28,
+							"height": 30,
+							"defUid": 8,
+							"px": [610,465],
+							"fieldInstances": [],
+							"__worldX": 338,
+							"__worldY": 225
+						},
+						{
+							"__identifier": "Wall",
+							"__grid": [23,25],
+							"__pivot": [0,0],
+							"__tags": ["Walls"],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "f972b2f0-c210-11ef-b826-2dcd462a50e4",
+							"width": 32,
+							"height": 32,
+							"defUid": 8,
+							"px": [368,400],
+							"fieldInstances": [],
+							"__worldX": 96,
+							"__worldY": 160
 						}
 					]
 				},
@@ -497,7 +561,7 @@
 					"entityInstances": [
 						{
 							"__identifier": "Player",
-							"__grid": [26,21],
+							"__grid": [26,23],
 							"__pivot": [0,0],
 							"__tags": ["Actors"],
 							"__tile": { "tilesetUid": 5, "x": 0, "y": 240, "w": 16, "h": 16 },
@@ -506,10 +570,10 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 4,
-							"px": [416,336],
+							"px": [416,368],
 							"fieldInstances": [],
 							"__worldX": 144,
-							"__worldY": 96
+							"__worldY": 128
 						}
 					]
 				},

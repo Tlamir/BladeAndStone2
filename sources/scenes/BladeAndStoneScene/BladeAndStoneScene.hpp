@@ -1,11 +1,12 @@
 #pragma once
-#include <box2d/box2d.h>
 #include <raylib.h>
 #include <LDtkLoader/Project.hpp>
 #include <LDtkLoader/World.hpp>
 
 #include "../BaseScene.hpp"
 #include "../Scenes.hpp"
+
+#include "../../entities/Player/PlayerCharacter.hpp"
 
 class BladeAndStoneScene:public BaseScene
 {
@@ -14,6 +15,8 @@ public:
 	~BladeAndStoneScene();
 	
 	std::unique_ptr<ldtk::Project> ldtkProject;
+	static std::unique_ptr<PlayerCharacter> player;
+
 	const ldtk::World* ldtkWorld{};
 	const ldtk::Level* currentLdtkLevel{};
 

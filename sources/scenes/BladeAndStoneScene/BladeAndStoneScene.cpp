@@ -4,12 +4,12 @@
 #include <LDtkLoader/Project.hpp>
 #include <LDtkLoader/World.hpp>
 #include <fmt/core.h>
+#include <iostream>
 
 #include <Constants.hpp>
 #include <utils/DebugUtils.hpp>
 
 #include "BladeAndStoneScene.hpp"
-#include "../../physics/PhysicsTypes.hpp"
 #include "../Scenes.hpp"
 
 #include "./entities/BaseEntity.hpp"
@@ -18,6 +18,7 @@
 // Character attributes
 Vector2 characterPosition = { AppConstants::ScreenWidth / 2, AppConstants::ScreenHeight / 2 }; // Initial position
 float characterSpeed = 200.0f;            // Movement speed
+std::unique_ptr<PlayerCharacter> BladeAndStoneScene::player = nullptr;
 
 // Camera system
 Camera2D camera = { 0 };
@@ -50,9 +51,10 @@ void BladeAndStoneScene::draw()
 
     BeginMode2D(camera); // Start drawing with the camera applied
 
-    // Draw level tiles
+    // Fetch layers
     for (auto&& layer : currentLdtkLevel->allLayers())
-    {
+    {   
+        // Draw layers with tileset
         if (layer.hasTileset())
         {
             currentTilesetTexture = LoadTexture(AppConstants::GetAssetPath("BladeAndStoneAssets/" + layer.getTileset().path).c_str());
@@ -77,11 +79,30 @@ void BladeAndStoneScene::draw()
                 DrawTextureRec(currentTilesetTexture, source_rect, target_pos, WHITE);
             }
         }
+
+        // get entity positions
+        DebugUtils::println("Entities in level:");
+        for (auto&& entity : currentLdtkLevel->getLayer("Entities").allEntities())
+        {
+            DebugUtils::println("  - {}", entity.getName());
+            if (entity.getName() == "Player")
+            {
+                player->level_spawn_position.x= entity.getPosition().x;
+                player->level_spawn_position.y= entity.getPosition().y;
+            }
+
+           // Implement wall colision layer here
+        }
+
+        
+
+
     }
+    //Draw Character
+    player->draw();
 
     // Draw character (fixed at the center of the screen)
-    DrawCircleV(characterPosition, 10, RED); // Character as a red circle
-
+    //DrawCircleV(characterPosition, 10, RED); // Character as a red circle
     EndMode2D(); // End drawing with the camera applied
 }
 
@@ -110,8 +131,10 @@ void BladeAndStoneScene::loadLevel()
     ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneAssets/BladeAndStoneMap.ldtk"));
     // Get world
     ldtkWorld = &ldtkProject->getWorld();
+    // Get player
+    player = std::make_unique<PlayerCharacter>();
     // Get LDtk level
     currentLdtkLevel = &ldtkWorld->getLevel("Level_0");
     // Get ground layer
-    auto bg_layer = currentLdtkLevel->getLayer("Ground").getTileset();
+    //auto bg_layer = currentLdtkLevel->getLayer("Ground").getTileset();
 }

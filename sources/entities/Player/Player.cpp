@@ -4,7 +4,6 @@
 #include <math.h>
 
 #include <raylib.h>
-#include <box2d/box2d.h>
 
 #include <LDtkLoader/World.hpp>
 

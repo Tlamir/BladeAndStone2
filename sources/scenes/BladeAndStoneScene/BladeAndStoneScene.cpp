@@ -80,23 +80,32 @@ void BladeAndStoneScene::draw()
             }
         }
 
-        // get entity positions
-        DebugUtils::println("Entities in level:");
-        for (auto&& entity : currentLdtkLevel->getLayer("Entities").allEntities())
+    }
+    // get entity Actor positions
+    DebugUtils::println("Entities in level:");
+    for (auto&& entity : currentLdtkLevel->getLayer("Actors").allEntities())
+    {
+        DebugUtils::println("  - {}", entity.getName());
+        if (entity.getName() == "Player")
         {
-            DebugUtils::println("  - {}", entity.getName());
-            if (entity.getName() == "Player")
-            {
-                player->level_spawn_position.x= entity.getPosition().x;
-                player->level_spawn_position.y= entity.getPosition().y;
-            }
-
-           // Implement wall colision layer here
+            //player->level_spawn_position.x= entity.getPosition().x;
+            //player->level_spawn_position.y= entity.getPosition().y;
         }
 
-        
+       // Implement wall colision layer here
+    }
+    // get entity Wall positions
+    DebugUtils::println("Entities in level:");
+    for (auto&& entity : currentLdtkLevel->getLayer("Collision").allEntities())
+    {
+        DebugUtils::println("  - {}", entity.getName());
+        if (entity.getName() == "Wall")
+        {
+            //player->level_spawn_position.x= entity.getPosition().x;
+            //player->level_spawn_position.y= entity.getPosition().y;
+        }
 
-
+        // Implement wall colision layer here
     }
     //Draw Character
     player->draw();

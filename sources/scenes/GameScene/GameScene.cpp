@@ -19,12 +19,22 @@ using namespace std;
 std::unique_ptr<Player> GameScene::player = nullptr;
 std::unique_ptr<b2World> GameScene::world = nullptr;
 
+Vector2 characterPosition2 = { AppConstants::ScreenWidth / 2, AppConstants::ScreenHeight / 2 }; // Initial position
+float characterSpeed2 = 20.0f;            // Movement speed
+
+// Camera system
+Camera2D camera2 = { 0 };
+
 GameScene::GameScene()
 {
-    player = std::make_unique<Player>();
-    ldtkProject = std::make_unique<ldtk::Project>();
+	// Initialize camera
+	camera2.target = characterPosition2;   // Camera focuses on the character
+	camera2.offset = { 128, 128 };
+	camera2.zoom = 1.0f;
+	player = std::make_unique<Player>();
+	ldtkProject = std::make_unique<ldtk::Project>();
 
-	ldtkProject->loadFromFile(AppConstants::GetAssetPath("world.ldtk"));
+	ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneAssets/BladeAndStoneMap.ldtk"));
 
 	ldtkWorld = &ldtkProject->getWorld();
 
@@ -46,6 +56,13 @@ Scenes GameScene::update(float dt)
 
 	world->Step(timeStep, velocityIterations, positionIterations);
 
+	if (IsKeyDown(KEY_RIGHT)) characterPosition2.x += characterSpeed2 * dt;
+	if (IsKeyDown(KEY_LEFT)) characterPosition2.x -= characterSpeed2 * dt;
+	if (IsKeyDown(KEY_UP)) characterPosition2.y -= characterSpeed2 * dt;
+	if (IsKeyDown(KEY_DOWN)) characterPosition2.y += characterSpeed2 * dt;
+
+	camera2.target = characterPosition2; // Update camera to follow character
+
 	player->update(dt);
 
 	return Scenes::NONE;
@@ -54,11 +71,15 @@ Scenes GameScene::update(float dt)
 void GameScene::draw()
 {
 	ClearBackground(RAYWHITE);
+	BeginMode2D(camera2); // Start drawing with the camera applied
+
 	DrawTextureRec(renderedLevelTexture,
-				   {0, 0, (float)renderedLevelTexture.width, (float)-renderedLevelTexture.height},
-				   {0, 0}, WHITE);
+		{ 0, 0, (float)renderedLevelTexture.width, (float)-renderedLevelTexture.height },
+		{ 0, 0 }, WHITE);
 
 	player->draw();
+
+	EndMode2D();
 
 	// DEBUG stuff
 	DebugUtils::draw_physics_objects_bounding_boxes(world.get());
@@ -79,8 +100,8 @@ void GameScene::set_selected_level(int lvl)
 		world = nullptr;
 	}
 
-	b2Vec2 gravity(0.0f, 60.0f);
-    world = std::make_unique<b2World>(gravity);
+	b2Vec2 gravity(0.0f, 0.0f);
+	world = std::make_unique<b2World>(gravity);
 
 	current_level = lvl;
 
@@ -89,12 +110,12 @@ void GameScene::set_selected_level(int lvl)
 	DebugUtils::println("----------------------------------------------");
 	DebugUtils::println("Loaded LDTK map with {}  levels in it", ldtkWorld->allLevels().size());
 	DebugUtils::println("The loaded level is {} and it has {} layers", current_level, currentLdtkLevel->allLayers().size());
-	for (auto &&layer : currentLdtkLevel->allLayers())
+	for (auto&& layer : currentLdtkLevel->allLayers())
 	{
 		DebugUtils::print("  - {}", layer.getName());
 	}
 
-	auto testTileLayerTileset = currentLdtkLevel->getLayer("TileLayer").getTileset();
+	auto testTileLayerTileset = currentLdtkLevel->getLayer("Ground").getTileset();
 
 	DebugUtils::println("The path to the tile layer tileset is: {}", testTileLayerTileset.path);
 	DebugUtils::println("----------------------------------------------");
@@ -116,19 +137,19 @@ void GameScene::set_selected_level(int lvl)
 		{
 			for (int j = 0; j <= (GameConstants::WorldHeight / backgroundTexture.height); j++)
 			{
-				DrawTextureV(backgroundTexture, {float(i * backgroundTexture.width), float(j * backgroundTexture.height)}, WHITE);
+				DrawTextureV(backgroundTexture, { float(i * backgroundTexture.width), float(j * backgroundTexture.height) }, WHITE);
 			}
 		}
 	}
 
 	// draw all tileset layers
-	for (auto &&layer : currentLdtkLevel->allLayers())
+	for (auto&& layer : currentLdtkLevel->allLayers())
 	{
 		if (layer.hasTileset())
 		{
-			currentTilesetTexture = LoadTexture(AppConstants::GetAssetPath(layer.getTileset().path).c_str());
+			currentTilesetTexture = LoadTexture(AppConstants::GetAssetPath("BladeAndStoneAssets/" + layer.getTileset().path).c_str());
 			// if it is a tile layer then draw every tile to the frame buffer
-			for (auto &&tile : layer.allTiles())
+			for (auto&& tile : layer.allTiles())
 			{
 				auto source_pos = tile.getTextureRect();
 				auto tile_size = float(layer.getTileset().tile_size);
@@ -155,7 +176,7 @@ void GameScene::set_selected_level(int lvl)
 
 	// get entity positions
 	DebugUtils::println("Entities in level:");
-	for (auto &&entity : currentLdtkLevel->getLayer("Entities").allEntities())
+	for (auto&& entity : currentLdtkLevel->getLayer("Actors").allEntities())
 	{
 		DebugUtils::println("  - {}", entity.getName());
 		if (entity.getName() == "Player")
@@ -172,7 +193,7 @@ void GameScene::set_selected_level(int lvl)
 
 	// create solid blocks on level
 	DebugUtils::println("Loading solid blocks in level:");
-	for (auto &&entity : currentLdtkLevel->getLayer("PhysicsEntities").allEntities())
+	for (auto&& entity : currentLdtkLevel->getLayer("Collision").allEntities())
 	{
 		// box2d width and height start from the center of the box
 		auto b2width = entity.getSize().x / 2.0f;
@@ -184,20 +205,20 @@ void GameScene::set_selected_level(int lvl)
 		b2BodyDef bodyDef;
 		bodyDef.userData.pointer = (uintptr_t)PhysicsTypes::SolidBlock.c_str();
 		bodyDef.position.Set(centerX / GameConstants::PhysicsWorldScale,
-							 centerY / GameConstants::PhysicsWorldScale);
+			centerY / GameConstants::PhysicsWorldScale);
 
-		b2Body *body = world->CreateBody(&bodyDef);
+		b2Body* body = world->CreateBody(&bodyDef);
 
 		b2PolygonShape groundBox;
 		groundBox.SetAsBox(b2width / GameConstants::PhysicsWorldScale,
-						   b2height / GameConstants::PhysicsWorldScale);
+			b2height / GameConstants::PhysicsWorldScale);
 
 		body->CreateFixture(&groundBox, 0.0f);
 
 		DebugUtils::println("  - x:{} y:{} width:{} height:{}",
-							centerX,
-							centerY,
-							b2width,
-							b2height);
+			centerX,
+			centerY,
+			b2width,
+			b2height);
 	}
 }

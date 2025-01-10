@@ -57,10 +57,10 @@ Scenes GameScene::update(float dt)
 
 	world->Step(timeStep, velocityIterations, positionIterations);
 
-	if (IsKeyDown(KEY_RIGHT)) characterPosition2.x += characterSpeed2 * dt;
-	if (IsKeyDown(KEY_LEFT)) characterPosition2.x -= characterSpeed2 * dt;
-	if (IsKeyDown(KEY_UP)) characterPosition2.y -= characterSpeed2 * dt;
-	if (IsKeyDown(KEY_DOWN)) characterPosition2.y += characterSpeed2 * dt;
+	if (IsKeyDown(KEY_RIGHT) && player->isMovingX) characterPosition2.x += characterSpeed2 * dt;
+	if (IsKeyDown(KEY_LEFT) && player->isMovingX) characterPosition2.x -= characterSpeed2 * dt;
+	if (IsKeyDown(KEY_UP) && player->isMovingY) characterPosition2.y -= characterSpeed2 * dt;
+	if (IsKeyDown(KEY_DOWN) && player->isMovingY) characterPosition2.y += characterSpeed2 * dt;
 
 	camera2.target = characterPosition2; // Update camera to follow character
 
@@ -213,6 +213,7 @@ void GameScene::set_selected_level(int lvl)
 		b2PolygonShape groundBox;
 		groundBox.SetAsBox(b2width / GameConstants::PhysicsWorldScale,
 			b2height / GameConstants::PhysicsWorldScale);
+		
 
 		body->CreateFixture(&groundBox, 0.0f);
 

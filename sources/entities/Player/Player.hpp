@@ -57,7 +57,8 @@ public:
     void draw() override;
 
     Vector2 get_position();
-    bool isMoving=false;
+    bool isMovingX=false;
+    bool isMovingY=false;
 
     void init_for_level(const ldtk::Entity *entity, b2World *physicsWorld);
 };

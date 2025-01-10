@@ -16,6 +16,8 @@
 #include "../../physics/RaycastUtils.hpp"
 
 using namespace std;
+auto spritePosX_LastFrame = 0.f;
+auto spritePosY_LastFrame = 0.f;
 
 Player::Player()
 {
@@ -75,6 +77,8 @@ void Player::update(float dt)
 
 void Player::draw()
 {
+    
+
     auto spritePosX = (body->GetPosition().x * GameConstants::PhysicsWorldScale) - 12;
     auto spritePosY = (body->GetPosition().y * GameConstants::PhysicsWorldScale) - 13;
 
@@ -92,6 +96,24 @@ void Player::draw()
         { 0, 0 },
         0.0f,
         WHITE);
+    if (spritePosX_LastFrame != spritePosX)
+    {
+        isMovingX = true;
+    }
+    else
+    {
+        isMovingX = false;
+    }
+    if (spritePosY_LastFrame != spritePosY)
+    {
+        isMovingY = true;
+    }
+    else
+    {
+        isMovingY = false;
+    }
+    spritePosX_LastFrame = spritePosX;
+    spritePosY_LastFrame = spritePosY;
 }
 
 

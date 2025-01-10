@@ -20,17 +20,14 @@ std::unique_ptr<Player> GameScene::player = nullptr;
 std::unique_ptr<b2World> GameScene::world = nullptr;
 
 Vector2 characterPosition2 = { AppConstants::ScreenWidth / 2, AppConstants::ScreenHeight / 2 }; // Initial position
-float characterSpeed2 = 26.6f;            // Movement speed //Adjust CameraSpeed to character speed later
+float characterSpeed2 = 26.6f;            // Movement speed //Adjust CameraSpeed to character speed later !!
 
 // Camera system
 Camera2D camera2 = { 0 };
 
 GameScene::GameScene()
 {
-	// Initialize camera
-	camera2.target = characterPosition2;   // Camera focuses on the character
-	camera2.offset = { 128, 128 };
-	camera2.zoom = 1.0f;
+	
 	player = std::make_unique<Player>();
 	ldtkProject = std::make_unique<ldtk::Project>();
 
@@ -39,6 +36,10 @@ GameScene::GameScene()
 	ldtkWorld = &ldtkProject->getWorld();
 
 	current_level = -1;
+	// Initialize camera
+	camera2.target = player->get_position();   // Camera focuses on the character
+	camera2.offset = {90.f,150.f};
+	camera2.zoom = 1.0f;
 	set_selected_level(0);
 }
 

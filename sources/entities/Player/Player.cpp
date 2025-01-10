@@ -94,6 +94,8 @@ void Player::draw()
         WHITE);
 }
 
+
+
 void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
 {
     auto pos = entity->getPosition();
@@ -149,6 +151,7 @@ void Player::check_if_move()
     float vx = 0.0f;
     float vy = 0.0f;
 
+
     if (IsKeyDown(KEY_LEFT))
     {
         vx -= effective_speed;
@@ -177,4 +180,10 @@ void Player::check_if_move()
 void Player::check_if_should_respawn()
 {
     // Placeholder for respawn logic
+}
+
+Vector2 Player::get_position()
+{
+    return Vector2(level_spawn_position.x, level_spawn_position.y);
+
 }

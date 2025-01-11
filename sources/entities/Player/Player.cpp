@@ -19,7 +19,7 @@ using namespace std;
 
 Player::Player()
 {
-    this->sprite = LoadTexture(AppConstants::GetAssetPath("BladeAndStoneAssets/Characters/fHero_.png").c_str());
+    this->sprite = LoadTexture(AppConstants::GetAssetPath("Characters/fHero_.png").c_str());
 
     
 

@@ -26,7 +26,7 @@ GameScene::GameScene()
     player = std::make_unique<Player>();
     ldtkProject = std::make_unique<ldtk::Project>();
 
-    ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneAssets/BladeAndStoneMap.ldtk"));
+    ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneMap.ldtk"));
 
     ldtkWorld = &ldtkProject->getWorld();
 
@@ -131,7 +131,7 @@ void GameScene::set_selected_level(int lvl)
     {
         if (layer.hasTileset())
         {
-            currentTilesetTexture = LoadTexture(AppConstants::GetAssetPath("BladeAndStoneAssets/" + layer.getTileset().path).c_str());
+            currentTilesetTexture = LoadTexture(AppConstants::GetAssetPath( layer.getTileset().path).c_str());
             // if it is a tile layer then draw every tile to the frame buffer
             for (auto&& tile : layer.allTiles())
             {
@@ -139,7 +139,7 @@ void GameScene::set_selected_level(int lvl)
                 auto tile_size = float(layer.getTileset().tile_size);
 
                 Rectangle source_rect = {
-                    .x = float(source_pos.x),
+                    .x = float(source_pos.x ),
                     .y = float(source_pos.y),
                     .width = tile.flipX ? -tile_size : tile_size,
                     .height = tile.flipY ? -tile_size : tile_size,

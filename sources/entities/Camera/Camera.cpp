@@ -13,7 +13,7 @@ GameCamera::GameCamera()
        128.f
     };
     camera.rotation = 0.0f;
-    camera.target = { 0.0f, 0.0f };
+    camera.target = { 100.0f, 100.0f };
 }
 
 void GameCamera::follow(const b2Vec2& target)

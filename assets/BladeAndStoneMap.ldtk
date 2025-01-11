@@ -397,7 +397,88 @@
 					"seed": 4824199,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": []
+					"entityInstances": [
+						{
+							"__identifier": "Wall",
+							"__grid": [13,10],
+							"__pivot": [0,0],
+							"__tags": ["Walls"],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "e3ad3ea0-c210-11ef-b48a-09570a298ffb",
+							"width": 16,
+							"height": 256,
+							"defUid": 8,
+							"px": [208,160],
+							"fieldInstances": [],
+							"__worldX": -64,
+							"__worldY": -80
+						},
+						{
+							"__identifier": "Wall",
+							"__grid": [14,25],
+							"__pivot": [0,0],
+							"__tags": ["Walls"],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "e5e97300-c210-11ef-b48a-f3d82429b9cc",
+							"width": 576,
+							"height": 16,
+							"defUid": 8,
+							"px": [224,400],
+							"fieldInstances": [],
+							"__worldX": -48,
+							"__worldY": 160
+						},
+						{
+							"__identifier": "Wall",
+							"__grid": [49,10],
+							"__pivot": [0,0],
+							"__tags": ["Walls"],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "e7d7d580-c210-11ef-b48a-c146f9523db7",
+							"width": 16,
+							"height": 240,
+							"defUid": 8,
+							"px": [784,160],
+							"fieldInstances": [],
+							"__worldX": 512,
+							"__worldY": -80
+						},
+						{
+							"__identifier": "Wall",
+							"__grid": [14,10],
+							"__pivot": [0,0],
+							"__tags": ["Walls"],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "ea60ca50-c210-11ef-b48a-99681acd0828",
+							"width": 560,
+							"height": 16,
+							"defUid": 8,
+							"px": [224,160],
+							"fieldInstances": [],
+							"__worldX": -48,
+							"__worldY": -80
+						},
+						{
+							"__identifier": "Wall",
+							"__grid": [17,17],
+							"__pivot": [0,0],
+							"__tags": ["Walls"],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "eddea670-c210-11ef-b48a-f32040547ce2",
+							"width": 32,
+							"height": 32,
+							"defUid": 8,
+							"px": [272,272],
+							"fieldInstances": [],
+							"__worldX": 0,
+							"__worldY": 32
+						}
+					]
 				},
 				{
 					"__identifier": "Actors",
@@ -438,6 +519,22 @@
 							"fieldInstances": [],
 							"__worldX": 64,
 							"__worldY": -32
+						},
+						{
+							"__identifier": "Wall",
+							"__grid": [17,17],
+							"__pivot": [0,0],
+							"__tags": ["Walls"],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "1ba3d540-c210-11ef-b48a-39bd0931a607",
+							"width": 26,
+							"height": 26,
+							"defUid": 8,
+							"px": [275,275],
+							"fieldInstances": [],
+							"__worldX": 3,
+							"__worldY": 35
 						}
 					]
 				},

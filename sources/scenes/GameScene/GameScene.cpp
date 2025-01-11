@@ -134,7 +134,7 @@ void GameScene::set_selected_level(int lvl)
             currentTilesetTexture = LoadTexture(AppConstants::GetAssetPath( layer.getTileset().path).c_str());
             // if it is a tile layer then draw every tile to the frame buffer
             for (auto&& tile : layer.allTiles())
-            {
+            {   
                 auto source_pos = tile.getTextureRect();
                 auto tile_size = float(layer.getTileset().tile_size);
 
@@ -149,7 +149,6 @@ void GameScene::set_selected_level(int lvl)
                     (float)tile.getPosition().x,
                     (float)tile.getPosition().y,
                 };
-
                 DrawTextureRec(currentTilesetTexture, source_rect, target_pos, WHITE);
             }
         }

@@ -21,13 +21,7 @@ Player::Player()
 {
     this->sprite = LoadTexture(AppConstants::GetAssetPath("BladeAndStoneAssets/Characters/fHero_.png").c_str());
 
-    // Initialize camera
-    camera.zoom = 1.0f;
-    camera.offset = {
-        128.f,
-        128.f
-    };
-    camera.rotation = 0.0f;
+    
 
     auto make_player_frame_rect = [](float frame_num) -> Rectangle
         {
@@ -90,8 +84,8 @@ void Player::update_camera()
         auto worldPos = body->GetPosition();
 
         // Update camera target to follow player in world coordinates
-        camera.target.x = worldPos.x * GameConstants::PhysicsWorldScale;
-        camera.target.y = worldPos.y * GameConstants::PhysicsWorldScale;
+        camera.follow(body->GetPosition());
+        camera.update();
     }
 }
 
@@ -147,9 +141,7 @@ void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
 
     body->CreateFixture(&fixtureDef);
 
-    // Set initial camera target to player spawn position
-    camera.target.x = static_cast<float>(pos.x);
-    camera.target.y = static_cast<float>(pos.y);
+   
 }
 
 void Player::set_velocity_x(float vx)

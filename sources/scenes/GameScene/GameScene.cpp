@@ -14,6 +14,8 @@
 
 #include "./entities/BaseEntity.hpp"
 
+#include<entities/Camera/Camera.hpp>
+
 using namespace std;
 
 std::unique_ptr<Player> GameScene::player = nullptr;
@@ -53,7 +55,7 @@ Scenes GameScene::update(float dt)
 void GameScene::draw()
 {
     ClearBackground(RAYWHITE);
-    BeginMode2D(player->get_camera()); // Use player's camera
+    BeginMode2D(player->get_camera().get_camera());
 
     DrawTextureRec(renderedLevelTexture,
         { 0, 0, (float)renderedLevelTexture.width, (float)-renderedLevelTexture.height },

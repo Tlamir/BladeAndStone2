@@ -6,6 +6,7 @@
 #include <raylib.h>
 #include <box2d/box2d.h>
 #include <LDtkLoader/Entity.hpp>
+#include<entities/Camera/Camera.hpp>
 
 using namespace std;
 
@@ -31,7 +32,7 @@ private:
     size_t current_anim_frame = 0;
     PlayerAnimationState anim_state = PlayerAnimationState::IDLE;
     unordered_map<PlayerAnimationState, vector<Rectangle>> animation_map;
-    Camera2D camera = { 0 };  // Added camera member
+    GameCamera camera;
 
     void set_velocity_x(float vx);
     void set_velocity_y(float vy);
@@ -49,6 +50,6 @@ public:
     void update(float dt) override;
     void draw() override;
     Vector2 get_position();
-    const Camera2D& get_camera() const { return camera; }  // Added camera getter
+    GameCamera& get_camera() { return camera; }
     void init_for_level(const ldtk::Entity* entity, b2World* physicsWorld);
 };

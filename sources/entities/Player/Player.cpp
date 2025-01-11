@@ -16,12 +16,18 @@
 #include "../../physics/RaycastUtils.hpp"
 
 using namespace std;
-auto spritePosX_LastFrame = 0.f;
-auto spritePosY_LastFrame = 0.f;
 
 Player::Player()
 {
     this->sprite = LoadTexture(AppConstants::GetAssetPath("BladeAndStoneAssets/Characters/fHero_.png").c_str());
+
+    // Initialize camera
+    camera.zoom = 1.0f;
+    camera.offset = {
+        128.f,
+        128.f
+    };
+    camera.rotation = 0.0f;
 
     auto make_player_frame_rect = [](float frame_num) -> Rectangle
         {
@@ -73,11 +79,25 @@ void Player::update(float dt)
 
     check_if_move();
     check_if_should_respawn();
+    update_camera();
+}
+
+void Player::update_camera()
+{
+    if (body)
+    {
+        // Get world position
+        auto worldPos = body->GetPosition();
+
+        // Update camera target to follow player in world coordinates
+        camera.target.x = worldPos.x * GameConstants::PhysicsWorldScale;
+        camera.target.y = worldPos.y * GameConstants::PhysicsWorldScale;
+    }
 }
 
 void Player::draw()
 {
-    
+    if (!body) return;
 
     auto spritePosX = (body->GetPosition().x * GameConstants::PhysicsWorldScale) - 12;
     auto spritePosY = (body->GetPosition().y * GameConstants::PhysicsWorldScale) - 13;
@@ -96,27 +116,7 @@ void Player::draw()
         { 0, 0 },
         0.0f,
         WHITE);
-    if (spritePosX_LastFrame != spritePosX)
-    {
-        isMovingX = true;
-    }
-    else
-    {
-        isMovingX = false;
-    }
-    if (spritePosY_LastFrame != spritePosY)
-    {
-        isMovingY = true;
-    }
-    else
-    {
-        isMovingY = false;
-    }
-    spritePosX_LastFrame = spritePosX;
-    spritePosY_LastFrame = spritePosY;
 }
-
-
 
 void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
 {
@@ -124,8 +124,11 @@ void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
 
     DebugUtils::println("Setting player position to x:{} and y:{}", pos.x, pos.y);
 
-    level_spawn_position = { (float)pos.x / GameConstants::PhysicsWorldScale,
-                            (float)pos.y / GameConstants::PhysicsWorldScale };
+    // Convert LDTK position to physics world position
+    level_spawn_position = {
+        static_cast<float>(pos.x) / GameConstants::PhysicsWorldScale,
+        static_cast<float>(pos.y) / GameConstants::PhysicsWorldScale
+    };
 
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
@@ -140,9 +143,13 @@ void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
     fixtureDef.density = 0.0001f;
-    fixtureDef.friction = 0.f; // Adjusted for smoother top-down movement
+    fixtureDef.friction = 0.f;
 
     body->CreateFixture(&fixtureDef);
+
+    // Set initial camera target to player spawn position
+    camera.target.x = static_cast<float>(pos.x);
+    camera.target.y = static_cast<float>(pos.y);
 }
 
 void Player::set_velocity_x(float vx)
@@ -172,7 +179,6 @@ void Player::check_if_move()
 
     float vx = 0.0f;
     float vy = 0.0f;
-
 
     if (IsKeyDown(KEY_LEFT))
     {
@@ -206,6 +212,16 @@ void Player::check_if_should_respawn()
 
 Vector2 Player::get_position()
 {
-    return Vector2(level_spawn_position.x, level_spawn_position.y);
-
+    if (body)
+    {
+        auto pos = body->GetPosition();
+        return Vector2{
+            pos.x * GameConstants::PhysicsWorldScale,
+            pos.y * GameConstants::PhysicsWorldScale
+        };
+    }
+    return Vector2{
+        level_spawn_position.x * GameConstants::PhysicsWorldScale,
+        level_spawn_position.y * GameConstants::PhysicsWorldScale
+    };
 }

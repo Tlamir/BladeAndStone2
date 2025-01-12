@@ -11,8 +11,7 @@ using namespace std;
 
 TitleScene::TitleScene()
 {
-	texture = LoadTexture(AppConstants::GetAssetPath("test.png").c_str());
-	std::cout <<"TESET:   " << AppConstants::GetAssetPath("").c_str()<<"   "<<std::endl;
+	texture = LoadTexture(AppConstants::GetAssetPath("TitleBackground.png").c_str());
 }
 
 TitleScene::~TitleScene()
@@ -35,29 +34,27 @@ void TitleScene::draw()
 {
 	ClearBackground(RAYWHITE);
 
-	auto draw_with_backdrop = [](const string& text, int x, int y, int fontSize, Color color, Color backdropColor) {
-		DrawText(text.c_str(), x + 1, y + 1, fontSize, backdropColor);
-		DrawText(text.c_str(), x, y, fontSize, color);
-	};
-
-	draw_with_backdrop("Press 'c' to play!", 10, 10, 30, GOLD, BLACK);
-
+	// Draw background image texture 
 
 	const int texture_x = GameConstants::WorldWidth / 2 - texture.width / 2;
 	const int texture_y = GameConstants::WorldHeight / 2 - texture.height / 2;
 	DrawTexture(texture, texture_x, texture_y, WHITE);
 
-	const string text = "This is the Title Scene";
+
+	// Draw title text
+
+	const string text = "BladeAndStone2";
 	const int text_width = MeasureText(text.c_str(), 20);
-	DrawText(text.c_str(), GameConstants::WorldWidth / 2 - text_width / 2, texture_y + texture.height + 20, 20, BLACK);
+	DrawText(text.c_str(), (GameConstants::WorldWidth-text_width)/2, GameConstants::WorldHeight / 10, 20, BLACK);
 
-	int mouseX = GetMouseX() / ScreenScale;
-	int mouseY = GetMouseY() / ScreenScale;
+	// Draw start text
 
-	int rectSize = GameConstants::WorldWidth / 20;
-	DrawRectangle(mouseX - rectSize / 2, mouseY - rectSize / 2, rectSize, rectSize, DARKPURPLE);
+	auto draw_with_backdrop = [](const string& text, int x, int y, int fontSize, Color color, Color backdropColor) {
+		DrawText(text.c_str(), x + 1, y + 1, fontSize, backdropColor);
+		DrawText(text.c_str(), x, y, fontSize, color);
+	};
 
-	DrawLine(mouseX, 0, mouseX, GameConstants::WorldHeight, SKYBLUE);
-	DrawLine(0, mouseY, GameConstants::WorldWidth, mouseY, GREEN);
+	draw_with_backdrop("Press 'c' to play!", GameConstants::WorldWidth/3, GameConstants::WorldHeight / 1.3, 10, GOLD, BLACK);
+
 }
 

@@ -19,5 +19,5 @@ public:
 private:
     Camera2D camera;
     float smooth_speed = 0.1f;
-    Vector2 target_position{ 0.0f, 0.0f };
+    Vector2 target_position{ 100.0f, 100.0f };
 };

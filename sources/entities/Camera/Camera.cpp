@@ -4,13 +4,9 @@
 GameCamera::GameCamera()
 {
     camera.zoom = 1.0f;
-   /* camera.offset = {
-        AppConstants::ScreenWidth / 2.0f,
-        AppConstants::ScreenHeight / 2.0f
-    };*/
     camera.offset = {
-       128.f,
-       128.f
+        GameConstants::WorldWidth/2,
+        GameConstants::WorldHeight/ 2
     };
     camera.rotation = 0.0f;
     camera.target = { 100.0f, 100.0f };

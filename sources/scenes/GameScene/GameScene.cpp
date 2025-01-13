@@ -1,4 +1,4 @@
-#include <memory> 
+#include <memory>
 #include <raylib.h>
 #include <box2d/box2d.h>
 #include <LDtkLoader/Project.hpp>
@@ -13,8 +13,7 @@
 #include "../Scenes.hpp"
 
 #include "./entities/BaseEntity.hpp"
-
-#include<entities/Camera/Camera.hpp>
+#include <entities/Camera/Camera.hpp>
 
 using namespace std;
 
@@ -61,17 +60,55 @@ void GameScene::draw()
         { 0, 0, (float)renderedLevelTexture.width, (float)-renderedLevelTexture.height },
         { 0, 0 }, WHITE);
 
+    // Draw solid blocks debug outlines
+    if (GameConstants::debugModeCollision)
+    {
+        if (world)
+        {
+            for (b2Body* body = world->GetBodyList(); body; body = body->GetNext())
+            {
+                // Check if this is a solid block by checking the user data
+                if (body->GetUserData().pointer &&
+                    (const char*)body->GetUserData().pointer == PhysicsTypes::SolidBlock)
+                {
+                    // Get the fixture (assuming one fixture per body for solid blocks)
+                    b2Fixture* fixture = body->GetFixtureList();
+                    if (fixture)
+                    {
+                        b2PolygonShape* polygonShape = (b2PolygonShape*)fixture->GetShape();
+                        if (polygonShape)
+                        {
+                            // Calculate the world position of the body
+                            b2Vec2 position = body->GetPosition();
+                            float posX = position.x * GameConstants::PhysicsWorldScale;
+                            float posY = position.y * GameConstants::PhysicsWorldScale;
+
+                            // Get the box dimensions
+                            float width = polygonShape->m_vertices[2].x * 2 * GameConstants::PhysicsWorldScale;
+                            float height = polygonShape->m_vertices[2].y * 2 * GameConstants::PhysicsWorldScale;
+
+                            // Draw the debug rectangle
+                            DrawRectangleLines(
+                                posX - (width / 2),  // Center the rectangle on the body position
+                                posY - (height / 2),
+                                width,
+                                height,
+                                GREEN  // Using green to distinguish from player's debug box
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
+   
+
     player->draw();
 
     EndMode2D();
-
-    // DEBUG stuff
-    DebugUtils::draw_physics_objects_bounding_boxes(world.get());
 }
-
 void GameScene::set_selected_level(int lvl)
 {
-    // unload current tileset texture if necessary
     if (current_level >= 0)
     {
         UnloadTexture(currentTilesetTexture);
@@ -79,8 +116,6 @@ void GameScene::set_selected_level(int lvl)
 
     if (world != nullptr)
     {
-        // if we had an old world then delete it and recreate
-        // a new one for the new level
         world = nullptr;
     }
 
@@ -92,7 +127,7 @@ void GameScene::set_selected_level(int lvl)
     currentLdtkLevel = &ldtkWorld->getLevel(current_level);
 
     DebugUtils::println("----------------------------------------------");
-    DebugUtils::println("Loaded LDTK map with {}  levels in it", ldtkWorld->allLevels().size());
+    DebugUtils::println("Loaded LDTK map with {} levels in it", ldtkWorld->allLevels().size());
     DebugUtils::println("The loaded level is {} and it has {} layers", current_level, currentLdtkLevel->allLayers().size());
     for (auto&& layer : currentLdtkLevel->allLayers())
     {
@@ -116,7 +151,6 @@ void GameScene::set_selected_level(int lvl)
         auto backgroundTexture = LoadTexture(AppConstants::GetAssetPath(backgroundPath.path.c_str()).c_str());
         SetTextureFilter(backgroundTexture, TEXTURE_FILTER_TRILINEAR);
 
-        // tile background texture to cover the whole frame buffer
         for (int i = 0; i <= (GameConstants::WorldWidth / backgroundTexture.width); i++)
         {
             for (int j = 0; j <= (GameConstants::WorldHeight / backgroundTexture.height); j++)
@@ -126,20 +160,18 @@ void GameScene::set_selected_level(int lvl)
         }
     }
 
-    // draw all tileset layers
     for (auto&& layer : currentLdtkLevel->allLayers())
     {
         if (layer.hasTileset())
         {
-            currentTilesetTexture = LoadTexture(AppConstants::GetAssetPath( layer.getTileset().path).c_str());
-            // if it is a tile layer then draw every tile to the frame buffer
+            currentTilesetTexture = LoadTexture(AppConstants::GetAssetPath(layer.getTileset().path).c_str());
             for (auto&& tile : layer.allTiles())
-            {   
+            {
                 auto source_pos = tile.getTextureRect();
                 auto tile_size = float(layer.getTileset().tile_size);
 
                 Rectangle source_rect = {
-                    .x = float(source_pos.x ),
+                    .x = float(source_pos.x),
                     .y = float(source_pos.y),
                     .width = tile.flipX ? -tile_size : tile_size,
                     .height = tile.flipY ? -tile_size : tile_size,
@@ -150,6 +182,25 @@ void GameScene::set_selected_level(int lvl)
                     (float)tile.getPosition().y,
                 };
                 DrawTextureRec(currentTilesetTexture, source_rect, target_pos, WHITE);
+
+                if (layer.getTileset().hasTagsEnum())
+                {
+                    const ldtk::Enum& tags_enum = layer.getTileset().getTagsEnum();
+
+                    const std::string tag_to_find = "Ground";
+                    if (tags_enum.hasTag(tag_to_find))
+                    {
+                        const ldtk::EnumValue& enum_value = tags_enum["Solid"];
+                        const std::vector<int>& tile_ids = layer.getTileset().getTilesWithTagEnum(enum_value);
+
+                        if (std::find(tile_ids.begin(), tile_ids.end(), tile.tileId) != tile_ids.end())
+                        {
+                            // Draw Enum locations if mode
+                            if(GameConstants::debugModeCollision) DrawRectangle(target_pos.x, target_pos.y, tile_size, tile_size, Fade(RED, 0.5f));
+                            create_solid_block(target_pos.x, target_pos.y, tile_size);
+                        }
+                    }
+                }
             }
         }
     }
@@ -157,7 +208,6 @@ void GameScene::set_selected_level(int lvl)
     EndTextureMode();
     renderedLevelTexture = renderTexture.texture;
 
-    // get entity positions
     DebugUtils::println("Entities in level:");
     for (auto&& entity : currentLdtkLevel->getLayer("Actors").allEntities())
     {
@@ -174,34 +224,44 @@ void GameScene::set_selected_level(int lvl)
         }
     }
 
-    // create solid blocks on level
     DebugUtils::println("Loading solid blocks in level:");
     for (auto&& entity : currentLdtkLevel->getLayer("Collision").allEntities())
     {
-        // box2d width and height start from the center of the box
         auto b2width = entity.getSize().x / 2.0f;
         auto b2height = entity.getSize().y / 2.0f;
 
         auto centerX = entity.getPosition().x + b2width;
         auto centerY = entity.getPosition().y + b2height;
 
-        b2BodyDef bodyDef;
-        bodyDef.userData.pointer = (uintptr_t)PhysicsTypes::SolidBlock.c_str();
-        bodyDef.position.Set(centerX / GameConstants::PhysicsWorldScale,
-            centerY / GameConstants::PhysicsWorldScale);
-
-        b2Body* body = world->CreateBody(&bodyDef);
-
-        b2PolygonShape groundBox;
-        groundBox.SetAsBox(b2width / GameConstants::PhysicsWorldScale,
-            b2height / GameConstants::PhysicsWorldScale);
-
-        body->CreateFixture(&groundBox, 0.0f);
-
-        DebugUtils::println("  - x:{} y:{} width:{} height:{}",
-            centerX,
-            centerY,
-            b2width,
-            b2height);
+        //create_solid_block(centerX, centerY, b2width, b2height);
     }
 }
+
+void GameScene::create_solid_block(float targetX, float targetY, float tileSize)
+{
+    // Convert to Box2D coordinates (center-based)
+    float halfSize = tileSize / 2.0f;
+    
+    // Adjust position to be at the center of the tile
+    float centerX = targetX + halfSize;
+    float centerY = targetY + halfSize;
+
+    b2BodyDef bodyDef;
+    bodyDef.userData.pointer = (uintptr_t)PhysicsTypes::SolidBlock.c_str();
+    bodyDef.position.Set(
+        centerX / GameConstants::PhysicsWorldScale,
+        centerY / GameConstants::PhysicsWorldScale
+    );
+
+    b2Body* body = world->CreateBody(&bodyDef);
+
+    b2PolygonShape groundBox;
+    groundBox.SetAsBox(
+        (tileSize / 2.0f) / GameConstants::PhysicsWorldScale,
+        (tileSize / 2.0f) / GameConstants::PhysicsWorldScale
+    );
+
+    body->CreateFixture(&groundBox, 0.0f);
+}
+
+

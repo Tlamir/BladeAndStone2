@@ -35,4 +35,8 @@ public:
     Scenes update(float dt) override;
 
     void set_selected_level(int lvl);
+
+    void create_solid_block(float targetX, float targetY, float tileSize);
+
+
 };

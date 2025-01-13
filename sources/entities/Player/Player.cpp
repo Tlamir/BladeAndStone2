@@ -156,7 +156,7 @@ void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
 	this->body = physicsWorld->CreateBody(&bodyDef);
 
 	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(0.6, 1.2);
+	dynamicBox.SetAsBox(0.6, 0.8);
 
 
 
@@ -198,24 +198,24 @@ void Player::check_if_move()
 	float vx = 0.0f;
 	float vy = 0.0f;
 
-	if (IsKeyDown(KEY_LEFT))
+	if (IsKeyDown(KEY_A))
 	{
 		vx -= effective_speed;
 		looking_right = false;
 	}
 
-	if (IsKeyDown(KEY_RIGHT))
+	if (IsKeyDown(KEY_D))
 	{
 		vx += effective_speed;
 		looking_right = true;
 	}
 
-	if (IsKeyDown(KEY_UP))
+	if (IsKeyDown(KEY_W))
 	{
 		vy -= effective_speed;
 	}
 
-	if (IsKeyDown(KEY_DOWN))
+	if (IsKeyDown(KEY_S))
 	{
 		vy += effective_speed;
 	}

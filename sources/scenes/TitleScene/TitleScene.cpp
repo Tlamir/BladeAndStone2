@@ -22,7 +22,7 @@ TitleScene::~TitleScene()
 
 Scenes TitleScene::update(float dt)
 {
-	if (IsKeyPressed(KEY_C))
+	if (IsKeyPressed(KEY_SPACE))
 	{
 		return Scenes::GAME;
 	}
@@ -54,7 +54,7 @@ void TitleScene::draw()
 		DrawText(text.c_str(), x, y, fontSize, color);
 	};
 
-	draw_with_backdrop("Press 'c' to play!", GameConstants::WorldWidth/3, GameConstants::WorldHeight / 1.3, 10, GOLD, BLACK);
+	draw_with_backdrop("Press 'SPACE' to play!", GameConstants::WorldWidth/4, GameConstants::WorldHeight / 1.3, 10, GOLD, BLACK);
 
 }
 

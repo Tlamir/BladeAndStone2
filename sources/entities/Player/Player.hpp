@@ -7,6 +7,7 @@
 #include <box2d/box2d.h>
 #include <LDtkLoader/Entity.hpp>
 #include<entities/Camera/Camera.hpp>
+#include<entities/Weapons/Weapon.hpp>
 
 using namespace std;
 
@@ -53,4 +54,5 @@ public:
     void adjustCollisionBox(const b2Vec2& offset);
     GameCamera& get_camera() { return camera; }
     void init_for_level(const ldtk::Entity* entity, b2World* physicsWorld);
+    static std::unique_ptr<Weapon> Sword;
 };

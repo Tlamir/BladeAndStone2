@@ -17,8 +17,14 @@
 
 using namespace std;
 
+std::unique_ptr<Weapon> Player::Sword = nullptr;
+
+
 Player::Player()
 {
+	Sword = std::make_unique<Weapon>();
+
+
 	this->sprite = LoadTexture(AppConstants::GetAssetPath("Characters/fHero_.png").c_str());
 
 
@@ -74,6 +80,9 @@ void Player::update(float dt)
 	check_if_move();
 	check_if_should_respawn();
 	update_camera();
+
+	// Handle player weapons
+	Sword->update(dt);
 }
 
 void Player::update_camera()
@@ -132,7 +141,10 @@ void Player::draw()
 		);
 	}
 
-
+	// Weapons draw
+	Sword->updatePosition(spritePosX, spritePosY,looking_right);
+	Sword->draw();
+	
 }
 
 void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
@@ -166,6 +178,10 @@ void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
 	fixtureDef.friction = 0.1f;
 
 	body->CreateFixture(&fixtureDef);
+
+	// Manage weapons
+
+	
 
 
 }

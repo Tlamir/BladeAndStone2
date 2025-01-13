@@ -4,6 +4,7 @@
 Weapon::Weapon()
 {
 	this->sprite = LoadTexture(AppConstants::GetAssetPath("Weapons/WeaponGem.png").c_str());
+    positonBuffer={ 4.f,18.f };
 	
 
 }
@@ -34,7 +35,7 @@ void Weapon::draw()
     sourceRec.width = sprite.width / tileAmout; // Width of one tile
     sourceRec.height = sprite.height / tileAmout; // Height of one tile
     Vector2 origin = { sourceRec.width, sourceRec.height };
-    Rectangle dest = { Position.x, Position.y, sourceRec.width, sourceRec.height };
+    Rectangle dest = { Position.x + positonBuffer.x, Position.y+positonBuffer.y, sourceRec.width, sourceRec.height };
     DrawTexturePro(sprite, sourceRec, dest, origin, rotation, WHITE);
 
 

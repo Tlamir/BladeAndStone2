@@ -17,6 +17,7 @@ private:
 	float rotation{0.f};
 	int tileAmout{ 4 };
 	bool isLookingRight{ false };
+	Vector2 positonBuffer{};
 
 
 };

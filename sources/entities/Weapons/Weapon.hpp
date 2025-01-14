@@ -1,31 +1,46 @@
 #pragma once
 #include"../BaseEntity.hpp"
 #include "raylib.h"
-class Weapon :public BaseEntity
+
+class Weapon : public BaseEntity
 {
 public:
-	Weapon(
-		Texture2D &weaponTexture,
-		Vector2 &positonBuffer,
-		float activationRotaion,
-		int textureGrid
-	);
+    Weapon(
+        Texture2D& weaponTexture,
+        Vector2& positonBuffer,
+        float activationRotaion,
+        int textureGrid,
+        float attackSpeed,
+        float attackReloadSpeed,
+        float attackWaitTime
+    );
 
-	~Weapon();
-	void update(float dt) override;
-	void draw() override;
-	void updatePosition(float posX, float posY, bool isLookingRight);
+    ~Weapon();
+    void update(float dt) override;
+    void draw() override;
+    void updatePosition(float posX, float posY, bool isLookingRight);
+    void Attack(float dt);
 
 private:
-	Texture2D sprite;
-	Vector2 Position{0.f,0.f};
-	float rotation{0.f};
-	int tileAmout{ 4 };
-	bool isLookingRight{ false };
-	Vector2 positonBuffer{};
-	Vector2 origin = {};
-	Rectangle destRec = {};
-	Rectangle sourceRec{};
+    Texture2D sprite;
+    // Player pos + pos buffer = weapon pos
+    Vector2 positonBuffer{};
+    Vector2 origin = {};
+    // Player pos
+    Vector2 position{ 0.f,0.f };
+    Rectangle destRec = {};
+    Rectangle sourceRec{};
+    int spriteGridSize{ 4 };
+    float attackRotation{ 0.f };
+    float rotationActive{ 0.f };
+    float attackSpeed{ 1.f };
+    float attackWaitingAtPeak{ 0.f };
+    float attackReloadSpeed{ 1.f };
+    bool isLookingRight{ false };
 
-
+    // Instance-specific state variables (no static)
+    float elapsedTime{ 0.0f };
+    bool isAttacking{ true };
+    bool isWaitingAtPeak{ false };
+    bool isReturning{ false };
 };

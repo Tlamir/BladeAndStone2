@@ -4,6 +4,7 @@
 #include <math.h>
 #include <memory>
 
+
 #include <raylib.h>
 
 #include <LDtkLoader/World.hpp>
@@ -83,6 +84,7 @@ void Player::update(float dt)
 
 	// Handle player weapons
 	Sword->update(dt);
+	Magic->update(dt);
 }
 
 void Player::update_camera()
@@ -212,7 +214,7 @@ void Player::set_velocity_xy(float vx, float vy)
 
 void Player::check_if_move()
 {
-	const auto effective_speed = 7.0f;
+	const auto effective_speed = 12.0f;
 
 	float vx = 0.0f;
 	float vy = 0.0f;
@@ -268,11 +270,11 @@ void Player::intializeInventory()
 	// Load the texture for the sword
 	Texture2D swordTexture = LoadTexture(AppConstants::GetAssetPath("Weapons/WeaponGem.png").c_str());
 	Vector2 swordPosBuffer{ 5.f,22.f };
-	Sword = std::make_unique<Weapon>(swordTexture, swordPosBuffer, -45.f, 4);
+	Sword = std::make_unique<Weapon>(swordTexture, swordPosBuffer, -140.f, 4,0.4f,2.1f,0.5f);
 
 	// Load the texture for the magic
 	Texture2D magicTexture = LoadTexture(AppConstants::GetAssetPath("Weapons/weapons_.png").c_str());
-	Vector2 magicPosBuffer{ 25.f,22.f };
-	Magic = std::make_unique<Weapon>(magicTexture, magicPosBuffer, -45.f, 5);
+	Vector2 magicPosBuffer{ 28.f,22.f };
+	Magic = std::make_unique<Weapon>(magicTexture, magicPosBuffer, 90.f, 5,0.2f,0.8f,0.1f);
 }
 

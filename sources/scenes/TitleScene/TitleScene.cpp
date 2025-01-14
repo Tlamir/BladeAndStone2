@@ -1,8 +1,6 @@
 #include <string>
 #include <iostream>
-
 #include <raylib.h>
-
 #include <Constants.hpp>
 #include "TitleScene.hpp"
 #include "../Scenes.hpp"
@@ -11,50 +9,53 @@ using namespace std;
 
 TitleScene::TitleScene()
 {
-	texture = LoadTexture(AppConstants::GetAssetPath("TitleBackground.png").c_str());
+    texture = LoadTexture(AppConstants::GetAssetPath("TitleBackground.png").c_str());
 }
 
 TitleScene::~TitleScene()
 {
-	UnloadTexture(texture);
+    UnloadTexture(texture);
 }
-
 
 Scenes TitleScene::update(float dt)
 {
-	if (IsKeyPressed(KEY_SPACE))
-	{
-		return Scenes::GAME;
-	}
+    if (IsKeyPressed(KEY_SPACE))
+    {
+        return Scenes::GAME;
+    }
 
-	return Scenes::NONE;
+    return Scenes::NONE;
 }
 
 void TitleScene::draw()
 {
-	ClearBackground(RAYWHITE);
+    ClearBackground(RAYWHITE);
 
-	// Draw background image texture 
+    // Draw background image texture (Centered)
+    const int textureX = (GameConstants::WorldWidth - texture.width) / 2;
+    const int textureY = (GameConstants::WorldHeight - texture.height) / 2;
+    DrawTexture(texture, textureX, textureY, WHITE);
 
-	const int texture_x = GameConstants::WorldWidth / 2 - texture.width / 2;
-	const int texture_y = GameConstants::WorldHeight / 2 - texture.height / 2;
-	DrawTexture(texture, texture_x, texture_y, WHITE);
+    // Draw title text (Centered)
+    const string titleText = "BladeAndStone2";
+    const int titleFontSize = 20;
+    const int titleTextWidth = MeasureText(titleText.c_str(), titleFontSize);
+    const int titleTextX = (GameConstants::WorldWidth - titleTextWidth) / 2;
+    const int titleTextY = GameConstants::WorldHeight / 10;
+    DrawText(titleText.c_str(), titleTextX, titleTextY, titleFontSize, BLACK);
 
+    // Helper lambda for drawing text with a backdrop
+    auto draw_with_backdrop = [](const string& text, int x, int y, int fontSize, Color textColor, Color backdropColor) {
+        DrawText(text.c_str(), x + 1, y + 1, fontSize, backdropColor);
+        DrawText(text.c_str(), x, y, fontSize, textColor);
+        };
 
-	// Draw title text
+    // Draw start text (Centered)
+    const string startText = "Press 'SPACE' to play!";
+    const int startFontSize = 20;
+    const int startTextWidth = MeasureText(startText.c_str(), startFontSize);
+    const int startTextX = (GameConstants::WorldWidth - startTextWidth) / 2;
+    const int startTextY = GameConstants::WorldHeight / 1.3f;
 
-	const string text = "BladeAndStone2";
-	const int text_width = MeasureText(text.c_str(), 20);
-	DrawText(text.c_str(), (GameConstants::WorldWidth-text_width)/2, GameConstants::WorldHeight / 10, 20, BLACK);
-
-	// Draw start text
-
-	auto draw_with_backdrop = [](const string& text, int x, int y, int fontSize, Color color, Color backdropColor) {
-		DrawText(text.c_str(), x + 1, y + 1, fontSize, backdropColor);
-		DrawText(text.c_str(), x, y, fontSize, color);
-	};
-
-	draw_with_backdrop("Press 'SPACE' to play!", GameConstants::WorldWidth/4, GameConstants::WorldHeight / 1.3, 10, GOLD, BLACK);
-
+    draw_with_backdrop(startText, startTextX, startTextY, startFontSize, GOLD, BLACK);
 }
-

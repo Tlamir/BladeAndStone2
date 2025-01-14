@@ -1,5 +1,5 @@
 #pragma once
-#include"../BaseEntity.hpp"
+#include "../BaseEntity.hpp"
 #include "raylib.h"
 
 class Weapon : public BaseEntity

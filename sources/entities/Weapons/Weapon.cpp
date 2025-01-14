@@ -1,17 +1,17 @@
 #include "Weapon.hpp"
 #include "Constants.hpp"
 
-Weapon::Weapon()
+Weapon::Weapon(Texture2D& weaponTexture, Vector2& positonBuffer, float activationRotaion, int textureGrid)
 {
-	this->sprite = LoadTexture(AppConstants::GetAssetPath("Weapons/WeaponGem.png").c_str());
-    positonBuffer={ 4.f,18.f };
-	
-
+    this->sprite = weaponTexture;
+    this->positonBuffer = positonBuffer;
+    rotation = activationRotaion;
+    tileAmout = textureGrid;   
 }
 
 Weapon::~Weapon()
 {
-
+    UnloadTexture(this->sprite);
 }
 
 void Weapon::update(float dt)
@@ -30,8 +30,6 @@ void Weapon::draw()
 {
     // Fix later weapon pos
     Rectangle sourceRec{0,0};
-    int bufferX = 25;
-    int bufferY = 5;
     sourceRec.width = sprite.width / tileAmout; // Width of one tile
     sourceRec.height = sprite.height / tileAmout; // Height of one tile
     Vector2 origin = { sourceRec.width, sourceRec.height };

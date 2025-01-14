@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <vector>
 #include <math.h>
+#include <memory>
 
 #include <raylib.h>
 
@@ -22,12 +23,10 @@ std::unique_ptr<Weapon> Player::Sword = nullptr;
 
 Player::Player()
 {
-	Sword = std::make_unique<Weapon>();
-
-
+	
+	intializeInventory();
+	// Load player sprite
 	this->sprite = LoadTexture(AppConstants::GetAssetPath("Characters/fHero_.png").c_str());
-
-
 
 	auto make_player_frame_rect = [](float frame_num) -> Rectangle
 		{
@@ -142,9 +141,9 @@ void Player::draw()
 	}
 
 	// Weapons draw
-	Sword->updatePosition(spritePosX, spritePosY,looking_right);
+	Sword->updatePosition(spritePosX, spritePosY, looking_right);
 	Sword->draw();
-	
+
 }
 
 void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
@@ -181,7 +180,7 @@ void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
 
 	// Manage weapons
 
-	
+
 
 
 }
@@ -258,5 +257,13 @@ Vector2 Player::get_position()
 		level_spawn_position.x * GameConstants::PhysicsWorldScale,
 		level_spawn_position.y * GameConstants::PhysicsWorldScale
 	};
+}
+
+void Player::intializeInventory()
+{
+	// Load the texture for the sword
+	Texture2D swordTexture = LoadTexture(AppConstants::GetAssetPath("Weapons/WeaponGem.png").c_str());
+	Vector2 swordPosBuffer{ 5.f,22.f };
+	Sword = std::make_unique<Weapon>(swordTexture, swordPosBuffer, 45.f, 4);
 }
 

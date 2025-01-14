@@ -4,7 +4,12 @@
 class Weapon :public BaseEntity
 {
 public:
-	Weapon();
+	Weapon(
+		Texture2D &weaponTexture,
+		Vector2 &positonBuffer,
+		float activationRotaion,
+		int textureGrid
+	);
 
 	~Weapon();
 	void update(float dt) override;
@@ -18,6 +23,9 @@ private:
 	int tileAmout{ 4 };
 	bool isLookingRight{ false };
 	Vector2 positonBuffer{};
+	Vector2 origin = {};
+	Rectangle destRec = {};
+	Rectangle sourceRec{};
 
 
 };

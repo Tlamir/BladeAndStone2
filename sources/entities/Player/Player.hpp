@@ -51,6 +51,7 @@ public:
     void update(float dt) override;
     void draw() override;
     Vector2 get_position();
+    void intializeInventory();
     void adjustCollisionBox(const b2Vec2& offset);
     GameCamera& get_camera() { return camera; }
     void init_for_level(const ldtk::Entity* entity, b2World* physicsWorld);

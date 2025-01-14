@@ -55,5 +55,7 @@ public:
     void adjustCollisionBox(const b2Vec2& offset);
     GameCamera& get_camera() { return camera; }
     void init_for_level(const ldtk::Entity* entity, b2World* physicsWorld);
+
     static std::unique_ptr<Weapon> Sword;
+    static std::unique_ptr<Weapon> Magic;
 };

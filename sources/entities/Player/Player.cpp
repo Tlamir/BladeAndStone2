@@ -19,6 +19,7 @@
 using namespace std;
 
 std::unique_ptr<Weapon> Player::Sword = nullptr;
+std::unique_ptr<Weapon> Player::Magic = nullptr;
 
 
 Player::Player()
@@ -144,6 +145,9 @@ void Player::draw()
 	Sword->updatePosition(spritePosX, spritePosY, looking_right);
 	Sword->draw();
 
+	Magic->updatePosition(spritePosX, spritePosY, looking_right);
+	Magic->draw();
+
 }
 
 void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
@@ -264,6 +268,11 @@ void Player::intializeInventory()
 	// Load the texture for the sword
 	Texture2D swordTexture = LoadTexture(AppConstants::GetAssetPath("Weapons/WeaponGem.png").c_str());
 	Vector2 swordPosBuffer{ 5.f,22.f };
-	Sword = std::make_unique<Weapon>(swordTexture, swordPosBuffer, 45.f, 4);
+	Sword = std::make_unique<Weapon>(swordTexture, swordPosBuffer, -45.f, 4);
+
+	// Load the texture for the magic
+	Texture2D magicTexture = LoadTexture(AppConstants::GetAssetPath("Weapons/weapons_.png").c_str());
+	Vector2 magicPosBuffer{ 25.f,22.f };
+	Magic = std::make_unique<Weapon>(magicTexture, magicPosBuffer, -45.f, 5);
 }
 

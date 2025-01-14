@@ -16,13 +16,15 @@ Weapon::~Weapon()
 
 void Weapon::update(float dt)
 {
+    float rotationSpeed = 5.0f; // Set a fixed rotation increment value
+
     if (IsKeyDown(KEY_SPACE))
     {
-        rotation = -40.f;
+        rotation += rotationSpeed; // Increment rotation by a fixed amount
     }
     else
     {
-        rotation = 0.f;
+        rotation -= rotationSpeed; // Decrement rotation by a fixed amount
     }
 }
 

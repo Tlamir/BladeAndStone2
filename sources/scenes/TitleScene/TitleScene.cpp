@@ -38,7 +38,7 @@ void TitleScene::draw()
 
     // Draw title text (Centered)
     const string titleText = "BladeAndStone2";
-    const int titleFontSize = 20;
+    const int titleFontSize = 20*GameConstants::cameraZoom;
     const int titleTextWidth = MeasureText(titleText.c_str(), titleFontSize);
     const int titleTextX = (GameConstants::WorldWidth - titleTextWidth) / 2;
     const int titleTextY = GameConstants::WorldHeight / 10;
@@ -52,7 +52,7 @@ void TitleScene::draw()
 
     // Draw start text (Centered)
     const string startText = "Press 'SPACE' to play!";
-    const int startFontSize = 20;
+    const int startFontSize = 20*GameConstants::cameraZoom;
     const int startTextWidth = MeasureText(startText.c_str(), startFontSize);
     const int startTextX = (GameConstants::WorldWidth - startTextWidth) / 2;
     const int startTextY = GameConstants::WorldHeight / 1.3f;

@@ -7,7 +7,7 @@ std::unique_ptr<BulletManager> Weapon::bulletManager = nullptr;
 
 
 Weapon::Weapon(Texture2D& weaponTexture, Vector2& positonBuffer, float activationRotaion, int textureGrid, float attackSpeed,
-	float attackReloadSpeed, float attackWaitTime, bool isMagicWeapon)
+	float attackReloadSpeed, float attackWaitTime, bool isMagicWeapon,int selectedWeaponFromTileset)
 {
 	this->sprite = weaponTexture;
 	this->positonBuffer = positonBuffer;
@@ -19,6 +19,8 @@ Weapon::Weapon(Texture2D& weaponTexture, Vector2& positonBuffer, float activatio
 	this->isMagicWeapon = isMagicWeapon;
 	
 	bulletManager = std::make_unique<BulletManager>();
+
+	this->selectedWeaponFromTileset = selectedWeaponFromTileset;
 
 
 }
@@ -39,8 +41,7 @@ void Weapon::update(float dt)
 void Weapon::draw()
 {
 	Rectangle sourceRec{ 0,0 };
-	sourceRec.width = sprite.width / spriteGridSize;
-	sourceRec.height = sprite.height / spriteGridSize;
+	sourceRec = selectWeaponFromTexture(sprite, selectedWeaponFromTileset, spriteGridSize);
 	Vector2 origin = { sourceRec.width, sourceRec.height };
 	Rectangle dest = {
 		position.x + positonBuffer.x,
@@ -51,6 +52,26 @@ void Weapon::draw()
 
 	if (isMagicWeapon) bulletManager->draw();
 	
+}
+
+Rectangle Weapon::selectWeaponFromTexture(Texture2D sprite, int index, int spriteGridSize)
+{
+	int row = index / spriteGridSize;  // Calculate the row (y-axis) in the grid
+	int col = index % spriteGridSize;  // Calculate the column (x-axis) in the grid
+
+	// Define the width and height of each cell in the grid
+	float cellWidth = static_cast<float>(sprite.width) / spriteGridSize;
+	float cellHeight = static_cast<float>(sprite.height) / spriteGridSize;
+
+	// Define the source rectangle for the selected part of the texture
+	Rectangle sourceRec = {
+		col * cellWidth,
+		row * cellHeight,
+		cellWidth,
+		cellHeight
+	};
+
+	return sourceRec;
 }
 
 void Weapon::updatePosition(float posX, float posY, bool isLookingRight)

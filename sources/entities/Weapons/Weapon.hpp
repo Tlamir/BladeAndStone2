@@ -14,12 +14,14 @@ public:
         float attackSpeed,
         float attackReloadSpeed,
         float attackWaitTime,
-        bool isMagicWeapon
+        bool isMagicWeapon,
+        int selectedWeaponFromTileset
     );
 
     ~Weapon();
     void update(float dt) override;
     void draw() override;
+    Rectangle selectWeaponFromTexture(Texture2D sprite, int index, int spriteGridSize);
     void updatePosition(float posX, float posY, bool isLookingRight);
     void Attack(float dt);
     
@@ -40,6 +42,7 @@ private:
     float attackWaitingAtPeak{ 0.f };
     float attackReloadSpeed{ 1.f };
     bool isLookingRight{ false };
+    int selectedWeaponFromTileset{ 0 };
 
     // Instance-specific state variables (no static)
     float elapsedTime{ 0.0f };

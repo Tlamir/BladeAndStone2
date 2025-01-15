@@ -25,7 +25,7 @@ std::unique_ptr<Weapon> Player::Magic = nullptr;
 
 Player::Player()
 {
-	
+
 	intializeInventory();
 	// Load player sprite
 	this->sprite = LoadTexture(AppConstants::GetAssetPath("Characters/fHero_.png").c_str());
@@ -214,7 +214,7 @@ void Player::set_velocity_xy(float vx, float vy)
 
 void Player::check_if_move()
 {
-	const auto effective_speed = 6.0f*GameConstants::scale;
+	const auto effective_speed = 6.0f * GameConstants::scale;
 
 	float vx = 0.0f;
 	float vy = 0.0f;
@@ -268,13 +268,41 @@ Vector2 Player::get_position()
 void Player::intializeInventory()
 {
 	// Load the texture for the sword
+	/*   weaponTexture,
+		 positonBuffer,
+		 activationRotaion,
+		 textureGrid,
+		 attackSpeed,
+		 attackReloadSpeed,
+		 attackWaitTime,
+		 isMagicWeapon,
+		 selectedWeaponFromTileset*/
 	Texture2D swordTexture = LoadTexture(AppConstants::GetAssetPath("Weapons/WeaponGem.png").c_str());
 	Vector2 swordPosBuffer{ 5.f,22.f };
-	Sword = std::make_unique<Weapon>(swordTexture, swordPosBuffer, -140.f, 4,0.4f,2.1f,0.5f,false);
+	Sword = std::make_unique<Weapon>(
+		swordTexture,
+		swordPosBuffer,
+		-140.f,
+		4, 
+		0.2f,
+		2.1f,
+		0.3f,
+		false,
+		13
+	);
 
 	// Load the texture for the magic
 	Texture2D magicTexture = LoadTexture(AppConstants::GetAssetPath("Weapons/weapons_.png").c_str());
 	Vector2 magicPosBuffer{ 28.f,22.f };
-	Magic = std::make_unique<Weapon>(magicTexture, magicPosBuffer, 90.f, 5,0.2f,0.8f,0.1f,true);
+	Magic = std::make_unique<Weapon>(magicTexture,
+		magicPosBuffer,
+		90.f,
+		5,
+		0.2f,
+		0.8f,
+		0.1f,
+		true,
+		18
+	);
 }
 

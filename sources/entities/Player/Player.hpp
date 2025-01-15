@@ -58,4 +58,5 @@ public:
 
     static std::unique_ptr<Weapon> Sword;
     static std::unique_ptr<Weapon> Magic;
+ 
 };

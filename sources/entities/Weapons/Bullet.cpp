@@ -10,12 +10,11 @@ Bullet::~Bullet()
 
 }
 
-Bullet::draw()
+void Bullet::update(float dt)
 {
-
 }
 
-Bullet::update()
+void Bullet::draw()
 {
 
 }

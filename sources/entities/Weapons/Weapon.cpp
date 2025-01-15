@@ -1,5 +1,8 @@
 #include "Weapon.hpp"
 #include "Constants.hpp"
+#include"Bullet.hpp"
+
+std::unique_ptr<Bullet> Weapon::Projectile = nullptr;
 
 Weapon::Weapon(Texture2D& weaponTexture, Vector2& positonBuffer, float activationRotaion, int textureGrid, float attackSpeed,
 	float attackReloadSpeed, float attackWaitTime)

@@ -1,7 +1,8 @@
 #pragma once
 #include "../BaseEntity.hpp"
 #include "raylib.h"
-
+#include <memory>
+#include"Bullet.hpp"
 class Weapon : public BaseEntity
 {
 public:
@@ -43,4 +44,6 @@ private:
     bool isAttacking{ true };
     bool isWaitingAtPeak{ false };
     bool isReturning{ false };
+
+    static std::unique_ptr<Bullet> Projectile;
 };

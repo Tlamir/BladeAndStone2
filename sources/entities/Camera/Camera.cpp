@@ -3,7 +3,7 @@
 
 GameCamera::GameCamera()
 {
-    camera.zoom = 1.0f;
+    camera.zoom = GameConstants::cameraZoom;
     camera.offset = {
         GameConstants::WorldWidth/2,
         GameConstants::WorldHeight/ 2

@@ -11,7 +11,7 @@
 	"iid": "ce484460-c210-11ef-ac76-b798e6d8c50e",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 13,
+	"nextUid": 16,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -216,6 +216,41 @@
 			"pivotX": 0,
 			"pivotY": 0,
 			"fieldDefs": []
+		},
+		{
+			"identifier": "EnemySpawner",
+			"uid": 15,
+			"tags": ["Actors"],
+			"exportToToc": false,
+			"allowOutOfBounds": false,
+			"doc": null,
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"minWidth": null,
+			"maxWidth": null,
+			"minHeight": null,
+			"maxHeight": null,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 0.08,
+			"lineOpacity": 0,
+			"hollow": false,
+			"color": "#FF0044",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 5,
+			"tileRenderMode": "FitInside",
+			"tileRect": { "tilesetUid": 5, "x": 240, "y": 704, "w": 16, "h": 16 },
+			"uiTileRect": { "tilesetUid": 5, "x": 240, "y": 704, "w": 16, "h": 16 },
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": []
 		}
 	], "tilesets": [
 		{
@@ -372,6 +407,22 @@
 							"fieldInstances": [],
 							"__worldX": 3,
 							"__worldY": 35
+						},
+						{
+							"__identifier": "EnemySpawner",
+							"__grid": [32,21],
+							"__pivot": [0,0],
+							"__tags": ["Actors"],
+							"__tile": { "tilesetUid": 5, "x": 240, "y": 704, "w": 16, "h": 16 },
+							"__smartColor": "#FF0044",
+							"iid": "85622200-c210-11ef-b440-87d00e6c16ed",
+							"width": 16,
+							"height": 16,
+							"defUid": 15,
+							"px": [512,336],
+							"fieldInstances": [],
+							"__worldX": 240,
+							"__worldY": 96
 						}
 					]
 				},

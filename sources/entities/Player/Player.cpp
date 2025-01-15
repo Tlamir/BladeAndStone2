@@ -288,7 +288,7 @@ void Player::intializeInventory()
 		2.1f,
 		0.3f,
 		false,
-		13
+		1
 	);
 
 	// Load the texture for the magic

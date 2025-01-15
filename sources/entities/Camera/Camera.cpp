@@ -9,7 +9,7 @@ GameCamera::GameCamera()
         GameConstants::WorldHeight/ 2
     };
     camera.rotation = 0.0f;
-    camera.target = { 100.0f, 100.0f };
+    camera.target = { 200.0f, 200.0f };
 }
 
 void GameCamera::follow(const b2Vec2& target)

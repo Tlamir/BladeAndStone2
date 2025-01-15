@@ -35,7 +35,8 @@ void Bullet::draw()
 {
     if (active)
     {
-        DrawTexture(sprite, static_cast<int>(position.x), static_cast<int>(position.y), WHITE);
+        //DrawTexture(sprite, static_cast<int>(position.x), static_cast<int>(position.y), WHITE);
+        DrawTextureEx(sprite, {position.x, position.y },0.f,2.f, WHITE);
     }
 }
 

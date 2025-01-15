@@ -13,6 +13,7 @@ namespace GameConstants
 
     const int CellSize = 16;
     const float PhysicsWorldScale = 16.0f / ScreenScale; // everything is this times bigger than what physics world says
+    const int  scale = ScreenScale;
 }
 
 namespace AppConstants

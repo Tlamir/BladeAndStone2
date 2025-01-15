@@ -44,6 +44,7 @@ private:
     void check_if_move();
     void check_if_should_respawn();
     void update_camera();  // Added camera update method
+    void updateWeaponPosition(std::unique_ptr<Weapon>& weapon, float posX, float posY, bool isLookingRight);
 
 public:
     Player();

@@ -1,11 +1,13 @@
 #include "Weapon.hpp"
 #include "Constants.hpp"
-#include"Bullet.hpp"
+#include "BulletManager.hpp"
 
-std::unique_ptr<Bullet> Weapon::Projectile = nullptr;
+std::unique_ptr<BulletManager> Weapon::bulletManager = nullptr;
+
+
 
 Weapon::Weapon(Texture2D& weaponTexture, Vector2& positonBuffer, float activationRotaion, int textureGrid, float attackSpeed,
-	float attackReloadSpeed, float attackWaitTime)
+	float attackReloadSpeed, float attackWaitTime, bool isMagicWeapon)
 {
 	this->sprite = weaponTexture;
 	this->positonBuffer = positonBuffer;
@@ -14,6 +16,10 @@ Weapon::Weapon(Texture2D& weaponTexture, Vector2& positonBuffer, float activatio
 	this->attackSpeed = attackSpeed;
 	this->attackReloadSpeed = attackReloadSpeed;
 	this->attackWaitingAtPeak = attackWaitTime;
+	this->isMagicWeapon = isMagicWeapon;
+	
+	bulletManager = std::make_unique<BulletManager>();
+
 
 }
 
@@ -26,6 +32,8 @@ void Weapon::update(float dt)
 {
 	// Attack
 	Attack(dt);
+	if (isMagicWeapon) bulletManager->update(dt);
+
 }
 
 void Weapon::draw()
@@ -40,6 +48,9 @@ void Weapon::draw()
 		sourceRec.width,
 		sourceRec.height };
 	DrawTexturePro(sprite, sourceRec, dest, origin, rotationActive, WHITE);
+
+	if (isMagicWeapon) bulletManager->draw();
+	
 }
 
 void Weapon::updatePosition(float posX, float posY, bool isLookingRight)
@@ -66,6 +77,16 @@ void Weapon::Attack(float dt)
 			elapsedTime = 0.0f;
 			isAttacking = false;
 			isWaitingAtPeak = true; // Move to wait phase after attack
+			// Shoot projectile in peak
+			if (isMagicWeapon)
+			{
+				Vector2 bulletStartPos = {
+				   position.x + positonBuffer.x,   // Adjust for weapon offset
+				   position.y + positonBuffer.y
+				};
+				Vector2 fireDirection = isLookingRight ? Vector2{ 1.0f, 0.0f } : Vector2{ -1.0f, 0.0f };
+				bulletManager->fireBullet(bulletStartPos);
+			}
 		}
 		else
 		{
@@ -78,6 +99,7 @@ void Weapon::Attack(float dt)
 	else if (isWaitingAtPeak)
 	{
 		// Wait Phase: Hold at the peak rotation (ATTACK_ANGLE) for WAIT_TIME
+		
 		if (elapsedTime >= WAIT_TIME)
 		{
 			elapsedTime = 0.0f;

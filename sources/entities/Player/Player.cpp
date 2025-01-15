@@ -270,11 +270,11 @@ void Player::intializeInventory()
 	// Load the texture for the sword
 	Texture2D swordTexture = LoadTexture(AppConstants::GetAssetPath("Weapons/WeaponGem.png").c_str());
 	Vector2 swordPosBuffer{ 5.f,22.f };
-	Sword = std::make_unique<Weapon>(swordTexture, swordPosBuffer, -140.f, 4,0.4f,2.1f,0.5f);
+	Sword = std::make_unique<Weapon>(swordTexture, swordPosBuffer, -140.f, 4,0.4f,2.1f,0.5f,false);
 
 	// Load the texture for the magic
 	Texture2D magicTexture = LoadTexture(AppConstants::GetAssetPath("Weapons/weapons_.png").c_str());
 	Vector2 magicPosBuffer{ 28.f,22.f };
-	Magic = std::make_unique<Weapon>(magicTexture, magicPosBuffer, 90.f, 5,0.2f,0.8f,0.1f);
+	Magic = std::make_unique<Weapon>(magicTexture, magicPosBuffer, 90.f, 5,0.2f,0.8f,0.1f,true);
 }
 

@@ -2,7 +2,7 @@
 #include "../BaseEntity.hpp"
 #include "raylib.h"
 #include <memory>
-#include"Bullet.hpp"
+#include"BulletManager.hpp"
 class Weapon : public BaseEntity
 {
 public:
@@ -13,7 +13,8 @@ public:
         int textureGrid,
         float attackSpeed,
         float attackReloadSpeed,
-        float attackWaitTime
+        float attackWaitTime,
+        bool isMagicWeapon
     );
 
     ~Weapon();
@@ -21,6 +22,7 @@ public:
     void draw() override;
     void updatePosition(float posX, float posY, bool isLookingRight);
     void Attack(float dt);
+    
 
 private:
     Texture2D sprite;
@@ -45,5 +47,6 @@ private:
     bool isWaitingAtPeak{ false };
     bool isReturning{ false };
 
-    static std::unique_ptr<Bullet> Projectile;
+    static std::unique_ptr<BulletManager> bulletManager;
+    bool isMagicWeapon{ false };
 };

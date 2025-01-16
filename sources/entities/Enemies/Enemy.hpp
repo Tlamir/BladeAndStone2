@@ -11,7 +11,11 @@ enum EnemyAnimationState
 {
     ENEMY_IDLE,
     ENEMY_WALK,
-    ENEMY_ATTACK
+    ENEMY_ATTACK,
+    ENEMY_JUMP,
+    ENEMY_DEAD,
+    ENEMY_HURT,
+    // Add more animations here if needed
 };
 
 class Enemy : public BaseEntity
@@ -42,4 +46,9 @@ public:
     void init_for_level(const b2Vec2& position, b2World* physicsWorld);
     void update(float dt) override;
     void draw() override;
+    void move(const b2Vec2& playerPosition);
+    void set_velocity_x(float vx);
+    void set_velocity_y(float vy);
+    void set_velocity_xy(float vx, float vy);
+    void check_if_move();
 };

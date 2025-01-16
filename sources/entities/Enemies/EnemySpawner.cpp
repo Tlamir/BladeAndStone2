@@ -16,9 +16,9 @@ EnemySpawner::~EnemySpawner()
 {
 }
 
-void EnemySpawner::update(float deltaTime)
+void EnemySpawner::update(float dt)
 {
-	timeSinceLastSpawn += deltaTime; // Accumulate time
+	timeSinceLastSpawn += dt; // Accumulate time
 
 	// Check if enough time has passed to spawn
 	if (timeSinceLastSpawn >= spawnRate)
@@ -30,6 +30,7 @@ void EnemySpawner::update(float deltaTime)
 	for (auto& enemy : enemies)
 	{
 		enemy->draw();
+		enemy->update(dt);
 	}
 
 }

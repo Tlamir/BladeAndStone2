@@ -7,7 +7,11 @@ class EnemySpawner
 public:
 	EnemySpawner(int spawnRate,
 		int spawnAmount,
-		int spawnType);
+		int spawnType,
+		float x,
+		float y,
+		b2World* physicsWorld
+	);
 	~EnemySpawner();
 
 	void update(float deltaTime);
@@ -22,6 +26,10 @@ private:
 	 int spawnType{};
 	 float timeSinceLastSpawn{};
 	 std::vector<std::unique_ptr<Enemy>> enemies;
+	 float posX; // X position of the spawner
+	 float posY; // Y position of the spawner
+	 b2World* physicsWorld{ nullptr }; // Replace with your actual physics world reference
+
 
 
 };

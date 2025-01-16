@@ -246,7 +246,14 @@ void GameScene::set_selected_level(int lvl)
 			int spawnAmount = entity.getField<int>("spawnAmount").value();
 			int spawnType = entity.getField<int>("spawnType").value();
 			//cout << "RATE: " << spawnRate << " AMOUNT: " << spawnAmount << " TYPE: " << spawnType << endl;
-			enemySpawners.emplace_back(std::make_unique<EnemySpawner>(spawnRate, spawnAmount, spawnType));
+			// Extract position from the entity
+			float posX = entity.getPosition().x;
+			float posY = entity.getPosition().y;
+			DebugUtils::println("EnemySpawner created at position ({}, {})", posX, posY);
+			// Pass the position to the EnemySpawner
+			 // Create the spawner with position
+			enemySpawners.emplace_back(std::make_unique<EnemySpawner>(spawnRate, spawnAmount, spawnType, posX, posY, world.get()));
+			
 		}
 	}
 	DebugUtils::println("Loading solid blocks in level:");

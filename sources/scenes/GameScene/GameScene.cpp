@@ -43,6 +43,7 @@ GameScene::~GameScene()
 
 Scenes GameScene::update(float dt)
 {
+	
 	const float timeStep = 1.0f / 60.0f;
 	const int32 velocityIterations = 6;
 	const int32 positionIterations = 2;
@@ -61,7 +62,10 @@ Scenes GameScene::update(float dt)
 void GameScene::draw()
 {
 	ClearBackground(RAYWHITE);
+
 	BeginMode2D(player->get_camera().get_camera());
+
+	
 
 	DrawTextureRec(renderedLevelTexture,
 		{ 0, 0, (float)renderedLevelTexture.width, (float)-renderedLevelTexture.height },
@@ -109,8 +113,14 @@ void GameScene::draw()
 		}
 	}
 
-
+	// Draw Player
 	player->draw();
+	// Draw EnnemySpawner
+	for (auto& enemySpawner : enemySpawners)
+	{
+		enemySpawner->DrawEnemies();
+	}
+
 
 	EndMode2D();
 }
@@ -239,7 +249,6 @@ void GameScene::set_selected_level(int lvl)
 			enemySpawners.emplace_back(std::make_unique<EnemySpawner>(spawnRate, spawnAmount, spawnType));
 		}
 	}
-	cout << "spawnercount: " << spawnerCount << endl;
 	DebugUtils::println("Loading solid blocks in level:");
 	for (auto&& entity : currentLdtkLevel->getLayer("Collision").allEntities())
 	{

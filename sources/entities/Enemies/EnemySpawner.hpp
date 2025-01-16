@@ -1,4 +1,7 @@
 #pragma once
+#include "Enemy.hpp"
+#include <vector>
+#include <memory>
 class EnemySpawner
 {
 public:
@@ -9,6 +12,8 @@ public:
 
 	void update(float deltaTime);
 
+	void DrawEnemies();
+
 	void spawnEnemies();
 
 private:
@@ -16,5 +21,7 @@ private:
 	 int spawnAmount{};
 	 int spawnType{};
 	 float timeSinceLastSpawn{};
+	 std::vector<std::unique_ptr<Enemy>> enemies;
+
 
 };

@@ -1,5 +1,6 @@
 #include "EnemySpawner.hpp"
 #include <iostream>
+#include "Enemy.hpp"
 
 
 EnemySpawner::EnemySpawner(int spawnRate, int spawnAmount, int spawnType)
@@ -23,6 +24,19 @@ void EnemySpawner::update(float deltaTime)
         spawnEnemies();
         timeSinceLastSpawn = 0.0f; // Reset the timer
     }
+
+    for (auto &enemy : enemies)
+    {
+        enemy->draw();
+    }
+}
+
+void EnemySpawner::DrawEnemies()
+{
+    for (auto& enemy : enemies)
+    {
+        enemy->draw();
+    }
 }
 
 void EnemySpawner::spawnEnemies()
@@ -31,4 +45,8 @@ void EnemySpawner::spawnEnemies()
     std::cout << "Type: " << spawnType << "\n";
     std::cout << "Amount: " << spawnAmount << "\n";
     std::cout << "------------------------------------------\n";
+    enemies.emplace_back(std::make_unique<Enemy>());
+
+
+
 }

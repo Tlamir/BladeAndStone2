@@ -573,7 +573,7 @@
 							"defUid": 15,
 							"px": [272,192],
 							"fieldInstances": [
-								{ "__identifier": "spawnRate", "__type": "Int", "__value": 10, "__tile": null, "defUid": 16, "realEditorValues": [{ "id": "V_Int", "params": [10] }] },
+								{ "__identifier": "spawnRate", "__type": "Int", "__value": 3, "__tile": null, "defUid": 16, "realEditorValues": [{ "id": "V_Int", "params": [3] }] },
 								{ "__identifier": "spawnAmount", "__type": "Int", "__value": 1, "__tile": null, "defUid": 17, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
 								{ "__identifier": "spawnType", "__type": "Int", "__value": 1, "__tile": null, "defUid": 18, "realEditorValues": [{ "id": "V_Int", "params": [1] }] }
 							],

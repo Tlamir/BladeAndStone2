@@ -56,8 +56,8 @@ void EnemySpawner::spawnEnemies()
 		auto enemy = std::make_unique<Enemy>();
 
 		// Generate enemy spawn position near the spawner
-		float spawnX = posX; // Random offset around the spawner
-		float spawnY = posY;
+		float spawnX = posX + (rand() % 21 - 10); // Random offset in range [-10, 10]
+		float spawnY = posY + (rand() % 21 - 10); // Random offset in range [-10, 10
 
 		// Create a b2Vec2 object for the position
 		b2Vec2 spawnPosition(spawnX, spawnY);

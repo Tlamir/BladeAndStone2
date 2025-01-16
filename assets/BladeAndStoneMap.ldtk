@@ -533,7 +533,7 @@
 							"defUid": 15,
 							"px": [512,336],
 							"fieldInstances": [
-								{ "__identifier": "spawnRate", "__type": "Int", "__value": 2, "__tile": null, "defUid": 16, "realEditorValues": [{ "id": "V_Int", "params": [2] }] },
+								{ "__identifier": "spawnRate", "__type": "Int", "__value": 20, "__tile": null, "defUid": 16, "realEditorValues": [{ "id": "V_Int", "params": [20] }] },
 								{ "__identifier": "spawnAmount", "__type": "Int", "__value": 2, "__tile": null, "defUid": 17, "realEditorValues": [{ "id": "V_Int", "params": [2] }] },
 								{ "__identifier": "spawnType", "__type": "Int", "__value": 2, "__tile": null, "defUid": 18, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
 							],
@@ -553,7 +553,7 @@
 							"defUid": 15,
 							"px": [240,464],
 							"fieldInstances": [
-								{ "__identifier": "spawnRate", "__type": "Int", "__value": 3, "__tile": null, "defUid": 16, "realEditorValues": [{ "id": "V_Int", "params": [3] }] },
+								{ "__identifier": "spawnRate", "__type": "Int", "__value": 30, "__tile": null, "defUid": 16, "realEditorValues": [{ "id": "V_Int", "params": [30] }] },
 								{ "__identifier": "spawnAmount", "__type": "Int", "__value": 3, "__tile": null, "defUid": 17, "realEditorValues": [{ "id": "V_Int", "params": [3] }] },
 								{ "__identifier": "spawnType", "__type": "Int", "__value": 3, "__tile": null, "defUid": 18, "realEditorValues": [{ "id": "V_Int", "params": [3] }] }
 							],
@@ -573,7 +573,7 @@
 							"defUid": 15,
 							"px": [272,192],
 							"fieldInstances": [
-								{ "__identifier": "spawnRate", "__type": "Int", "__value": 1, "__tile": null, "defUid": 16, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
+								{ "__identifier": "spawnRate", "__type": "Int", "__value": 10, "__tile": null, "defUid": 16, "realEditorValues": [{ "id": "V_Int", "params": [10] }] },
 								{ "__identifier": "spawnAmount", "__type": "Int", "__value": 1, "__tile": null, "defUid": 17, "realEditorValues": [{ "id": "V_Int", "params": [1] }] },
 								{ "__identifier": "spawnType", "__type": "Int", "__value": 1, "__tile": null, "defUid": 18, "realEditorValues": [{ "id": "V_Int", "params": [1] }] }
 							],

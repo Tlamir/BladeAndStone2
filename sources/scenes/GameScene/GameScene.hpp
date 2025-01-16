@@ -11,6 +11,7 @@
 
 #include "../../entities/Player/Player.hpp"
 #include "./entities/BaseEntity.hpp"
+#include "./entities/Enemies/EnemySpawner.hpp"
 
 class GameScene : public BaseScene
 {
@@ -23,6 +24,9 @@ private:
 
     Texture2D currentTilesetTexture;
     Texture2D renderedLevelTexture;
+
+    std::vector<std::unique_ptr<EnemySpawner>> enemySpawners;
+
 
 public:
     GameScene();

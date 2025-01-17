@@ -9,7 +9,7 @@ namespace GameConstants
 {
     const int WorldWidth = 1280;
     const int WorldHeight = 720;
-    const int debugModeCollision = true;
+    const int debugModeCollision = false;
 
     const int CellSize = 16;
     const float PhysicsWorldScale = 16.0f / ScreenScale; // everything is this times bigger than what physics world says

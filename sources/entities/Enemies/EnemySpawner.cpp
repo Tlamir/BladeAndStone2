@@ -1,6 +1,7 @@
 #include "EnemySpawner.hpp"
 #include <iostream>
 #include "Enemy.hpp"
+#include "EnemyTextureLoader.hpp"
 
 EnemySpawner::EnemySpawner(int spawnRate, int spawnAmount, int spawnType, float x, float y, b2World* physicsWorld) :
 	spawnRate(spawnRate),
@@ -52,21 +53,21 @@ void EnemySpawner::spawnEnemies()
 	std::cout << "Spawner Position: (" << posX << ", " << posY << ")\n";
 	std::cout << "------------------------------------------\n";
 
+	if (spawnType < EnemyTextureLoader::DEMON || spawnType > EnemyTextureLoader::SLIMEBALL)
+		throw std::out_of_range("Invalid spawnType provided.");
+
+	auto enemyType = static_cast<EnemyTextureLoader::EnemyTextures>(spawnType);
+	auto enemyTexture = EnemyTextureLoader::getEnemyTexture(enemyType);
+
 	for (int i = 0; i < spawnAmount; i++)
 	{
-		// Create a new Enemy
-		auto enemy = std::make_unique<Enemy>();
-
-		// Generate enemy spawn position near the spawner
-		float spawnX = posX + (rand() % 21 - 10); // Random offset in range [-10, 10]
-		float spawnY = posY + (rand() % 21 - 10); // Random offset in range [-10, 10
-
-		// Create a b2Vec2 object for the position
+		float spawnX = posX + (rand() % 21 - 10);
+		float spawnY = posY + (rand() % 21 - 10);
 		b2Vec2 spawnPosition(spawnX, spawnY);
-		// Initialize the enemy
+
+		auto enemy = std::make_unique<Enemy>(enemyTexture);
 		enemy->init_for_level(spawnPosition, physicsWorld);
 
-		// Add the enemy to the list
 		enemies.emplace_back(std::move(enemy));
 	}
 }

@@ -3,11 +3,12 @@
 #include <iostream>
 
 #include"../Player/Player.hpp"
-Enemy::Enemy()
+Enemy::Enemy(Texture2D sprite)
+	:sprite(sprite)
 {
 	// Load enemy sprite
 	// Move sprite loading to enemySpawner
-	this->sprite = LoadTexture(AppConstants::GetAssetPath("Characters/demon_.png").c_str());
+	
 
 	initializeAnimations();
 }

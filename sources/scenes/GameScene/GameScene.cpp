@@ -27,7 +27,7 @@ GameScene::GameScene()
 	player = std::make_unique<Player>();
 	ldtkProject = std::make_unique<ldtk::Project>();
 
-	ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneMap.ldtk"));
+	ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneMapTEST.ldtk"));
 
 	ldtkWorld = &ldtkProject->getWorld();
 
@@ -295,5 +295,3 @@ void GameScene::create_solid_block(float targetX, float targetY, float tileSize)
 
 	body->CreateFixture(&groundBox, 0.0f);
 }
-
-

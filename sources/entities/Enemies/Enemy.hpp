@@ -43,7 +43,7 @@ private:
     float speed{1.5f};
 
 public:
-    Enemy();
+    Enemy(Texture2D sprite);
     ~Enemy();
 
     void init_for_level(const b2Vec2& position, b2World* physicsWorld);

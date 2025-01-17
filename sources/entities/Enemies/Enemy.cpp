@@ -178,6 +178,15 @@ void Enemy::move()
     {
         direction.x /= length;
         direction.y /= length;
+
+        if (direction.x > 0)
+        {
+            looking_right = true;
+        }
+        else if (direction.x < 0)
+        {
+            looking_right = false;
+        }
     }
 
     b2Vec2 velocity = { direction.x * speed, direction.y * speed };

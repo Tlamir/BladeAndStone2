@@ -42,7 +42,7 @@ void EnemyTextureLoader::loadTextures()
 
 Texture2D EnemyTextureLoader::getEnemyTexture(EnemyTextures enemyType)
 {
-    auto& instance = getInstance(); // Access the singleton instance
+    auto& instance = getInstance();
 
     if (enemyType < DEMON || enemyType > SLIMEBALL)
     {

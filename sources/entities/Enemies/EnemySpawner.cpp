@@ -3,13 +3,15 @@
 #include "Enemy.hpp"
 #include "EnemyTextureLoader.hpp"
 
-EnemySpawner::EnemySpawner(int spawnRate, int spawnAmount, int spawnType, float x, float y, b2World* physicsWorld) :
-	spawnRate(spawnRate),
-	spawnAmount(spawnAmount),
-	spawnType(spawnType),
-	posX(x),
-	posY(y),
-	physicsWorld(physicsWorld)
+
+
+EnemySpawner::EnemySpawner(int spawnRate, int spawnAmount, int spawnType, float x, float y, b2World* physicsWorld, Weapon* weapon) : spawnRate(spawnRate),
+spawnAmount(spawnAmount),
+spawnType(spawnType),
+posX(x),
+posY(y),
+physicsWorld(physicsWorld),
+weapon(weapon)
 {
 }
 
@@ -17,22 +19,30 @@ EnemySpawner::~EnemySpawner()
 {
 }
 
-void EnemySpawner::update(float dt,Vector2 playerPos)
+void EnemySpawner::update(float dt, Vector2 playerPos)
 {
-	timeSinceLastSpawn += dt; // Accumulate time
-
-	// Check if enough time has passed to spawn
+	timeSinceLastSpawn += dt;
 	if (timeSinceLastSpawn >= spawnRate)
 	{
 		spawnEnemies();
-		timeSinceLastSpawn = 0.0f; // Reset the timer
+		timeSinceLastSpawn = 0.0f;
 	}
 
-	for (auto& enemy : enemies)
+	for (auto it = enemies.begin(); it != enemies.end();)
 	{
+		auto& enemy = *it;
 		enemy->draw();
 		enemy->update(dt);
 		enemy->setTargetPos(playerPos);
+		// If the enemy hits the weapon's hitbox
+		if (enemy->checkCollisionWithWeapon(weapon->getHitbox()))
+		{
+			it = enemies.erase(it);
+		}
+		else
+		{
+			++it;
+		}
 	}
 
 }

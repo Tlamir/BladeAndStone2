@@ -43,7 +43,7 @@ GameScene::~GameScene()
 
 Scenes GameScene::update(float dt)
 {
-	
+
 	const float timeStep = 1.0f / 60.0f;
 	const int32 velocityIterations = 6;
 	const int32 positionIterations = 2;
@@ -65,7 +65,7 @@ void GameScene::draw()
 
 	BeginMode2D(player->get_camera().get_camera());
 
-	
+
 
 	DrawTextureRec(renderedLevelTexture,
 		{ 0, 0, (float)renderedLevelTexture.width, (float)-renderedLevelTexture.height },
@@ -78,33 +78,30 @@ void GameScene::draw()
 		{
 			for (b2Body* body = world->GetBodyList(); body; body = body->GetNext())
 			{
-				// Check if this is a solid block by checking the user data
 				if (body->GetUserData().pointer &&
 					(const char*)body->GetUserData().pointer == PhysicsTypes::SolidBlock)
 				{
-					// Get the fixture (assuming one fixture per body for solid blocks)
 					b2Fixture* fixture = body->GetFixtureList();
 					if (fixture)
 					{
 						b2PolygonShape* polygonShape = (b2PolygonShape*)fixture->GetShape();
 						if (polygonShape)
 						{
-							// Calculate the world position of the body
 							b2Vec2 position = body->GetPosition();
 							float posX = position.x * GameConstants::PhysicsWorldScale;
 							float posY = position.y * GameConstants::PhysicsWorldScale;
 
-							// Get the box dimensions
+
 							float width = polygonShape->m_vertices[2].x * 2 * GameConstants::PhysicsWorldScale;
 							float height = polygonShape->m_vertices[2].y * 2 * GameConstants::PhysicsWorldScale;
 
-							// Draw the debug rectangle
+						
 							DrawRectangleLines(
-								posX - (width / 2),  // Center the rectangle on the body position
+								posX - (width / 2),
 								posY - (height / 2),
 								width,
 								height,
-								GREEN  // Using green to distinguish from player's debug box
+								GREEN 
 							);
 						}
 					}
@@ -212,7 +209,7 @@ void GameScene::set_selected_level(int lvl)
 
 						if (std::find(tile_ids.begin(), tile_ids.end(), tile.tileId) != tile_ids.end())
 						{
-							// Draw Enum locations if mode
+							
 							if (GameConstants::debugModeCollision) DrawRectangle(target_pos.x, target_pos.y, tile_size, tile_size, Fade(RED, 0.5f));
 							create_solid_block(target_pos.x, target_pos.y, tile_size);
 						}
@@ -245,15 +242,12 @@ void GameScene::set_selected_level(int lvl)
 			int spawnRate = entity.getField<int>("spawnRate").value();
 			int spawnAmount = entity.getField<int>("spawnAmount").value();
 			int spawnType = entity.getField<int>("spawnType").value();
-			//cout << "RATE: " << spawnRate << " AMOUNT: " << spawnAmount << " TYPE: " << spawnType << endl;
-			// Extract position from the entity
 			float posX = entity.getPosition().x;
 			float posY = entity.getPosition().y;
 			DebugUtils::println("EnemySpawner created at position ({}, {})", posX, posY);
-			// Pass the position to the EnemySpawner
-			 // Create the spawner with 
-			enemySpawners.emplace_back(std::make_unique<EnemySpawner>(spawnRate, spawnAmount, spawnType, posX, posY, world.get()));
-			
+
+			enemySpawners.emplace_back(std::make_unique<EnemySpawner>(spawnRate, spawnAmount, spawnType, posX, posY, world.get(),player->getWeapon()));
+
 		}
 	}
 	DebugUtils::println("Loading solid blocks in level:");

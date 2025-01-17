@@ -2,7 +2,9 @@
 #include "../BaseEntity.hpp"
 #include "raylib.h"
 #include <memory>
-#include"BulletManager.hpp"
+#include "BulletManager.hpp"
+#include <box2d/box2d.h>
+
 class Weapon : public BaseEntity
 {
 public:
@@ -15,16 +17,18 @@ public:
         float attackReloadSpeed,
         float attackWaitTime,
         bool isMagicWeapon,
-        int selectedWeaponFromTileset
+        int selectedWeaponFromTileset,
+        b2World* world
     );
-
     ~Weapon();
     void update(float dt) override;
     void draw() override;
     Rectangle selectWeaponFromTexture(Texture2D sprite, int index, int spriteGridSize);
     void updatePosition(float posX, float posY, bool isLookingRight);
     void Attack(float dt);
-    
+    Rectangle getHitbox() const;
+
+    void drawHitbox() const;
 
 private:
     Texture2D sprite;
@@ -44,12 +48,14 @@ private:
     bool isLookingRight{ false };
     int selectedWeaponFromTileset{ 0 };
 
-    // Instance-specific state variables (no static)
     float elapsedTime{ 0.0f };
     bool isAttacking{ true };
     bool isWaitingAtPeak{ false };
     bool isReturning{ false };
-
     static std::unique_ptr<BulletManager> bulletManager;
     bool isMagicWeapon{ false };
+
+    // Physics
+    b2Body* weaponBody = nullptr;
+    b2World* physicsWorld = nullptr;
 };

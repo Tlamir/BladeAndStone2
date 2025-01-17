@@ -2,6 +2,7 @@
 #include "Enemy.hpp"
 #include <vector>
 #include <memory>
+#include<./entities/Weapons/Weapon.hpp>
 class EnemySpawner
 {
 public:
@@ -10,7 +11,8 @@ public:
 		int spawnType,
 		float x,
 		float y,
-		b2World* physicsWorld
+		b2World* physicsWorld,
+		Weapon* weapon
 	);
 	~EnemySpawner();
 
@@ -26,9 +28,10 @@ private:
 	 int spawnType{};
 	 float timeSinceLastSpawn{};
 	 std::vector<std::unique_ptr<Enemy>> enemies;
-	 float posX; // X position of the spawner
-	 float posY; // Y position of the spawner
-	 b2World* physicsWorld{ nullptr }; // Replace with your actual physics world reference
+	 float posX;
+	 float posY;
+	 b2World* physicsWorld{ nullptr };
+	 Weapon* weapon;
 
 
 

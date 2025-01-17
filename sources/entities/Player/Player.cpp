@@ -24,8 +24,6 @@ std::unique_ptr<Weapon> Player::Magic = nullptr;
 
 Player::Player()
 {
-
-	intializeInventory();
 	// Load player sprite
 	this->sprite = LoadTexture(AppConstants::GetAssetPath("Characters/fHero_.png").c_str());
 
@@ -185,8 +183,7 @@ void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
 
 	// Manage weapons
 
-
-
+	intializeInventory(physicsWorld);
 
 }
 
@@ -264,7 +261,8 @@ Vector2 Player::get_position()
 	};
 }
 
-void Player::intializeInventory()
+
+void Player::intializeInventory(b2World* physicsWorld)
 {
 	// Load the texture for the sword
 	/*   weaponTexture,
@@ -283,11 +281,12 @@ void Player::intializeInventory()
 		swordPosBuffer,
 		-140.f,
 		4, 
-		0.2f,
+		0.1f,
 		2.1f,
-		0.3f,
+		0.2f,
 		false,
-		1
+		1,
+		physicsWorld
 	);
 
 	// Load the texture for the magic
@@ -301,7 +300,12 @@ void Player::intializeInventory()
 		0.8f,
 		0.1f,
 		true,
-		18
+		18,
+		physicsWorld
 	);
 }
 
+Weapon* Player::getWeapon()
+{
+	return Sword.get();
+}

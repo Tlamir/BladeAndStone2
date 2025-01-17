@@ -1,5 +1,4 @@
 #pragma once
-
 #include "../BaseEntity.hpp"
 #include <memory>
 #include <raylib.h>
@@ -15,17 +14,15 @@ enum EnemyAnimationState
     ENEMY_JUMP,
     ENEMY_DEAD,
     ENEMY_HURT,
-    // Add more animations here if needed
 };
 
 class Enemy : public BaseEntity
 {
 private:
-    // Enemy sprite and physical body
+
     Texture2D sprite;
     b2Body* body{ nullptr };
 
-    // Enemy's spawn position and state
     b2Vec2 spawn_position;
     bool looking_right = true;
 
@@ -35,17 +32,22 @@ private:
     size_t current_anim_frame = 0;
     EnemyAnimationState anim_state = EnemyAnimationState::ENEMY_IDLE;
     std::unordered_map<EnemyAnimationState, std::vector<Rectangle>> animation_map;
+    Vector2 targetPos{};
+    float speed{ 1.5f };
+
+    // Combat variables
+    bool isHit = false;
+    int health = 100;
+    float hitCooldown = 0.5f;
+    float currentHitCooldown = 0.0f;
 
     void set_velocity(float vx, float vy);
     void initializeAnimations();
-
-    Vector2 targetPos{};
-    float speed{1.5f};
+    void updateHitState(float dt);
 
 public:
     Enemy(Texture2D sprite);
     ~Enemy();
-
     void init_for_level(const b2Vec2& position, b2World* physicsWorld);
     void update(float dt) override;
     void draw() override;
@@ -55,4 +57,11 @@ public:
     void set_velocity_xy(float vx, float vy);
     void check_if_move();
     void setTargetPos(Vector2 playerPos);
+    Rectangle getHitbox() const;
+    bool checkCollisionWithWeapon(const Rectangle& weaponHitbox) const;
+
+    // Combat methods
+    void onHit(int damage);
+    bool shouldDestroy() const { return health <= 0; }
+    bool isAlive() const { return health > 0; }
 };

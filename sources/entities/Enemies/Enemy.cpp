@@ -3,19 +3,17 @@
 #include <iostream>
 
 #include"../Player/Player.hpp"
+#include <physics/PhysicsTypes.hpp>
 Enemy::Enemy(Texture2D sprite)
 	:sprite(sprite)
 {
-	// Load enemy sprite
-	// Move sprite loading to enemySpawner
-	
-
 	initializeAnimations();
 }
 
 Enemy::~Enemy()
 {
-	UnloadTexture(this->sprite);
+	// This destroctor handled by enemytextureloader 
+	//UnloadTexture(this->sprite);
 }
 
 void Enemy::initializeAnimations()
@@ -82,17 +80,16 @@ void Enemy::initializeAnimations()
 void Enemy::init_for_level(const b2Vec2& position, b2World* physicsWorld)
 {
 	spawn_position = position;
-	// Convert ldtk position to physics world position
 	spawn_position = {
 	   static_cast<float>(position.x) / GameConstants::PhysicsWorldScale,
 	   static_cast<float>(position.y) / GameConstants::PhysicsWorldScale
 	};
 
-	// Create enemy body
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.fixedRotation = true;
-	bodyDef.position.Set(spawn_position.x, spawn_position.y);;
+	bodyDef.position.Set(spawn_position.x, spawn_position.y);
+	bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
 	this->body = physicsWorld->CreateBody(&bodyDef);
 
@@ -103,6 +100,8 @@ void Enemy::init_for_level(const b2Vec2& position, b2World* physicsWorld)
 	fixtureDef.shape = &dynamicBox;
 	fixtureDef.density = 1.f;
 	fixtureDef.friction = 0.3f;
+	fixtureDef.filter.categoryBits = PhysicsTypes::Categories::ENEMY;
+	fixtureDef.filter.maskBits = PhysicsTypes::Categories::WEAPON | PhysicsTypes::Categories::SOLID;
 
 	body->CreateFixture(&fixtureDef);
 }
@@ -115,8 +114,7 @@ void Enemy::set_velocity(float vx, float vy)
 void Enemy::update(float dt)
 {
 	animation_ticker -= dt;
-
-	// Update frame timing
+	updateHitState(dt);
 	if (animation_ticker <= 0)
 	{
 		animation_ticker = animation_frame_duration;
@@ -129,13 +127,10 @@ void Enemy::update(float dt)
 	{
 		anim_state = ENEMY_WALK;
 	}
-	else if (body->GetLinearVelocity().Length() <= 0.1f && anim_state != ENEMY_IDLE)
+	else if (body->GetLinearVelocity().Length() <= 0.1f && anim_state != ENEMY_HURT)
 	{
 		anim_state = ENEMY_IDLE;
 	}
-
-	auto current_anim_states = animation_map[anim_state];
-	current_anim_frame = current_anim_frame % current_anim_states.size();
 }
 
 void Enemy::draw()
@@ -157,16 +152,14 @@ void Enemy::draw()
 	// Draw enemy collision box
 	if (GameConstants::debugModeCollision)
 	{
-		// Draw debug collision box
+
 		auto bodyPos = body->GetPosition();
-		// Get the box dimensions from the fixture (assuming the first fixture is the box)
 		b2PolygonShape* polygonShape = (b2PolygonShape*)body->GetFixtureList()->GetShape();
 		Vector2 boxSize = {
 			polygonShape->m_vertices[2].x * 2 * GameConstants::PhysicsWorldScale, // width
 			polygonShape->m_vertices[2].y * 2 * GameConstants::PhysicsWorldScale  // height
 		};
 
-		// Draw the physics body rectangle
 		DrawRectangleLines(
 			(bodyPos.x * GameConstants::PhysicsWorldScale) - (boxSize.x / 2),
 			(bodyPos.y * GameConstants::PhysicsWorldScale) - (boxSize.y / 2),
@@ -213,6 +206,65 @@ void Enemy::setTargetPos(Vector2 playerPos)
 	targetPos = playerPos;
 }
 
+void Enemy::updateHitState(float dt)
+{
+	if (isHit)
+	{
+		currentHitCooldown -= dt;
+		if (currentHitCooldown <= 0)
+		{
+			isHit = false;
+			currentHitCooldown = hitCooldown;
+			if (health > 0)
+			{
+				anim_state = ENEMY_IDLE;
+			}
+		}
 
+	}
+}
+
+void Enemy::onHit(int damage)
+{
+	if (!isHit && health > 0)
+	{
+		health -= damage;
+		isHit = true;
+		currentHitCooldown = hitCooldown;
+		anim_state = ENEMY_HURT;
+		std::cout<<"=========ENEMY_HURT======="<<endl;
+		if (health <= 0)
+		{
+			anim_state = ENEMY_DEAD;
+		}
+
+
+	}
+}
+
+Rectangle Enemy::getHitbox() const
+{
+	if (!body) return Rectangle{ 0, 0, 0, 0 };
+
+	auto bodyPos = body->GetPosition();
+	// Get the box dimensions from the fixture
+	b2PolygonShape* polygonShape = (b2PolygonShape*)body->GetFixtureList()->GetShape();
+	Vector2 boxSize = {
+		polygonShape->m_vertices[2].x * 2 * GameConstants::PhysicsWorldScale,
+		polygonShape->m_vertices[2].y * 2 * GameConstants::PhysicsWorldScale
+	};
+
+	return Rectangle{
+		(bodyPos.x * GameConstants::PhysicsWorldScale) - (boxSize.x / 2),
+		(bodyPos.y * GameConstants::PhysicsWorldScale) - (boxSize.y / 2),
+		boxSize.x,
+		boxSize.y
+	};
+}
+
+bool Enemy::checkCollisionWithWeapon(const Rectangle& weaponHitbox) const
+{
+	return CheckCollisionRecs(getHitbox(), weaponHitbox);
+}
 
 

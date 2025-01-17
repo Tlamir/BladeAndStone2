@@ -66,8 +66,11 @@ public:
 
     Vector2 get_position();
 
+    void intializeInventory(b2World* physicsWorld);
+
+    Weapon* getWeapon();
+
     // Inventory and collision functions
-    void intializeInventory();
     void adjustCollisionBox(const b2Vec2& offset);
 
     // Camera accessor

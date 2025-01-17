@@ -1,28 +1,49 @@
 #include "Weapon.hpp"
 #include "Constants.hpp"
 #include "BulletManager.hpp"
+#include <physics/PhysicsTypes.hpp>
 
 std::unique_ptr<BulletManager> Weapon::bulletManager = nullptr;
 
 
 
-Weapon::Weapon(Texture2D& weaponTexture, Vector2& positonBuffer, float activationRotaion, int textureGrid, float attackSpeed,
-	float attackReloadSpeed, float attackWaitTime, bool isMagicWeapon,int selectedWeaponFromTileset)
+Weapon::Weapon(Texture2D& weaponTexture, Vector2& positonBuffer, float activationRotaion,
+	int textureGrid, float attackSpeed, float attackReloadSpeed, float attackWaitTime,
+	bool isMagicWeapon, int selectedWeaponFromTileset, b2World* world)
 {
 	this->sprite = weaponTexture;
 	this->positonBuffer = positonBuffer;
+	this->physicsWorld = world;
 	attackRotation = activationRotaion;
 	spriteGridSize = textureGrid;
 	this->attackSpeed = attackSpeed;
 	this->attackReloadSpeed = attackReloadSpeed;
 	this->attackWaitingAtPeak = attackWaitTime;
 	this->isMagicWeapon = isMagicWeapon;
-	
-	bulletManager = std::make_unique<BulletManager>();
-
 	this->selectedWeaponFromTileset = selectedWeaponFromTileset;
 
+	bulletManager = std::make_unique<BulletManager>();
 
+	// Create weapon physics body
+	if (physicsWorld)
+	{
+		b2BodyDef bodyDef;
+		bodyDef.type = b2_dynamicBody;
+		bodyDef.bullet = true;
+
+		weaponBody = physicsWorld->CreateBody(&bodyDef);
+
+		b2PolygonShape weaponShape;
+		weaponShape.SetAsBox(0.5f, 0.1f);
+
+		b2FixtureDef fixtureDef;
+		fixtureDef.shape = &weaponShape;
+		fixtureDef.isSensor = true;
+		fixtureDef.filter.categoryBits = PhysicsTypes::Categories::WEAPON;
+		fixtureDef.filter.maskBits = PhysicsTypes::Categories::ENEMY;
+
+		weaponBody->CreateFixture(&fixtureDef);
+	}
 }
 
 Weapon::~Weapon()
@@ -51,7 +72,11 @@ void Weapon::draw()
 	DrawTexturePro(sprite, sourceRec, dest, origin, rotationActive, WHITE);
 
 	if (isMagicWeapon) bulletManager->draw();
-	
+	if (GameConstants::debugModeCollision && !isMagicWeapon)
+	{
+		drawHitbox();
+
+	}
 }
 
 Rectangle Weapon::selectWeaponFromTexture(Texture2D sprite, int index, int spriteGridSize)
@@ -76,42 +101,45 @@ Rectangle Weapon::selectWeaponFromTexture(Texture2D sprite, int index, int sprit
 
 void Weapon::updatePosition(float posX, float posY, bool isLookingRight)
 {
-	position = { posX,posY };
+	position = { posX, posY };
 	this->isLookingRight = isLookingRight;
+
+	// Update physics body position
+	if (weaponBody)
+	{
+		weaponBody->SetTransform(
+			b2Vec2(posX / GameConstants::PhysicsWorldScale,
+				posY / GameConstants::PhysicsWorldScale),
+			weaponBody->GetAngle());
+	}
 }
+
 
 void Weapon::Attack(float dt)
 {
-	const float ATTACK_TIME = attackSpeed;       // Time to reach full attack rotation
-	const float WAIT_TIME = attackWaitingAtPeak; // Time to wait at the peak of the attack
-	const float RETURN_TIME = attackReloadSpeed; // Time to return to the original position
-	const float ATTACK_ANGLE = attackRotation;   // Full rotation angle for attack
+	const float ATTACK_TIME = attackSpeed;
+	const float WAIT_TIME = attackWaitingAtPeak;
+	const float RETURN_TIME = attackReloadSpeed;
+	const float ATTACK_ANGLE = attackRotation;
 
 	elapsedTime += dt;
 
 	if (isAttacking)
 	{
-		// Attack Phase: Rotate to ATTACK_ANGLE in ATTACK_TIME
 		if (elapsedTime >= ATTACK_TIME)
 		{
-			rotationActive = ATTACK_ANGLE; // Fully rotated
+			rotationActive = ATTACK_ANGLE;
 			elapsedTime = 0.0f;
 			isAttacking = false;
-			isWaitingAtPeak = true; // Move to wait phase after attack
-			// Shoot projectile in peak
+			isWaitingAtPeak = true;
 			if (isMagicWeapon)
 			{
-				Vector2 bulletStartPos = {
-				   position.x + positonBuffer.x,   // Adjust for weapon offset
-				   position.y + positonBuffer.y
-				};
-				Vector2 fireDirection = isLookingRight ? Vector2{ 1.0f, 0.0f } : Vector2{ -1.0f, 0.0f };
+				Vector2 bulletStartPos = { position.x + positonBuffer.x, position.y + positonBuffer.y };
 				bulletManager->fireBullet(bulletStartPos);
 			}
 		}
 		else
 		{
-			// Interpolate smoothly from 0 to ATTACK_ANGLE
 			float t = elapsedTime / ATTACK_TIME;
 			t = t * t * (3.0f - 2.0f * t);
 			rotationActive = ATTACK_ANGLE * t;
@@ -119,31 +147,69 @@ void Weapon::Attack(float dt)
 	}
 	else if (isWaitingAtPeak)
 	{
-		// Wait Phase: Hold at the peak rotation (ATTACK_ANGLE) for WAIT_TIME
-		
 		if (elapsedTime >= WAIT_TIME)
 		{
 			elapsedTime = 0.0f;
 			isWaitingAtPeak = false;
-			isReturning = true; // Start returning after the wait phase
+			isReturning = true;
 		}
 	}
 	else if (isReturning)
 	{
-		// Return Phase: Smoothly return to 0 over RETURN_TIME
 		if (elapsedTime >= RETURN_TIME)
 		{
-			rotationActive = 0.0f; // Reset to original position
+			rotationActive = 0.0f;
 			elapsedTime = 0.0f;
 			isReturning = false;
-			isAttacking = true; // Start the attack phase again
+			isAttacking = true; // Reset the attack cycle
 		}
 		else
 		{
-			// Interpolate smoothly from ATTACK_ANGLE back to 0
 			float t = elapsedTime / RETURN_TIME;
 			t = t * t * (3.0f - 2.0f * t);
 			rotationActive = ATTACK_ANGLE * (1.0f - t);
 		}
+	}
+}
+
+Rectangle Weapon::getHitbox() const
+{
+	if (!isAttacking && !isWaitingAtPeak)
+	{
+		return Rectangle{ 0, 0, 0, 0 };
+	}
+
+	// Calculate the size of the weapon sprite in the grid
+	float weaponWidth = static_cast<float>(sprite.width) / spriteGridSize;
+	float weaponHeight = static_cast<float>(sprite.height) / spriteGridSize;
+
+	// Calculate the hitbox dimensions
+	float hitboxWidth = weaponWidth * 1;  // 80% of the weapon's width
+	float hitboxHeight = weaponHeight * 2; // 50% of the weapon's height
+
+	// Center the hitbox around the weapon's position
+	float hitboxX = position.x + positonBuffer.x - (hitboxWidth);
+	float hitboxY = position.y + positonBuffer.y - (hitboxHeight / 2);
+
+	return Rectangle{ hitboxX, hitboxY, hitboxWidth, hitboxHeight };
+}
+
+void Weapon::drawHitbox() const
+{
+	Rectangle hitbox = getHitbox();
+
+	if (hitbox.width > 0 && hitbox.height > 0)
+	{
+		DrawRectangleLines(
+			static_cast<int>(hitbox.x),
+			static_cast<int>(hitbox.y),
+			static_cast<int>(hitbox.width),
+			static_cast<int>(hitbox.height),
+			RED
+		);
+		DrawCircle(static_cast<int>(position.x + positonBuffer.x),
+			static_cast<int>(position.y + positonBuffer.y),
+			3,
+			GREEN);
 	}
 }

@@ -244,3 +244,4 @@ bool Enemy::checkCollisionWithWeapon(const Rectangle& weaponHitbox) const
 {
     return CheckCollisionRecs(getHitbox(), weaponHitbox);
 }
+

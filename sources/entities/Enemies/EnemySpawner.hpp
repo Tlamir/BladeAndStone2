@@ -12,7 +12,8 @@ public:
 		float x,
 		float y,
 		b2World* physicsWorld,
-		Weapon* weapon
+		Weapon* weapon,
+		BulletManager* bulletManager
 	);
 	~EnemySpawner();
 
@@ -23,7 +24,7 @@ public:
 	void spawnEnemies();
 
 private:
-	 int spawnRate{};
+	 float spawnRate{};
 	 int spawnAmount{};
 	 int spawnType{};
 	 float timeSinceLastSpawn{};
@@ -32,6 +33,7 @@ private:
 	 float posY;
 	 b2World* physicsWorld{ nullptr };
 	 Weapon* weapon;
+	 BulletManager* myrefBulletManager;
 
 
 

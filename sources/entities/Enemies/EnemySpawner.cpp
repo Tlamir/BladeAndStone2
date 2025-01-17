@@ -3,15 +3,13 @@
 #include "Enemy.hpp"
 #include "EnemyTextureLoader.hpp"
 
-
-
-EnemySpawner::EnemySpawner(int spawnRate, int spawnAmount, int spawnType, float x, float y, b2World* physicsWorld, Weapon* weapon) : spawnRate(spawnRate),
-spawnAmount(spawnAmount),
+EnemySpawner::EnemySpawner(int spawnRate, int spawnAmount, int spawnType, float x, float y, b2World* physicsWorld, Weapon* weapon, BulletManager* bulletManager) : spawnAmount(spawnAmount),
 spawnType(spawnType),
 posX(x),
 posY(y),
 physicsWorld(physicsWorld),
-weapon(weapon)
+weapon(weapon),
+myrefBulletManager(bulletManager)
 {
 }
 
@@ -21,37 +19,49 @@ EnemySpawner::~EnemySpawner()
 
 void EnemySpawner::update(float dt, Vector2 playerPos)
 {
-	timeSinceLastSpawn += dt;
-	if (timeSinceLastSpawn >= spawnRate)
-	{
-		spawnEnemies();
-		timeSinceLastSpawn = 0.0f;
-	}
+    timeSinceLastSpawn += dt;
+    if (timeSinceLastSpawn >= spawnRate)
+    {
+        spawnEnemies();
+        timeSinceLastSpawn = 0.0f;
+    }
 
-	for (auto it = enemies.begin(); it != enemies.end();)
-	{
-		auto& enemy = *it;
-		enemy->draw();
-		enemy->update(dt);
-		// If the enemy hits the weapon's hitbox
-		if (enemy->checkCollisionWithWeapon(weapon->getHitbox()))
-		{
-			enemy->onHit(50);
-			if ((!enemy->isAlive()))
-			{
-				it = enemies.erase(it);
+    for (auto it = enemies.begin(); it != enemies.end();)
+    {
+        auto& enemy = *it;
 
-			}
-			return;
-		}
-		else
-		{
-			++it;
-		}
-		enemy->setTargetPos(playerPos);
-		
-	}
+        // Update before checking collision
+        enemy->update(dt);
+        enemy->setTargetPos(playerPos);
 
+        // Check collision with weapon
+        if (enemy->checkCollisionWithWeapon(weapon->getHitbox()))
+        {
+            enemy->onHit(50);
+            if (!enemy->isAlive())
+            {
+                it = enemies.erase(it);
+                continue; 
+            }
+        }
+
+        // Check collision with bullets
+        for (const auto& bulletHitbox : myrefBulletManager->getBulletHitboxes())
+        {
+            if (enemy->checkCollisionWithWeapon(bulletHitbox))
+            {
+                enemy->onHit(25);
+                if (!enemy->isAlive())
+                {
+                    it = enemies.erase(it);
+                    goto next_enemy;
+                }
+            }
+        }
+
+        ++it;
+    next_enemy:;
+    }
 }
 
 void EnemySpawner::DrawEnemies()

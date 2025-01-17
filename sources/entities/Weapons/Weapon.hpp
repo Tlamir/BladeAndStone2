@@ -28,6 +28,8 @@ public:
     void updatePosition(float posX, float posY, bool isLookingRight);
     void Attack(float dt);
     Rectangle getHitbox() const;
+    BulletManager* getBulletManager();
+
 
     void drawHitbox() const;
     int damage{ 50 };

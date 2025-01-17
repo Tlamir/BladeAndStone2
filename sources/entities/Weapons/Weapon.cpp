@@ -144,7 +144,7 @@ void Weapon::Attack(float dt)
 			if (isMagicWeapon)
 			{
 				Vector2 bulletStartPos = { position.x + positonBuffer.x, position.y + positonBuffer.y };
-				bulletManager->fireBullet(bulletStartPos);
+				bulletManager->fireBullet(bulletStartPos,physicsWorld);
 			}
 		}
 		else
@@ -221,4 +221,9 @@ void Weapon::drawHitbox() const
 			3,
 			GREEN);
 	}
+}
+
+BulletManager* Weapon::getBulletManager()
+{
+	return  bulletManager.get();
 }

@@ -37,7 +37,7 @@ private:
 
     // Combat variables
     bool isHit = false;
-    int health = 100;
+    int health = 99;
     float hitCooldown = 0.5f;
     float currentHitCooldown = 0.0f;
 

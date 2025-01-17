@@ -239,14 +239,14 @@ void GameScene::set_selected_level(int lvl)
 		if (entity.getName() == "EnemySpawner")
 		{
 			//Create Enemy Spawners
-			int spawnRate = entity.getField<int>("spawnRate").value();
+			float spawnRate = entity.getField<int>("spawnRate").value();
 			int spawnAmount = entity.getField<int>("spawnAmount").value();
 			int spawnType = entity.getField<int>("spawnType").value();
 			float posX = entity.getPosition().x;
 			float posY = entity.getPosition().y;
 			DebugUtils::println("EnemySpawner created at position ({}, {})", posX, posY);
 
-			enemySpawners.emplace_back(std::make_unique<EnemySpawner>(spawnRate, spawnAmount, spawnType, posX, posY, world.get(),player->getWeapon()));
+			enemySpawners.emplace_back(std::make_unique<EnemySpawner>(spawnRate, spawnAmount, spawnType, posX, posY, world.get(),player->getWeapon(),player->getBulletManager()));
 
 		}
 	}

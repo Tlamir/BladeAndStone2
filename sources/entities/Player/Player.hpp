@@ -69,6 +69,8 @@ public:
 
     Weapon* getWeapon();
 
+    BulletManager* getBulletManager();
+
     // Inventory and collision functions
     void adjustCollisionBox(const b2Vec2& offset);
 

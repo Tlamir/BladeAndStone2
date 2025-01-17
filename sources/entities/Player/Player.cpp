@@ -307,3 +307,8 @@ Weapon* Player::getWeapon()
 {
     return Sword.get();
 }
+
+BulletManager* Player::getBulletManager()
+{
+    return Magic->getBulletManager();
+}

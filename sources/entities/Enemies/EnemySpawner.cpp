@@ -3,7 +3,9 @@
 #include "Enemy.hpp"
 #include "EnemyTextureLoader.hpp"
 
-EnemySpawner::EnemySpawner(int spawnRate, int spawnAmount, int spawnType, float x, float y, b2World* physicsWorld, Weapon* weapon, BulletManager* bulletManager) : spawnAmount(spawnAmount),
+EnemySpawner::EnemySpawner(int spawnRate, int spawnAmount, int spawnType, float x, float y, b2World* physicsWorld, Weapon* weapon, BulletManager* bulletManager) :
+spawnRate(spawnRate),
+spawnAmount(spawnAmount),
 spawnType(spawnType),
 posX(x),
 posY(y),

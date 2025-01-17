@@ -68,11 +68,15 @@ void Bullet::draw()
         if (bulletBody)
         {
             b2PolygonShape* bulletShape = dynamic_cast<b2PolygonShape*>(bulletBody->GetFixtureList()->GetShape());
-            if (bulletShape)
+            if (GameConstants::debugModeCollision)
             {
-                // Draw the rectangle in red with line thickness of 2
-                DrawRectangleLinesEx(getHitbox(), 2, RED);
+                if (bulletShape)
+                {
+                    // Draw the rectangle in red with line thickness of 2
+                    DrawRectangleLinesEx(getHitbox(), 2, RED);
+                }
             }
+           
         }
     
     }

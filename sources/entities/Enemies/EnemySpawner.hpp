@@ -24,7 +24,7 @@ public:
 	void spawnEnemies();
 
 private:
-	 float spawnRate{};
+	 int spawnRate{};
 	 int spawnAmount{};
 	 int spawnType{};
 	 float timeSinceLastSpawn{};

@@ -239,7 +239,7 @@ void GameScene::set_selected_level(int lvl)
 		if (entity.getName() == "EnemySpawner")
 		{
 			//Create Enemy Spawners
-			float spawnRate = entity.getField<int>("spawnRate").value();
+			int spawnRate = entity.getField<int>("spawnRate").value();
 			int spawnAmount = entity.getField<int>("spawnAmount").value();
 			int spawnType = entity.getField<int>("spawnType").value();
 			float posX = entity.getPosition().x;

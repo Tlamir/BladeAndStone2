@@ -143,7 +143,7 @@ void Weapon::Attack(float dt)
 			isWaitingAtPeak = true;
 			if (isMagicWeapon)
 			{
-				Vector2 bulletStartPos = { position.x + positonBuffer.x, position.y + positonBuffer.y };
+				Vector2 bulletStartPos = { position.x + positonBuffer.x, position.y + positonBuffer.y/2 };
 				bulletManager->fireBullet(bulletStartPos,physicsWorld);
 			}
 		}

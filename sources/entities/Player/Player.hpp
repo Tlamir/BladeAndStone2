@@ -14,9 +14,8 @@ enum PlayerAnimationState
 {
     IDLE,
     WALK,
-    JUMP_START,
-    JUMP_APEX,
-    JUMP_FALL
+    HURT,
+    DEAD
 };
 
 class Player : public BaseEntity

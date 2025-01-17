@@ -184,8 +184,8 @@ Rectangle Weapon::getHitbox() const
 	float weaponHeight = static_cast<float>(sprite.height) / spriteGridSize;
 
 	// Calculate the hitbox dimensions
-	float hitboxWidth = weaponWidth * 1;  // 80% of the weapon's width
-	float hitboxHeight = weaponHeight * 2; // 50% of the weapon's height
+	float hitboxWidth = weaponWidth * 1;  
+	float hitboxHeight = weaponHeight * 2; 
 
 	// Center the hitbox around the weapon's position
 	float hitboxX = position.x + positonBuffer.x - (hitboxWidth);

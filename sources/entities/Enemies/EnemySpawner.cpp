@@ -16,7 +16,7 @@ EnemySpawner::~EnemySpawner()
 {
 }
 
-void EnemySpawner::update(float dt)
+void EnemySpawner::update(float dt,Vector2 playerPos)
 {
 	timeSinceLastSpawn += dt; // Accumulate time
 
@@ -31,6 +31,7 @@ void EnemySpawner::update(float dt)
 	{
 		enemy->draw();
 		enemy->update(dt);
+		enemy->setTargetPos(playerPos);
 	}
 
 }

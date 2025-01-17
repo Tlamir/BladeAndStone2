@@ -39,6 +39,9 @@ private:
     void set_velocity(float vx, float vy);
     void initializeAnimations();
 
+    Vector2 targetPos{};
+    float speed{1.5f};
+
 public:
     Enemy();
     ~Enemy();
@@ -46,9 +49,10 @@ public:
     void init_for_level(const b2Vec2& position, b2World* physicsWorld);
     void update(float dt) override;
     void draw() override;
-    void move(const b2Vec2& playerPosition);
+    void move();
     void set_velocity_x(float vx);
     void set_velocity_y(float vy);
     void set_velocity_xy(float vx, float vy);
     void check_if_move();
+    void setTargetPos(Vector2 playerPos);
 };

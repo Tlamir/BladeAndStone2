@@ -14,7 +14,7 @@ public:
 	);
 	~EnemySpawner();
 
-	void update(float deltaTime);
+	void update(float deltaTime,Vector2 playerPos);
 
 	void DrawEnemies();
 

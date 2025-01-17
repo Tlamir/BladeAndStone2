@@ -53,7 +53,7 @@ Scenes GameScene::update(float dt)
 
 	for (auto& enemySpawner : enemySpawners)
 	{
-		enemySpawner->update(dt);
+		enemySpawner->update(dt, player->get_position());
 	}
 
 	return Scenes::NONE;
@@ -251,7 +251,7 @@ void GameScene::set_selected_level(int lvl)
 			float posY = entity.getPosition().y;
 			DebugUtils::println("EnemySpawner created at position ({}, {})", posX, posY);
 			// Pass the position to the EnemySpawner
-			 // Create the spawner with position
+			 // Create the spawner with 
 			enemySpawners.emplace_back(std::make_unique<EnemySpawner>(spawnRate, spawnAmount, spawnType, posX, posY, world.get()));
 			
 		}

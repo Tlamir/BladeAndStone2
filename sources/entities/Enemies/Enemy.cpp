@@ -2,9 +2,11 @@
 #include <Constants.hpp>
 #include <iostream>
 
+#include"../Player/Player.hpp"
 Enemy::Enemy()
 {
 	// Load enemy sprite
+	// Move sprite loading to enemySpawner
 	this->sprite = LoadTexture(AppConstants::GetAssetPath("Characters/demon_.png").c_str());
 
 	initializeAnimations();
@@ -21,7 +23,7 @@ void Enemy::initializeAnimations()
 	auto make_enemy_frame_rect = [](float frame_num) -> Rectangle {
 		return {
 			.x = frame_num * 24.0f,  // Assuming 24x24 frames on the sprite sheet
-			.y = 0.0f,                // All frames are in the first row initially
+			.y = 0.0f,                
 			.width = 24.0f,
 			.height = 24.0f
 		};
@@ -90,8 +92,6 @@ void Enemy::init_for_level(const b2Vec2& position, b2World* physicsWorld)
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.fixedRotation = true;
 	bodyDef.position.Set(spawn_position.x, spawn_position.y);;
-	// Here its setting body pos 256 400 like that to body
-	// Convert LDTK position to physics world position
 
 	this->body = physicsWorld->CreateBody(&bodyDef);
 
@@ -122,10 +122,8 @@ void Enemy::update(float dt)
 		current_anim_frame = (current_anim_frame + 1) % animation_map[anim_state].size();
 	}
 
-	// Placeholder for movement or AI logic
-	move({ 300.f, 300.f });
+	move();
 
-	// Switch to walk animation if moving
 	if (body->GetLinearVelocity().Length() > 0.1f && anim_state != ENEMY_HURT)
 	{
 		anim_state = ENEMY_WALK;
@@ -135,13 +133,8 @@ void Enemy::update(float dt)
 		anim_state = ENEMY_IDLE;
 	}
 
-	// Ensure the current animation state has valid frames
 	auto current_anim_states = animation_map[anim_state];
 	current_anim_frame = current_anim_frame % current_anim_states.size();
-	std::cout << "Velocity: ("
-		<< body->GetLinearVelocity().x << ", "
-		<< body->GetLinearVelocity().y << ")\n";
-	std::cout << "Current Animation State: " << anim_state << std::endl;
 }
 
 void Enemy::draw()
@@ -160,10 +153,7 @@ void Enemy::draw()
 		current_anim_rect.width *= -1;
 	}
 	
-
-
-
-	// Draw player collision box
+	// Draw enemy collision box
 	if (GameConstants::debugModeCollision)
 	{
 		// Draw debug collision box
@@ -193,15 +183,17 @@ void Enemy::draw()
 		WHITE);
 }
 
-void Enemy::move(const b2Vec2& playerPosition)
+void Enemy::move()
 {
 	if (!body) return;
 
-	// Get the current enemy position
 	b2Vec2 enemyPosition = body->GetPosition();
-	
-	// Calculate the direction vector from the enemy to the player
-	b2Vec2 direction = playerPosition - enemyPosition;
+
+	Vector2 enemyPos = { enemyPosition.x, enemyPosition.y };
+
+	Vector2 scaledTargetPos = { targetPos.x / GameConstants::PhysicsWorldScale, targetPos.y / GameConstants::PhysicsWorldScale };
+
+	Vector2 direction = { scaledTargetPos.x - enemyPos.x, scaledTargetPos.y - enemyPos.y };
 
 	// Normalize the direction vector
 	float length = std::sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -211,11 +203,13 @@ void Enemy::move(const b2Vec2& playerPosition)
 		direction.y /= length;
 	}
 
-	// Set the movement speed (you can define a constant or variable for this)
-	float speed = 2.0f; // Adjust this value as needed
+	b2Vec2 velocity = { direction.x * speed, direction.y * speed };
+	body->SetLinearVelocity(velocity);
+}
 
-	// Set the enemy velocity toward the player
-	body->SetLinearVelocity({ direction.x * speed, direction.y * speed });
+void Enemy::setTargetPos(Vector2 playerPos)
+{
+	targetPos = playerPos;
 }
 
 

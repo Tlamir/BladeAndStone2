@@ -18,7 +18,8 @@ public:
         float attackWaitTime,
         bool isMagicWeapon,
         int selectedWeaponFromTileset,
-        b2World* world
+        b2World* world,
+        int damage
     );
     ~Weapon();
     void update(float dt) override;
@@ -29,7 +30,7 @@ public:
     Rectangle getHitbox() const;
 
     void drawHitbox() const;
-
+    int damage{ 50 };
 private:
     Texture2D sprite;
     // Player pos + pos buffer = weapon pos

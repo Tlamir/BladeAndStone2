@@ -282,7 +282,8 @@ void Player::intializeInventory(b2World* physicsWorld)
         0.2f,
         false,
         1,
-        physicsWorld
+        physicsWorld,
+        50
     );
 
     // Load the texture for the magic weapon
@@ -297,7 +298,8 @@ void Player::intializeInventory(b2World* physicsWorld)
         0.1f,
         true,
         18,
-        physicsWorld
+        physicsWorld,
+        1
     );
 }
 

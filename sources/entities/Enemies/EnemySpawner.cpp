@@ -33,16 +33,23 @@ void EnemySpawner::update(float dt, Vector2 playerPos)
 		auto& enemy = *it;
 		enemy->draw();
 		enemy->update(dt);
-		enemy->setTargetPos(playerPos);
 		// If the enemy hits the weapon's hitbox
 		if (enemy->checkCollisionWithWeapon(weapon->getHitbox()))
 		{
-			it = enemies.erase(it);
+			enemy->onHit(50);
+			if ((!enemy->isAlive()))
+			{
+				it = enemies.erase(it);
+
+			}
+			return;
 		}
 		else
 		{
 			++it;
 		}
+		enemy->setTargetPos(playerPos);
+		
 	}
 
 }

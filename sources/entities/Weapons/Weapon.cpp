@@ -7,24 +7,34 @@ std::unique_ptr<BulletManager> Weapon::bulletManager = nullptr;
 
 
 
-Weapon::Weapon(Texture2D& weaponTexture, Vector2& positonBuffer, float activationRotaion,
-	int textureGrid, float attackSpeed, float attackReloadSpeed, float attackWaitTime,
-	bool isMagicWeapon, int selectedWeaponFromTileset, b2World* world)
+Weapon::Weapon(
+	Texture2D& weaponTexture,
+	Vector2& positionBuffer,
+	float activationRotation,
+	int textureGrid,
+	float attackSpeed,
+	float attackReloadSpeed,
+	float attackWaitTime,
+	bool isMagicWeapon,
+	int selectedWeaponFromTileset,
+	b2World* world,
+	int weaponDamage)
+	: sprite(weaponTexture),
+	positonBuffer(positionBuffer),
+	attackRotation(activationRotation),
+	spriteGridSize(textureGrid),
+	attackSpeed(attackSpeed),
+	attackReloadSpeed(attackReloadSpeed),
+	attackWaitingAtPeak(attackWaitTime),
+	isMagicWeapon(isMagicWeapon),
+	selectedWeaponFromTileset(selectedWeaponFromTileset),
+	damage(weaponDamage),
+	physicsWorld(world)
 {
-	this->sprite = weaponTexture;
-	this->positonBuffer = positonBuffer;
-	this->physicsWorld = world;
-	attackRotation = activationRotaion;
-	spriteGridSize = textureGrid;
-	this->attackSpeed = attackSpeed;
-	this->attackReloadSpeed = attackReloadSpeed;
-	this->attackWaitingAtPeak = attackWaitTime;
-	this->isMagicWeapon = isMagicWeapon;
-	this->selectedWeaponFromTileset = selectedWeaponFromTileset;
-
+	// Initialize BulletManager
 	bulletManager = std::make_unique<BulletManager>();
 
-	// Create weapon physics body
+	// Create the weapon's physics body if a physics world is provided
 	if (physicsWorld)
 	{
 		b2BodyDef bodyDef;
@@ -34,18 +44,17 @@ Weapon::Weapon(Texture2D& weaponTexture, Vector2& positonBuffer, float activatio
 		weaponBody = physicsWorld->CreateBody(&bodyDef);
 
 		b2PolygonShape weaponShape;
-		weaponShape.SetAsBox(0.5f, 0.1f);
+		weaponShape.SetAsBox(0.5f, 0.1f); // Set weapon shape as a box
 
 		b2FixtureDef fixtureDef;
 		fixtureDef.shape = &weaponShape;
-		fixtureDef.isSensor = true;
+		fixtureDef.isSensor = true; // Make it a sensor for collision detection
 		fixtureDef.filter.categoryBits = PhysicsTypes::Categories::WEAPON;
 		fixtureDef.filter.maskBits = PhysicsTypes::Categories::ENEMY;
 
-		weaponBody->CreateFixture(&fixtureDef);
+		weaponBody->CreateFixture(&fixtureDef); // Attach fixture to the weapon body
 	}
 }
-
 Weapon::~Weapon()
 {
 	UnloadTexture(this->sprite);

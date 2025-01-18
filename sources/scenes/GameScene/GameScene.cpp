@@ -1,20 +1,20 @@
-#include <memory>
-#include <raylib.h>
 #include <box2d/box2d.h>
+#include <fmt/core.h>
 #include <LDtkLoader/Project.hpp>
 #include <LDtkLoader/World.hpp>
-#include <fmt/core.h>
+#include <memory>
+#include <raylib.h>
 
 #include <Constants.hpp>
 #include <utils/DebugUtils.hpp>
 
-#include "GameScene.hpp"
 #include "../../physics/PhysicsTypes.hpp"
 #include "../Scenes.hpp"
+#include "GameScene.hpp"
 
 #include "./entities/BaseEntity.hpp"
-#include <entities/Camera/Camera.hpp>
 #include"./entities/Enemies/EnemySpawner.hpp"
+#include <entities/Camera/Camera.hpp>
 
 using namespace std;
 
@@ -32,7 +32,7 @@ GameScene::GameScene()
 	ldtkWorld = &ldtkProject->getWorld();
 
 	current_level = -1;
-	set_selected_level(0);
+	setSelectedLevel(0);
 }
 
 GameScene::~GameScene()
@@ -51,7 +51,6 @@ Scenes GameScene::update(float dt)
 
 	player->update(dt);
 
-	// Enemy player collision check
 	for (auto& enemySpawner : enemySpawners)
 	{
 		enemySpawner->update(dt, player->get_position());
@@ -125,7 +124,7 @@ void GameScene::draw()
 	EndMode2D();
 }
 
-void GameScene::set_selected_level(int lvl)
+void GameScene::setSelectedLevel(int lvl)
 {
 	if (current_level >= 0)
 	{
@@ -215,7 +214,7 @@ void GameScene::set_selected_level(int lvl)
 						{
 							
 							if (GameConstants::debugModeCollision) DrawRectangle(target_pos.x, target_pos.y, tile_size, tile_size, Fade(RED, 0.5f));
-							create_solid_block(target_pos.x, target_pos.y, tile_size);
+							createSolidBlock(target_pos.x, target_pos.y, tile_size);
 						}
 					}
 				}
@@ -267,7 +266,7 @@ void GameScene::set_selected_level(int lvl)
 	}
 }
 
-void GameScene::create_solid_block(float targetX, float targetY, float tileSize)
+void GameScene::createSolidBlock(float targetX, float targetY, float tileSize)
 {
 	// Convert to Box2D coordinates (center-based)
 	float halfSize = tileSize / 2.0f;

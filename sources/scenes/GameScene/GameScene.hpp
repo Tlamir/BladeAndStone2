@@ -38,9 +38,9 @@ public:
     void draw() override;
     Scenes update(float dt) override;
 
-    void set_selected_level(int lvl);
+    void setSelectedLevel(int lvl);
 
-    void create_solid_block(float targetX, float targetY, float tileSize);
+    void createSolidBlock(float targetX, float targetY, float tileSize);
 
     void CheckCollisions(std::unique_ptr<EnemySpawner>& enemySpawner);
 

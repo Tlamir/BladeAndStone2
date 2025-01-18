@@ -72,7 +72,7 @@ void GameScene::draw()
 	DrawTextureRec(renderedLevelTexture,
 		{ 0, 0, (float)renderedLevelTexture.width, (float)-renderedLevelTexture.height },
 		{ 0, 0 }, WHITE);
-
+	
 	// Draw solid blocks debug outlines
 	if (GameConstants::debugModeCollision)
 	{
@@ -112,14 +112,15 @@ void GameScene::draw()
 		}
 	}
 
-	// Draw Player
-	player->draw();
+	
 	// Draw EnnemySpawner
 	for (auto& enemySpawner : enemySpawners)
 	{
 		enemySpawner->DrawEnemies();
 	}
 
+	// Draw Player (Draw player at last to render always on top)
+	player->draw();
 
 	EndMode2D();
 }

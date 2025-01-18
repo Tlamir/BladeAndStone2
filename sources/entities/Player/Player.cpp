@@ -304,7 +304,7 @@ void Player::intializeInventory(b2World* physicsWorld)
         2.1f,
         0.2f,
         false,
-        1,
+        8,
         physicsWorld,
         50
     );

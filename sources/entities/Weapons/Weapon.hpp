@@ -10,8 +10,8 @@ class Weapon : public BaseEntity
 public:
     Weapon(
         Texture2D& weaponTexture,
-        Vector2& positonBuffer,
-        float activationRotaion,
+        Vector2& positionBuffer,
+        float activationRotation,
         int textureGrid,
         float attackSpeed,
         float attackReloadSpeed,
@@ -22,24 +22,23 @@ public:
         int damage
     );
     ~Weapon();
+
     void update(float dt) override;
     void draw() override;
+
     Rectangle selectWeaponFromTexture(Texture2D sprite, int index, int spriteGridSize);
     void updatePosition(float posX, float posY, bool isLookingRight);
-    void Attack(float dt);
+    void attack(float dt);
     Rectangle getHitbox() const;
     BulletManager* getBulletManager();
 
-
     void drawHitbox() const;
-    int damage{ 50 };
+
 private:
     Texture2D sprite;
-    // Player pos + pos buffer = weapon pos
-    Vector2 positonBuffer{};
+    Vector2 positionBuffer{}; // Offset from player position to weapon position
     Vector2 origin = {};
-    // Player pos
-    Vector2 position{ 0.f,0.f };
+    Vector2 position{ 0.f, 0.f }; // Player position
     Rectangle destRec = {};
     Rectangle sourceRec{};
     int spriteGridSize{ 4 };
@@ -50,6 +49,7 @@ private:
     float attackReloadSpeed{ 1.f };
     bool isLookingRight{ false };
     int selectedWeaponFromTileset{ 0 };
+    int damage{};
 
     float elapsedTime{ 0.0f };
     bool isAttacking{ true };

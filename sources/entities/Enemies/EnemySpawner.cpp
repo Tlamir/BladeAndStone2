@@ -43,12 +43,6 @@ void EnemySpawner::DrawEnemies()
 
 void EnemySpawner::spawnEnemies()
 {
-	std::cout << "-------------- ENEMY SPAWNED --------------\n";
-	std::cout << "Type: " << spawnType << "\n";
-	std::cout << "Amount: " << spawnAmount << "\n";
-	std::cout << "Spawner Position: (" << posX << ", " << posY << ")\n";
-	std::cout << "------------------------------------------\n";
-
 	if (spawnType < EnemyTextureLoader::DEMON || spawnType > EnemyTextureLoader::SLIMEBALL)
 		throw std::out_of_range("Invalid spawnType provided.");
 
@@ -58,7 +52,7 @@ void EnemySpawner::spawnEnemies()
 	// Create random are for enemy pos
 	for (int i = 0; i < spawnAmount; i++)
 	{
-		float spawnX = posX + (rand() % 21 - 10);
+		float spawnX = posX + (rand() % 40 - 10);
 		float spawnY = posY + (rand() % 21 - 10);
 		b2Vec2 spawnPosition(spawnX, spawnY);
 

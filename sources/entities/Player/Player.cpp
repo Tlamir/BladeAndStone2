@@ -68,6 +68,8 @@ Player::~Player()
 
 void Player::update(float dt)
 {
+    if (health<=0)  return;
+
     // Update animation based on time
     animation_ticker -= dt;
     if (animation_ticker <= 0)
@@ -361,3 +363,13 @@ Rectangle Player::getHitbox()
     };
 }
 
+
+bool Player::isAlive()
+{
+    return health <= 0;
+}
+
+int Player::getHealth()
+{
+    return health <= 0 ? health : 0;
+}

@@ -87,9 +87,8 @@ public:
     bool checkCollisionWithEnemy(const Rectangle& enemyHitbox);
     Rectangle getHitbox();
 
-    // Collision box adjustment
-    void adjustCollisionBox(const b2Vec2& offset);
-
     // Damage handling
     void getDamage(int damage);
+    bool isAlive();
+    int getHealth();
 };

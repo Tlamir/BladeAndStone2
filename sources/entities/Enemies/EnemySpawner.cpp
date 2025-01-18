@@ -50,7 +50,7 @@ void EnemySpawner::update(float dt, Vector2 playerPos)
         // Check collision with bullets
         for (const auto& bulletHitbox : myrefBulletManager->getBulletHitboxes())
         {
-            if (enemy->checkCollisionWithWeapon(bulletHitbox))
+            if (enemy->checkCollisionWithWeapon(*bulletHitbox))
             {
                 enemy->onHit(25);
                 if (!enemy->isAlive())

@@ -6,7 +6,7 @@
 class Bullet : public BaseEntity
 {
 public:
-	Bullet(Vector2 startPos, b2World* world);
+	Bullet(Vector2 startPos, b2World* world,Texture2D* bulletSprite);
 	~Bullet();
 	void fire(Vector2 direction);
 	void update(float dt) override;
@@ -18,11 +18,12 @@ public:
 	// Physics
 	b2Body* bulletBody = nullptr;
 	b2World* physicsWorld = nullptr;
+	mutable Rectangle hitbox;
 
 private:
-	Texture2D sprite;
-	Vector2 position;
-	Vector2 direction;
+	Texture2D sprite{};
+	Vector2 position{};
+	Vector2 direction{};
 	float speed{ 400.0f };
 	bool active{ false };
 	float lifetime{ 2.0f };

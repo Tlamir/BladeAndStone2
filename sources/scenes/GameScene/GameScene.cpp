@@ -52,7 +52,7 @@ Scenes GameScene::update(float dt)
 	player->update(dt);
 
 	
-
+	// Enemy player collision check
 	for (auto& enemySpawner : enemySpawners)
 	{
 		enemySpawner->update(dt, player->get_position());

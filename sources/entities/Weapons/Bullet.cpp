@@ -5,10 +5,9 @@
 #include <raylib.h>
 #include <physics/PhysicsTypes.hpp>
 
-Bullet::Bullet(Vector2 startPos, b2World* world) : position(startPos), physicsWorld(world)
+Bullet::Bullet(Vector2 startPos, b2World* world, Texture2D* bulletSprite) : position(startPos), physicsWorld(world), sprite(bulletSprite ? *bulletSprite : Texture2D{})
 {
     // Move this to bullet manager
-    sprite = LoadTexture(AppConstants::GetAssetPath("Weapons/Projectile.png").c_str());
     if (physicsWorld)
     {
         b2BodyDef bodyDef;
@@ -34,7 +33,7 @@ Bullet::Bullet(Vector2 startPos, b2World* world) : position(startPos), physicsWo
 
 Bullet::~Bullet()
 {
-    UnloadTexture(sprite);
+    
 }
 
 void Bullet::fire(Vector2 direction)
@@ -98,5 +97,12 @@ Vector2 Bullet::getPosition() const
 
 Rectangle Bullet::getHitbox() const
 {
-    return Rectangle{ position.x - 0.5f, position.y - 0.5f, (float)sprite.width*2, (float)sprite.height*2};
+    // Update the cached hitbox based on current position
+    hitbox = Rectangle{
+        position.x - 0.5f,
+        position.y - 0.5f,
+        (float)sprite.width * 2,
+        (float)sprite.height * 2
+    };
+    return hitbox;
 }

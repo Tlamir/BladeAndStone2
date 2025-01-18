@@ -1,8 +1,17 @@
 #include "BulletManager.hpp"
-
+#include "Constants.hpp"
+BulletManager::BulletManager()
+{
+	bulletSprite = LoadTexture(AppConstants::GetAssetPath("Weapons/Projectile.png").c_str());
+}
+BulletManager::~BulletManager()
+{
+	UnloadTexture(bulletSprite);
+}
 void BulletManager::fireBullet(const Vector2& position,b2World* currentWorld)
 {
-	bullets.emplace_back(std::make_unique<Bullet>(position, currentWorld));
+
+	bullets.emplace_back(std::make_unique<Bullet>(position, currentWorld,&bulletSprite));
 
 	// Fire the bullet in the positive X direction (right)
 	bullets.back()->fire(Vector2{ 1.0f, 0.0f });
@@ -29,16 +38,14 @@ void BulletManager::draw()
 	}
 }
 
-void BulletManager::checkCollisions()
+std::vector<const Rectangle*> BulletManager::getBulletHitboxes() const
 {
-	// Placeholder for collision 
-}
-std::vector<Rectangle> BulletManager::getBulletHitboxes() const
-{
-	std::vector<Rectangle> hitboxes;
-	for (const auto& bullet : bullets)
+	std::vector<const Rectangle*> hitboxes;
+	hitboxes.reserve(bullets.size());
+	for (const std::unique_ptr<Bullet>& bullet : bullets)
 	{
-		hitboxes.push_back(bullet->getHitbox());
+		bullet->getHitbox();
+		hitboxes.push_back(&bullet->hitbox);
 	}
 	return hitboxes;
 }

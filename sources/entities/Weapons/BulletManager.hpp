@@ -8,13 +8,18 @@
 class BulletManager : public BaseEntity
 {
 public:
+	BulletManager();
+	~BulletManager();
 	void fireBullet(const Vector2& position, b2World* currentWorld);
 	void update(float dt);
 	void draw();
-	void checkCollisions();
-	std::vector<Rectangle> getBulletHitboxes() const;
+
+	std::vector<const Rectangle*> getBulletHitboxes() const;
+
 
 
 private:
 	std::vector<std::unique_ptr<Bullet>> bullets;
+	Texture2D bulletSprite;
+	Rectangle hitbox;
 };

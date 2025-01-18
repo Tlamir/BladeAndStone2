@@ -77,16 +77,16 @@ void Player::update(float dt)
     }
 
     // Update player movement and behaviors
-    check_if_move();
-    check_if_should_respawn();
-    update_camera();
+    checkIfMove();
+    checkIfRespawn();
+    updateCamera();
 
     // Handle player weapons
     Sword->update(dt);
     Magic->update(dt);
 }
 
-void Player::update_camera()
+void Player::updateCamera()
 {
     if (body)
     {
@@ -160,7 +160,7 @@ void Player::draw()
     Magic->draw();
 }
 
-void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
+void Player::initForLevel(const ldtk::Entity* entity, b2World* physicsWorld)
 {
     auto pos = entity->getPosition();
    
@@ -206,7 +206,7 @@ void Player::getDamage(int damage)
     health -= damage;
 }
 
-void Player::set_velocity_x(float vx)
+void Player::setVelocityX(float vx)
 {
     body->SetLinearVelocity({
         vx,
@@ -214,7 +214,7 @@ void Player::set_velocity_x(float vx)
         });
 }
 
-void Player::set_velocity_y(float vy)
+void Player::setVelocityY(float vy)
 {
     body->SetLinearVelocity({
         body->GetLinearVelocity().x,
@@ -222,12 +222,12 @@ void Player::set_velocity_y(float vy)
         });
 }
 
-void Player::set_velocity_xy(float vx, float vy)
+void Player::setVelocityXY(float vx, float vy)
 {
     body->SetLinearVelocity({ vx, vy });
 }
 
-void Player::check_if_move()
+void Player::checkIfMove()
 {
     const auto effective_speed = 6.0f * GameConstants::scale;
 
@@ -256,7 +256,7 @@ void Player::check_if_move()
         vy += effective_speed;
     }
 
-    set_velocity_xy(vx, vy);
+    setVelocityXY(vx, vy);
 
     // Update animation state based on movement
     if (vx != 0 || vy != 0)
@@ -269,12 +269,12 @@ void Player::check_if_move()
     }
 }
 
-void Player::check_if_should_respawn()
+void Player::checkIfRespawn()
 {
     // Placeholder for respawn
 }
 
-Vector2 Player::get_position()
+Vector2 Player::getPosition()
 {
     if (body)
     {

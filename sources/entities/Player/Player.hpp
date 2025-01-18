@@ -49,19 +49,19 @@ private:
     int health = 100;
 
     // Movement and physics utilities
-    void set_velocity_x(float vx);
-    void set_velocity_y(float vy);
-    void set_velocity_xy(float vx, float vy);
+    void setVelocityX(float vx);
+    void setVelocityY(float vy);
+    void setVelocityXY(float vx, float vy);
     bool can_move_in_x_direction(bool moving_right);
 
     // Checks for player state
     void check_if_on_floor();
     void check_if_jump();
-    void check_if_move();
-    void check_if_should_respawn();
+    void checkIfMove();
+    void checkIfRespawn();
 
     // Camera and weapon updates
-    void update_camera();
+    void updateCamera();
     void updateWeaponPosition(std::unique_ptr<Weapon>& weapon, float posX, float posY, bool isLookingRight);
 
 public:
@@ -74,11 +74,11 @@ public:
     void draw() override;
 
     // Position and camera accessor
-    Vector2 get_position();
+    Vector2 getPosition();
     GameCamera& get_camera() { return camera; }
 
     // Initialization and inventory setup
-    void init_for_level(const ldtk::Entity* entity, b2World* physicsWorld);
+    void initForLevel(const ldtk::Entity* entity, b2World* physicsWorld);
     void intializeInventory(b2World* physicsWorld);
 
     // Weapons and collision handling

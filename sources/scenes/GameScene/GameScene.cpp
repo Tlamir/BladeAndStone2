@@ -53,7 +53,7 @@ Scenes GameScene::update(float dt)
 
 	for (auto& enemySpawner : enemySpawners)
 	{
-		enemySpawner->update(dt, player->get_position());
+		enemySpawner->update(dt, player->getPosition());
 
 		CheckCollisions(enemySpawner);
 	}
@@ -231,7 +231,7 @@ void GameScene::setSelectedLevel(int lvl)
 		DebugUtils::println("  - {}", entity.getName());
 		if (entity.getName() == "Player")
 		{
-			player->init_for_level(&entity, world.get());
+			player->initForLevel(&entity, world.get());
 		}
 
 		if (entity.getName() == "Portal")

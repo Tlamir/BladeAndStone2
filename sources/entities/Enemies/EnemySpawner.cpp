@@ -1,17 +1,15 @@
-#include "EnemySpawner.hpp"
-#include <iostream>
 #include "Enemy.hpp"
+#include "EnemySpawner.hpp"
 #include "EnemyTextureLoader.hpp"
+#include <iostream>
 
-EnemySpawner::EnemySpawner(int spawnRate, int spawnAmount, int spawnType, float x, float y, b2World* physicsWorld, Weapon* weapon, BulletManager* bulletManager) :
+EnemySpawner::EnemySpawner(int spawnRate, int spawnAmount, int spawnType, float x, float y, b2World* physicsWorld) :
 spawnRate(spawnRate),
 spawnAmount(spawnAmount),
 spawnType(spawnType),
 posX(x),
 posY(y),
-physicsWorld(physicsWorld),
-weapon(weapon),
-myrefBulletManager(bulletManager)
+physicsWorld(physicsWorld)
 {
 }
 
@@ -57,6 +55,7 @@ void EnemySpawner::spawnEnemies()
 	auto enemyType = static_cast<EnemyTextureLoader::EnemyTextures>(spawnType);
 	auto enemyTexture = EnemyTextureLoader::getEnemyTexture(enemyType);
 
+	// Create random are for enemy pos
 	for (int i = 0; i < spawnAmount; i++)
 	{
 		float spawnX = posX + (rand() % 21 - 10);

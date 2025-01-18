@@ -1,8 +1,7 @@
 #pragma once
 #include "Enemy.hpp"
-#include <vector>
 #include <memory>
-#include<./entities/Weapons/Weapon.hpp>
+#include <vector>
 class EnemySpawner
 {
 public:
@@ -11,9 +10,7 @@ public:
 		int spawnType,
 		float x,
 		float y,
-		b2World* physicsWorld,
-		Weapon* weapon,
-		BulletManager* bulletManager
+		b2World* physicsWorld
 	);
 	~EnemySpawner();
 
@@ -33,8 +30,6 @@ private:
 	 float posX;
 	 float posY;
 	 b2World* physicsWorld{ nullptr };
-	 Weapon* weapon;
-	 BulletManager* myrefBulletManager;
 
 
 

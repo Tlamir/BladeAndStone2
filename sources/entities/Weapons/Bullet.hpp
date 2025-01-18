@@ -1,7 +1,7 @@
 #pragma once
-#include "raylib.h"
 #include "../BaseEntity.hpp"
 #include"box2d/box2d.h"
+#include "raylib.h"
 
 class Bullet : public BaseEntity
 {
@@ -15,10 +15,11 @@ public:
 	void deactivate();
 	Vector2 getPosition() const;
 	Rectangle getHitbox() const;
+
 	// Physics
 	b2Body* bulletBody = nullptr;
 	b2World* physicsWorld = nullptr;
-	mutable Rectangle hitbox;
+	mutable Rectangle hitbox{};
 
 private:
 	Texture2D sprite{};

@@ -1,13 +1,15 @@
 #include "Bullet.hpp"
 #include "Constants.hpp"
-#include <physics/PhysicsTypes.hpp>
 #include <box2d/box2d.h>
-#include <raylib.h>
 #include <physics/PhysicsTypes.hpp>
+#include <raylib.h>
 
-Bullet::Bullet(Vector2 startPos, b2World* world, Texture2D* bulletSprite) : position(startPos), physicsWorld(world), sprite(bulletSprite ? *bulletSprite : Texture2D{})
+Bullet::Bullet(Vector2 startPos, b2World* world, Texture2D* bulletSprite) : 
+    position(startPos), 
+    physicsWorld(world), 
+    sprite(bulletSprite ? *bulletSprite : Texture2D{})
 {
-    // Move this to bullet manager
+    
     if (physicsWorld)
     {
         b2BodyDef bodyDef;
@@ -18,16 +20,16 @@ Bullet::Bullet(Vector2 startPos, b2World* world, Texture2D* bulletSprite) : posi
         bulletBody = physicsWorld->CreateBody(&bodyDef);
 
         b2PolygonShape bulletShape;
-        bulletShape.SetAsBox(0.5f, 0.5f); // Set weapon shape as a box
+        bulletShape.SetAsBox(0.5f, 0.5f);
         
 
         b2FixtureDef fixtureDef;
         fixtureDef.shape = &bulletShape;
-        fixtureDef.isSensor = true; // Make it a sensor for collision detection
+        fixtureDef.isSensor = true;
         fixtureDef.filter.categoryBits = PhysicsTypes::Categories::WEAPON;
         fixtureDef.filter.maskBits = PhysicsTypes::Categories::ENEMY;
 
-        bulletBody->CreateFixture(&fixtureDef); // Attach fixture to the weapon body
+        bulletBody->CreateFixture(&fixtureDef);
     }
 }
 
@@ -47,7 +49,6 @@ void Bullet::update(float dt)
 {
     if (!active) return;
 
-    // Update bullet position based on direction and speed
     position.x += direction.x * speed * dt;
     position.y += direction.y * speed * dt;
 
@@ -60,10 +61,9 @@ void Bullet::draw()
 {
     if (active)
     {
-        //DrawTexture(sprite, static_cast<int>(position.x), static_cast<int>(position.y), WHITE);
         DrawTextureEx(sprite, {position.x, position.y },0.f,2.f, WHITE);
 
-        // Get the size of the bullet shape from the physics body
+       
         if (bulletBody)
         {
             b2PolygonShape* bulletShape = dynamic_cast<b2PolygonShape*>(bulletBody->GetFixtureList()->GetShape());
@@ -71,7 +71,7 @@ void Bullet::draw()
             {
                 if (bulletShape)
                 {
-                    // Draw the rectangle in red with line thickness of 2
+                    
                     DrawRectangleLinesEx(getHitbox(), 2, RED);
                 }
             }
@@ -90,6 +90,7 @@ void Bullet::deactivate()
 {
     active = false;
 }
+
 Vector2 Bullet::getPosition() const
 {
     return position;

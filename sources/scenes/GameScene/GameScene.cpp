@@ -249,7 +249,7 @@ void GameScene::setSelectedLevel(int lvl)
 			float posY = entity.getPosition().y;
 			DebugUtils::println("EnemySpawner created at position ({}, {})", posX, posY);
 
-			enemySpawners.emplace_back(std::make_unique<EnemySpawner>(spawnRate, spawnAmount, spawnType, posX, posY, world.get(),player->getWeapon(),player->getBulletManager()));
+			enemySpawners.emplace_back(std::make_unique<EnemySpawner>(spawnRate, spawnAmount, spawnType, posX, posY, world.get()));
 
 		}
 	}

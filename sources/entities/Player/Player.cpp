@@ -141,7 +141,7 @@ void Player::draw()
             RED
         );
     }
-
+   
     // Weapons draw
     Sword->updatePosition(spritePosX, spritePosY, looking_right);
     Sword->draw();
@@ -181,6 +181,11 @@ void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
 
     // Manage weapons
     intializeInventory(physicsWorld);
+}
+
+void Player::getDamage(int damage)
+{
+    health -= damage;
 }
 
 void Player::set_velocity_x(float vx)
@@ -312,3 +317,29 @@ BulletManager* Player::getBulletManager()
 {
     return Magic->getBulletManager();
 }
+
+bool Player::checkCollisionWithEnemy(const Rectangle& enemyHitbox)
+{
+    return CheckCollisionRecs(getHitbox(), enemyHitbox);
+}
+
+Rectangle Player::getHitbox()
+{
+
+    if (!body) return Rectangle{ 0, 0, 0, 0 };
+
+    auto bodyPos = body->GetPosition();
+    b2PolygonShape* polygonShape = (b2PolygonShape*)body->GetFixtureList()->GetShape();
+    Vector2 boxSize = {
+        polygonShape->m_vertices[2].x * 2 * GameConstants::PhysicsWorldScale,
+        polygonShape->m_vertices[2].y * 2 * GameConstants::PhysicsWorldScale
+    };
+
+    return Rectangle{
+        (bodyPos.x * GameConstants::PhysicsWorldScale) - (boxSize.x / 2),
+        (bodyPos.y * GameConstants::PhysicsWorldScale) - (boxSize.y / 2),
+        boxSize.x,
+        boxSize.y
+    };
+}
+

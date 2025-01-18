@@ -22,6 +22,7 @@ public:
 	void DrawEnemies();
 
 	void spawnEnemies();
+	std::vector<std::unique_ptr<Enemy>>& getEnemies();
 
 private:
 	 int spawnRate{};

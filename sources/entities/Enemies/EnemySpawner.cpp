@@ -100,3 +100,8 @@ void EnemySpawner::spawnEnemies()
 		enemies.emplace_back(std::move(enemy));
 	}
 }
+
+std::vector<std::unique_ptr<Enemy>>& EnemySpawner::getEnemies()
+{
+    return enemies;
+}

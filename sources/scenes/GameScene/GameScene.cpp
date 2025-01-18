@@ -51,9 +51,18 @@ Scenes GameScene::update(float dt)
 	world->Step(timeStep, velocityIterations, positionIterations);
 	player->update(dt);
 
+	
+
 	for (auto& enemySpawner : enemySpawners)
 	{
 		enemySpawner->update(dt, player->get_position());
+		for (auto& enemy: enemySpawner->getEnemies())
+		{
+			if (player->checkCollisionWithEnemy(enemy->getHitbox()))
+			{
+				player->getDamage(1);
+			}
+		}
 	}
 
 	return Scenes::NONE;

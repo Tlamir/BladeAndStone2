@@ -10,6 +10,7 @@
 #include <entities/Camera/Camera.hpp>
 #include <entities/Weapons/Weapon.hpp>
 
+// Animation states for the player
 enum PlayerAnimationState
 {
     IDLE,
@@ -21,61 +22,74 @@ enum PlayerAnimationState
 class Player : public BaseEntity
 {
 private:
-    // Player sprite and physical body
+    // Sprite and physical body
     Texture2D sprite;
     b2Body* body{ nullptr };
 
-    // Player's spawn position and states
+    // Spawn position and movement states
     b2Vec2 level_spawn_position;
     bool is_touching_floor = true;
     bool looking_right = true;
 
-    // Animation variables
+    // Animation properties
     const float animation_frame_duration = 0.2f;
     float animation_ticker = animation_frame_duration;
     size_t current_anim_frame = 0;
     PlayerAnimationState anim_state = PlayerAnimationState::IDLE;
-    unordered_map<PlayerAnimationState, vector<Rectangle>> animation_map;
+    std::unordered_map<PlayerAnimationState, std::vector<Rectangle>> animation_map;
 
+    // Camera
     GameCamera camera;
 
     // Weapons
     static std::unique_ptr<Weapon> Sword;
     static std::unique_ptr<Weapon> Magic;
 
+    // Player health
+    int health = 100;
+
+    // Movement and physics utilities
     void set_velocity_x(float vx);
     void set_velocity_y(float vy);
     void set_velocity_xy(float vx, float vy);
+    bool can_move_in_x_direction(bool moving_right);
 
+    // Checks for player state
     void check_if_on_floor();
     void check_if_jump();
     void check_if_move();
     void check_if_should_respawn();
 
-    void update_camera(); 
+    // Camera and weapon updates
+    void update_camera();
     void updateWeaponPosition(std::unique_ptr<Weapon>& weapon, float posX, float posY, bool isLookingRight);
-    bool can_move_in_x_direction(bool moving_right);
 
 public:
+    // Constructor and destructor
     Player();
     ~Player();
 
+    // Core functionality
     void update(float dt) override;
     void draw() override;
 
+    // Position and camera accessor
     Vector2 get_position();
-
-    void intializeInventory(b2World* physicsWorld);
-
-    Weapon* getWeapon();
-
-    BulletManager* getBulletManager();
-
-    // Inventory and collision functions
-    void adjustCollisionBox(const b2Vec2& offset);
-
-    // Camera accessor
     GameCamera& get_camera() { return camera; }
 
+    // Initialization and inventory setup
     void init_for_level(const ldtk::Entity* entity, b2World* physicsWorld);
+    void intializeInventory(b2World* physicsWorld);
+
+    // Weapons and collision handling
+    Weapon* getWeapon();
+    BulletManager* getBulletManager();
+    bool checkCollisionWithEnemy(const Rectangle& enemyHitbox);
+    Rectangle getHitbox();
+
+    // Collision box adjustment
+    void adjustCollisionBox(const b2Vec2& offset);
+
+    // Damage handling
+    void getDamage(int damage);
 };

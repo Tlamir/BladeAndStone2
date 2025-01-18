@@ -42,5 +42,6 @@ public:
 
     void create_solid_block(float targetX, float targetY, float tileSize);
 
+    void CheckCollisions(std::unique_ptr<EnemySpawner>& enemySpawner);
 
 };

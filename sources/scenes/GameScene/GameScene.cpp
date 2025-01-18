@@ -56,44 +56,7 @@ Scenes GameScene::update(float dt)
 	{
 		enemySpawner->update(dt, player->get_position());
 
-		auto& enemies = enemySpawner->getEnemies();
-		for (auto it = enemies.begin(); it != enemies.end();)
-		{
-			auto& enemy = *it;
-			// Enemy player collision check
-			if (player->checkCollisionWithEnemy(enemy->getHitbox()))
-			{
-				player->getDamage(1);
-			}
-
-			// Check collision with weapon
-			if (enemy->checkCollisionWithWeapon(player->getWeapon()->getHitbox()))
-			{
-				enemy->onHit(50);
-				if (!enemy->isAlive())
-				{
-					it = enemies.erase(it);
-					continue;
-				}
-			}
-
-			// Check collision with bullets
-			for (const auto& bulletHitbox : player->getBulletManager()->getBulletHitboxes())
-			{
-				if (enemy->checkCollisionWithWeapon(*bulletHitbox))
-				{
-					enemy->onHit(25);
-					if (!enemy->isAlive())
-					{
-						it = enemies.erase(it);
-						goto next_enemy;
-					}
-				}
-			}
-
-			++it;
-		next_enemy:;
-		}
+		CheckCollisions(enemySpawner);
 	}
 
 	return Scenes::NONE;
@@ -329,4 +292,48 @@ void GameScene::create_solid_block(float targetX, float targetY, float tileSize)
 	);
 
 	body->CreateFixture(&groundBox, 0.0f);
+}
+
+void GameScene::CheckCollisions(std::unique_ptr<EnemySpawner>& enemySpawner)
+{
+	auto& enemies = enemySpawner->getEnemies();
+
+	for (auto it = enemies.begin(); it != enemies.end();)
+	{
+		auto& enemy = *it;
+
+		// Check collision with the player
+		if (player->checkCollisionWithEnemy(enemy->getHitbox()))
+		{
+			player->getDamage(1);
+		}
+
+		// Check collision with the player's weapon
+		if (enemy->checkCollisionWithWeapon(player->getWeapon()->getHitbox()))
+		{
+			enemy->onHit(50);
+			if (!enemy->isAlive())
+			{
+				it = enemies.erase(it);
+				continue;
+			}
+		}
+
+		// Check collision with bullets
+		for (const auto& bulletHitbox : player->getBulletManager()->getBulletHitboxes())
+		{
+			if (enemy->checkCollisionWithWeapon(*bulletHitbox))
+			{
+				enemy->onHit(25);
+				if (!enemy->isAlive())
+				{
+					it = enemies.erase(it);
+					goto next_enemy;
+				}
+			}
+		}
+
+		++it;
+	next_enemy:;
+	}
 }

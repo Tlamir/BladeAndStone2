@@ -269,9 +269,7 @@ void GameScene::setSelectedLevel(int lvl)
 
 void GameScene::createSolidBlock(float targetX, float targetY, float tileSize)
 {
-	// Convert to Box2D coordinates (center-based)
 	float halfSize = tileSize / 2.0f;
-	// Adjust position to be at the center of the tile
 	float centerX = targetX + halfSize;
 	float centerY = targetY + halfSize;
 
@@ -284,21 +282,23 @@ void GameScene::createSolidBlock(float targetX, float targetY, float tileSize)
 
 	b2Body* body = world->CreateBody(&bodyDef);
 	b2PolygonShape groundBox;
+	// Slightly reduce the collision box size to prevent edge catching
 	groundBox.SetAsBox(
-		(tileSize / 2.0f) / GameConstants::PhysicsWorldScale,
-		(tileSize / 2.0f) / GameConstants::PhysicsWorldScale
+		(tileSize / 2.0f - 0.1f) / GameConstants::PhysicsWorldScale,
+		(tileSize / 2.0f - 0.1f) / GameConstants::PhysicsWorldScale
 	);
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &groundBox;
 	fixtureDef.density = 1.f;
-	fixtureDef.friction = 0.3f;
+	// Reduced friction to make sliding along walls smoother
+	fixtureDef.friction = 0.1f;
+	// Add some restitution to prevent sticking
+	fixtureDef.restitution = 0.0f;
 	fixtureDef.filter.categoryBits = PhysicsTypes::Categories::SOLID;
-	// Updated to collide with player and enemies
 	fixtureDef.filter.maskBits = PhysicsTypes::Categories::PLAYER |
 		PhysicsTypes::Categories::ENEMY;
 
-	// Use the fixture definition instead of just the shape
 	body->CreateFixture(&fixtureDef);
 }
 

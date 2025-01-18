@@ -114,7 +114,6 @@ void Player::draw()
         current_anim_rect.width *= -1;
     }
 
-    // Draw the player sprite based on the current animation state
     DrawTexturePro(sprite,
         current_anim_rect,
         { spritePosX, spritePosY, 24, 24 },
@@ -127,15 +126,26 @@ void Player::draw()
     {
         auto bodyPos = body->GetPosition();
         b2PolygonShape* polygonShape = (b2PolygonShape*)body->GetFixtureList()->GetShape();
+
+        // Calculate the box size directly from the polygon shape's half-width and half-height
+        float halfWidth = polygonShape->m_vertices[1].x - polygonShape->m_vertices[0].x;  // Half-width
+        float halfHeight = polygonShape->m_vertices[2].y - polygonShape->m_vertices[0].y; // Half-height
         Vector2 boxSize = {
-            polygonShape->m_vertices[2].x * 2 * GameConstants::PhysicsWorldScale,
-            polygonShape->m_vertices[2].y * 2 * GameConstants::PhysicsWorldScale
+            halfWidth * 2 * GameConstants::PhysicsWorldScale,
+            halfHeight * 2 * GameConstants::PhysicsWorldScale
+        };
+
+        // Account for the shape's center offset when drawing
+        b2Vec2 shapeOffset = polygonShape->m_centroid;
+        Vector2 drawPosition = {
+            (bodyPos.x + shapeOffset.x) * GameConstants::PhysicsWorldScale - (boxSize.x / 2),
+            (bodyPos.y + shapeOffset.y) * GameConstants::PhysicsWorldScale - (boxSize.y / 2)
         };
 
         // Draw the physics body rectangle
         DrawRectangleLines(
-            (bodyPos.x * GameConstants::PhysicsWorldScale) - (boxSize.x / 2),
-            (bodyPos.y * GameConstants::PhysicsWorldScale) - (boxSize.y / 2),
+            drawPosition.x,
+            drawPosition.y,
             boxSize.x,
             boxSize.y,
             RED
@@ -166,24 +176,28 @@ void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
     bodyDef.type = b2_dynamicBody;
     bodyDef.fixedRotation = true;
     bodyDef.position.Set(level_spawn_position.x, level_spawn_position.y);
-    bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);  // Added this line for consistency
+    bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
+    // Add linear damping to prevent sliding
+    bodyDef.linearDamping = 5.0f;
 
     this->body = physicsWorld->CreateBody(&bodyDef);
 
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(0.3, 0.4);
+    // Adjust player collison box
+    dynamicBox.SetAsBox(0.25f, 0.15f,b2Vec2(0.f,0.4f),0.f);  // Reduced from 0.3, 0.4
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
     fixtureDef.density = .0001f;
-    fixtureDef.friction = 0.1f;
-    // Added collision filtering for player
+    // Lower friction for smoother movement
+    fixtureDef.friction = 0.05f;
+    // Add slight restitution to prevent ghost collision
+    fixtureDef.restitution = 0.01f;
     fixtureDef.filter.categoryBits = PhysicsTypes::Categories::PLAYER;
-    fixtureDef.filter.maskBits = PhysicsTypes::Categories::SOLID ;
+    fixtureDef.filter.maskBits = PhysicsTypes::Categories::SOLID;
 
     body->CreateFixture(&fixtureDef);
 
-    // Manage weapons
     intializeInventory(physicsWorld);
 }
 
@@ -257,7 +271,7 @@ void Player::check_if_move()
 
 void Player::check_if_should_respawn()
 {
-    // Placeholder for respawn logic (could be extended for a respawn mechanic)
+    // Placeholder for respawn
 }
 
 Vector2 Player::get_position()

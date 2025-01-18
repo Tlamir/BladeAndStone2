@@ -65,7 +65,6 @@ void Enemy::initializeAnimations()
 
 void Enemy::initForLevel(const b2Vec2& position, b2World* physicsWorld)
 {
-    spawn_position = position;
     spawn_position = {
         static_cast<float>(position.x) / GameConstants::PhysicsWorldScale,
         static_cast<float>(position.y) / GameConstants::PhysicsWorldScale
@@ -76,18 +75,27 @@ void Enemy::initForLevel(const b2Vec2& position, b2World* physicsWorld)
     bodyDef.fixedRotation = true;
     bodyDef.position.Set(spawn_position.x, spawn_position.y);
     bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);
+    // Add linear damping to prevent sliding
+    bodyDef.linearDamping = 2.0f;
 
     this->body = physicsWorld->CreateBody(&bodyDef);
 
     b2PolygonShape dynamicBox;
-    dynamicBox.SetAsBox(0.3, 0.4);
+  
+    dynamicBox.SetAsBox(0.3f, 0.4f); 
 
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &dynamicBox;
     fixtureDef.density = 1.f;
-    fixtureDef.friction = 0.3f;
+    // Lower friction for smoother movement
+    fixtureDef.friction = 0.03f;
+    // Add slight restitution to prevent sticking
+    fixtureDef.restitution = 0.01f;
+
     fixtureDef.filter.categoryBits = PhysicsTypes::Categories::ENEMY;
-    fixtureDef.filter.maskBits = PhysicsTypes::Categories::WEAPON | PhysicsTypes::Categories::SOLID| PhysicsTypes::Categories::ENEMY;
+    fixtureDef.filter.maskBits = 
+        PhysicsTypes::Categories::SOLID| 
+        PhysicsTypes::Categories::ENEMY;
 
     body->CreateFixture(&fixtureDef);
 }

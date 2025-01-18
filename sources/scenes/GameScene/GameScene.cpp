@@ -43,25 +43,56 @@ GameScene::~GameScene()
 
 Scenes GameScene::update(float dt)
 {
-
 	const float timeStep = 1.0f / 60.0f;
 	const int32 velocityIterations = 6;
 	const int32 positionIterations = 2;
 
 	world->Step(timeStep, velocityIterations, positionIterations);
+
 	player->update(dt);
 
-	
 	// Enemy player collision check
 	for (auto& enemySpawner : enemySpawners)
 	{
 		enemySpawner->update(dt, player->get_position());
-		for (auto& enemy: enemySpawner->getEnemies())
+
+		auto& enemies = enemySpawner->getEnemies();
+		for (auto it = enemies.begin(); it != enemies.end();)
 		{
+			auto& enemy = *it;
+			// Enemy player collision check
 			if (player->checkCollisionWithEnemy(enemy->getHitbox()))
 			{
 				player->getDamage(1);
 			}
+
+			// Check collision with weapon
+			if (enemy->checkCollisionWithWeapon(player->getWeapon()->getHitbox()))
+			{
+				enemy->onHit(50);
+				if (!enemy->isAlive())
+				{
+					it = enemies.erase(it);
+					continue;
+				}
+			}
+
+			// Check collision with bullets
+			for (const auto& bulletHitbox : player->getBulletManager()->getBulletHitboxes())
+			{
+				if (enemy->checkCollisionWithWeapon(*bulletHitbox))
+				{
+					enemy->onHit(25);
+					if (!enemy->isAlive())
+					{
+						it = enemies.erase(it);
+						goto next_enemy;
+					}
+				}
+			}
+
+			++it;
+		next_enemy:;
 		}
 	}
 
@@ -130,6 +161,7 @@ void GameScene::draw()
 
 	EndMode2D();
 }
+
 void GameScene::set_selected_level(int lvl)
 {
 	if (current_level >= 0)

@@ -63,7 +63,7 @@ void Enemy::initializeAnimations()
     };
 }
 
-void Enemy::init_for_level(const b2Vec2& position, b2World* physicsWorld)
+void Enemy::initForLevel(const b2Vec2& position, b2World* physicsWorld)
 {
     spawn_position = position;
     spawn_position = {
@@ -87,12 +87,12 @@ void Enemy::init_for_level(const b2Vec2& position, b2World* physicsWorld)
     fixtureDef.density = 1.f;
     fixtureDef.friction = 0.3f;
     fixtureDef.filter.categoryBits = PhysicsTypes::Categories::ENEMY;
-    fixtureDef.filter.maskBits = PhysicsTypes::Categories::WEAPON | PhysicsTypes::Categories::SOLID;
+    fixtureDef.filter.maskBits = PhysicsTypes::Categories::WEAPON | PhysicsTypes::Categories::SOLID| PhysicsTypes::Categories::ENEMY;
 
     body->CreateFixture(&fixtureDef);
 }
 
-void Enemy::set_velocity(float vx, float vy)
+void Enemy::setVelocity(float vx, float vy)
 {
     body->SetLinearVelocity({ vx, vy });
 }

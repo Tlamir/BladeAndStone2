@@ -41,14 +41,14 @@ private:
     float hitCooldown = 0.5f;
     float currentHitCooldown = 0.0f;
 
-    void set_velocity(float vx, float vy);
+    void setVelocity(float vx, float vy);
     void initializeAnimations();
     void updateHitState(float dt);
 
 public:
     Enemy(Texture2D sprite);
     ~Enemy();
-    void init_for_level(const b2Vec2& position, b2World* physicsWorld);
+    void initForLevel(const b2Vec2& position, b2World* physicsWorld);
     void update(float dt) override;
     void draw() override;
     void move();

@@ -153,8 +153,8 @@ void Player::draw()
 void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
 {
     auto pos = entity->getPosition();
+   
     DebugUtils::println("Setting player position to x:{} and y:{}", pos.x, pos.y);
-
     // Convert LDTK position to physics world position
     level_spawn_position = {
         static_cast<float>(pos.x) / GameConstants::PhysicsWorldScale,
@@ -166,6 +166,7 @@ void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
     bodyDef.type = b2_dynamicBody;
     bodyDef.fixedRotation = true;
     bodyDef.position.Set(level_spawn_position.x, level_spawn_position.y);
+    bodyDef.userData.pointer = reinterpret_cast<uintptr_t>(this);  // Added this line for consistency
 
     this->body = physicsWorld->CreateBody(&bodyDef);
 
@@ -176,6 +177,9 @@ void Player::init_for_level(const ldtk::Entity* entity, b2World* physicsWorld)
     fixtureDef.shape = &dynamicBox;
     fixtureDef.density = .0001f;
     fixtureDef.friction = 0.1f;
+    // Added collision filtering for player
+    fixtureDef.filter.categoryBits = PhysicsTypes::Categories::PLAYER;
+    fixtureDef.filter.maskBits = PhysicsTypes::Categories::SOLID ;
 
     body->CreateFixture(&fixtureDef);
 

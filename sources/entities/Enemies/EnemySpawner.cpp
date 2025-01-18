@@ -63,7 +63,7 @@ void EnemySpawner::spawnEnemies()
 		b2Vec2 spawnPosition(spawnX, spawnY);
 
 		auto enemy = std::make_unique<Enemy>(enemyTexture);
-		enemy->init_for_level(spawnPosition, physicsWorld);
+		enemy->initForLevel(spawnPosition, physicsWorld);
 
 		enemies.emplace_back(std::move(enemy));
 	}

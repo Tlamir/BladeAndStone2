@@ -375,8 +375,3 @@ void GameScene::CheckCollisions(std::unique_ptr<EnemySpawner>& enemySpawner)
 	next_enemy:;
 	}
 }
-
-bool GameScene::CheckAliveCondition() 
-{
-	return player->isAlive(); 
-}

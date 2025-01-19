@@ -46,6 +46,4 @@ public:
 
     void CheckCollisions(std::unique_ptr<EnemySpawner>& enemySpawner);
 
-    bool CheckAliveCondition();
-
 };

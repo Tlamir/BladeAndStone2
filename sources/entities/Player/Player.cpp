@@ -52,13 +52,16 @@ Player::Player()
         make_frame_rect(2, 1)  // Frame 3 (WALK)
     };
 
-    animation_map[DEAD] = {
-        make_frame_rect(0, 2)  // Frame 1 (DEAD)
+    animation_map[HURT] = {
+      make_frame_rect(0, 4),  // Frame 1 (HURT)
+      make_frame_rect(1, 4),  // Frame 1 (HURT)
+      make_frame_rect(2, 4)  // Frame 1 (HURT)
     };
 
-    animation_map[HURT] = {
-        make_frame_rect(1, 2)  // Frame 1 (HURT)
+    animation_map[DEAD] = {
+        make_frame_rect(3, 5),  // Frame 1 (DEAD)
     };
+
 }
 
 Player::~Player()
@@ -68,9 +71,15 @@ Player::~Player()
 
 void Player::update(float dt)
 {
-    if (health<=0)  return;
+    if (health <= 0)
+    {
+        if (anim_state != DEAD)
+        {
+            anim_state = DEAD;
+        }
+        return;
+    }
 
-    // Update animation based on time
     animation_ticker -= dt;
     if (animation_ticker <= 0)
     {
@@ -78,12 +87,10 @@ void Player::update(float dt)
         current_anim_frame += 1;
     }
 
-    // Update player movement and behaviors
     checkIfMove();
     checkIfRespawn();
     updateCamera();
 
-    // Handle player weapons
     Sword->update(dt);
     Magic->update(dt);
 }
@@ -205,6 +212,7 @@ void Player::initForLevel(const ldtk::Entity* entity, b2World* physicsWorld)
 
 void Player::getDamage(int damage)
 {
+    anim_state = HURT;
     health -= damage;
 }
 

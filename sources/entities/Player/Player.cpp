@@ -366,10 +366,10 @@ Rectangle Player::getHitbox()
 
 bool Player::isAlive()
 {
-    return health <= 0;
+    return health >= 0;
 }
 
 int Player::getHealth()
 {
-    return health <= 0 ? health : 0;
+    return health >= 0 ? health : 0;
 }

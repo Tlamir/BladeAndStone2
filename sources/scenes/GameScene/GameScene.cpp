@@ -16,10 +16,13 @@
 #include"./entities/Enemies/EnemySpawner.hpp"
 #include <entities/Camera/Camera.hpp>
 
+#include"GameSceneUI.hpp"
+
 using namespace std;
 
 std::unique_ptr<Player> GameScene::player = nullptr;
 std::unique_ptr<b2World> GameScene::world = nullptr;
+GameSceneUI gameSceneUI;
 
 
 GameScene::GameScene()
@@ -27,9 +30,10 @@ GameScene::GameScene()
 	player = std::make_unique<Player>();
 	ldtkProject = std::make_unique<ldtk::Project>();
 
-	ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneMap.ldtk"));
+	ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneMapTest.ldtk"));
 
 	ldtkWorld = &ldtkProject->getWorld();
+
 
 	current_level = -1;
 	setSelectedLevel(0);
@@ -54,8 +58,17 @@ Scenes GameScene::update(float dt)
 	for (auto& enemySpawner : enemySpawners)
 	{
 		enemySpawner->update(dt, player->getPosition());
-
 		CheckCollisions(enemySpawner);
+	}
+
+	isPlayerAlive = player->isAlive();
+
+	if (!isPlayerAlive)
+	{
+		if (IsKeyDown(KEY_SPACE))
+		{
+			return Scenes::GAME;
+		}
 	}
 
 	return Scenes::NONE;
@@ -64,6 +77,8 @@ Scenes GameScene::update(float dt)
 void GameScene::draw()
 {
 	ClearBackground(RAYWHITE);
+
+	
 
 	BeginMode2D(player->get_camera().get_camera());
 
@@ -123,6 +138,15 @@ void GameScene::draw()
 	player->draw();
 
 	EndMode2D();
+
+	// Draw Scene UI (Draw UI outside 2D mode to not affect by camera)
+	gameSceneUI.drawGameUI(player->getHealth(), killedEnemies);
+
+	if (!isPlayerAlive)
+	{
+		gameSceneUI.drawGameEndUI();
+
+	}
 }
 
 void GameScene::setSelectedLevel(int lvl)
@@ -323,6 +347,7 @@ void GameScene::CheckCollisions(std::unique_ptr<EnemySpawner>& enemySpawner)
 			if (!enemy->isAlive())
 			{
 				it = enemies.erase(it);
+				killedEnemies++;
 				continue;
 			}
 		}
@@ -336,6 +361,7 @@ void GameScene::CheckCollisions(std::unique_ptr<EnemySpawner>& enemySpawner)
 				if (!enemy->isAlive())
 				{
 					it = enemies.erase(it);
+					killedEnemies++;
 					goto next_enemy;
 				}
 			}
@@ -344,4 +370,9 @@ void GameScene::CheckCollisions(std::unique_ptr<EnemySpawner>& enemySpawner)
 		++it;
 	next_enemy:;
 	}
+}
+
+bool GameScene::CheckAliveCondition() 
+{
+	return player->isAlive(); 
 }

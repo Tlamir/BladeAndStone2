@@ -17,6 +17,8 @@ class GameScene : public BaseScene
 {
 private:
     int current_level;
+    int killedEnemies{0};
+    bool isPlayerAlive{ true };
 
     std::unique_ptr<ldtk::Project> ldtkProject;
     const ldtk::World *ldtkWorld{};
@@ -43,5 +45,7 @@ public:
     void createSolidBlock(float targetX, float targetY, float tileSize);
 
     void CheckCollisions(std::unique_ptr<EnemySpawner>& enemySpawner);
+
+    bool CheckAliveCondition();
 
 };

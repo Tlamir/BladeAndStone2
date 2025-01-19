@@ -17,6 +17,7 @@
 #include <entities/Camera/Camera.hpp>
 
 #include"GameSceneUI.hpp"
+#include"utils/SoundManager.hpp"
 
 using namespace std;
 
@@ -34,6 +35,10 @@ GameScene::GameScene()
 
 	ldtkWorld = &ldtkProject->getWorld();
 
+	// Initialize sound manager and play start sound
+	auto soundManager = SoundManager::getInstance();
+	soundManager->initialize();
+	soundManager->playSoundEffect("gameStart");  // Play start sound when scene first loads
 
 	current_level = -1;
 	setSelectedLevel(0);
@@ -50,10 +55,23 @@ Scenes GameScene::update(float dt)
 	const float timeStep = 1.0f / 60.0f;
 	const int32 velocityIterations = 6;
 	const int32 positionIterations = 2;
+	auto soundManager = SoundManager::getInstance();
 
+	// Update physics world
 	world->Step(timeStep, velocityIterations, positionIterations);
+
+	// Store previous player state
+	bool wasAlive = isPlayerAlive;
 	isPlayerAlive = player->isAlive();
 
+	// Check if player just died this frame
+	bool playerJustDied = wasAlive && !isPlayerAlive;
+	if (playerJustDied)
+	{
+		soundManager->playSoundEffect("gameOver");
+	}
+
+	// Handle dead player state
 	if (!isPlayerAlive)
 	{
 		if (IsKeyDown(KEY_SPACE))

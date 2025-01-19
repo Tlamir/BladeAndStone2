@@ -11,9 +11,8 @@ enum EnemyAnimationState
     ENEMY_IDLE,
     ENEMY_WALK,
     ENEMY_ATTACK,
-    ENEMY_JUMP,
-    ENEMY_DEAD,
     ENEMY_HURT,
+    ENEMY_DEAD
 };
 
 class Enemy : public BaseEntity

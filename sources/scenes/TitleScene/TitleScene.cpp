@@ -39,7 +39,7 @@ void TitleScene::draw()
         DrawText(text.c_str(), x, y, fontSize, textColor);
         };
 
-    const string titleText = "BladeAndStone2";
+    const string titleText = "Blade And Stone 2";
     const int titleFontSize = 30 * GameConstants::cameraZoom;
     const int titleTextWidth = MeasureText(titleText.c_str(), titleFontSize);
     const int titleTextX = (GameConstants::WorldWidth - titleTextWidth) / 2;
@@ -51,5 +51,5 @@ void TitleScene::draw()
     const int startTextWidth = MeasureText(startText.c_str(), startFontSize);
     const int startTextX = (GameConstants::WorldWidth - startTextWidth) / 2;
     const int startTextY = GameConstants::WorldHeight / 1.3f;
-    draw_with_backdrop(startText, startTextX, startTextY, startFontSize, DARKGREEN, BLACK);
+    draw_with_backdrop(startText, startTextX, startTextY, startFontSize, DARKGRAY, BLACK);
 }

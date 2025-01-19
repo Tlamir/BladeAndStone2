@@ -35,10 +35,10 @@ void Enemy::initializeAnimations()
 	};
 
 	animation_map[ENEMY_WALK] = {
-		make_enemy_frame_rect(8, 2),
-		make_enemy_frame_rect(9, 2),
-		make_enemy_frame_rect(10, 2),
-		make_enemy_frame_rect(11, 2)
+		make_enemy_frame_rect(0, 2),
+		make_enemy_frame_rect(1, 2),
+		make_enemy_frame_rect(2, 2),
+		make_enemy_frame_rect(3, 2)
 	};
 
 	animation_map[ENEMY_ATTACK] = {
@@ -48,18 +48,18 @@ void Enemy::initializeAnimations()
 		make_enemy_frame_rect(19, 2)
 	};
 
-	animation_map[ENEMY_DEAD] = {
-		make_enemy_frame_rect(32, 6),
-		make_enemy_frame_rect(33, 6),
-		make_enemy_frame_rect(34, 6),
-		make_enemy_frame_rect(35, 6)
+	animation_map[ENEMY_HURT] = {
+		make_enemy_frame_rect(0, 4),
+		make_enemy_frame_rect(1, 4),
+		make_enemy_frame_rect(2, 4),
+		make_enemy_frame_rect(3, 4)
 	};
 
-	animation_map[ENEMY_HURT] = {
-		make_enemy_frame_rect(40, 4),
-		make_enemy_frame_rect(41, 4),
-		make_enemy_frame_rect(42, 4),
-		make_enemy_frame_rect(43, 4)
+	animation_map[ENEMY_DEAD] = {
+		make_enemy_frame_rect(0, 5),
+		make_enemy_frame_rect(1, 5),
+		make_enemy_frame_rect(2, 5),
+		make_enemy_frame_rect(3, 5)
 	};
 }
 

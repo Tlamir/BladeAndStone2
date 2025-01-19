@@ -52,17 +52,11 @@ private:
     void setVelocityX(float vx);
     void setVelocityY(float vy);
     void setVelocityXY(float vx, float vy);
-    bool can_move_in_x_direction(bool moving_right);
-
-    // Checks for player state
-    void check_if_on_floor();
-    void check_if_jump();
     void checkIfMove();
     void checkIfRespawn();
 
     // Camera and weapon updates
     void updateCamera();
-    void updateWeaponPosition(std::unique_ptr<Weapon>& weapon, float posX, float posY, bool isLookingRight);
 
 public:
     // Constructor and destructor

@@ -363,7 +363,6 @@ Rectangle Player::getHitbox()
     };
 }
 
-
 bool Player::isAlive()
 {
     return health >= 0;

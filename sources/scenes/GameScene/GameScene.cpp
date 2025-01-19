@@ -52,15 +52,6 @@ Scenes GameScene::update(float dt)
 	const int32 positionIterations = 2;
 
 	world->Step(timeStep, velocityIterations, positionIterations);
-
-	player->update(dt);
-
-	for (auto& enemySpawner : enemySpawners)
-	{
-		enemySpawner->update(dt, player->getPosition());
-		CheckCollisions(enemySpawner);
-	}
-
 	isPlayerAlive = player->isAlive();
 
 	if (!isPlayerAlive)
@@ -70,6 +61,16 @@ Scenes GameScene::update(float dt)
 			return Scenes::GAME;
 		}
 	}
+
+	player->update(dt);
+
+	for (auto& enemySpawner : enemySpawners)
+	{
+		enemySpawner->update(dt, player->getPosition());
+		CheckCollisions(enemySpawner);
+	}
+
+	
 
 	return Scenes::NONE;
 }
@@ -328,6 +329,9 @@ void GameScene::createSolidBlock(float targetX, float targetY, float tileSize)
 
 void GameScene::CheckCollisions(std::unique_ptr<EnemySpawner>& enemySpawner)
 {
+
+	if (!isPlayerAlive)	return;
+
 	auto& enemies = enemySpawner->getEnemies();
 
 	for (auto it = enemies.begin(); it != enemies.end();)

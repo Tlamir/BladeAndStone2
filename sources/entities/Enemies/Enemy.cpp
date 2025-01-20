@@ -12,7 +12,14 @@ Enemy::Enemy(Texture2D sprite)
 
 Enemy::~Enemy()
 {
-	// Destructor is handled by enemy texture loader
+	// Destructor of texture handled by enemy texture loader
+	// Destroy physics body
+	if (body && currentWorld)
+	{
+		currentWorld->DestroyBody(body);
+		body = nullptr;
+		std::cout << "============ENEMYBODYDELETED" << endl;
+	}
 }
 
 void Enemy::initializeAnimations()
@@ -65,6 +72,8 @@ void Enemy::initializeAnimations()
 
 void Enemy::initForLevel(const b2Vec2& position, b2World* physicsWorld)
 {
+	currentWorld = physicsWorld;
+
 	spawn_position = {
 		static_cast<float>(position.x) / GameConstants::PhysicsWorldScale,
 		static_cast<float>(position.y) / GameConstants::PhysicsWorldScale

@@ -21,6 +21,7 @@ private:
 
     Texture2D sprite;
     b2Body* body{ nullptr };
+    b2World* currentWorld = nullptr;
 
     b2Vec2 spawn_position;
     bool looking_right = true;

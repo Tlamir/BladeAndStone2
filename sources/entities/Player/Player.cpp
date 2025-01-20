@@ -123,6 +123,13 @@ void Player::draw()
         current_anim_rect.width *= -1;
     }
 
+    // Weapons draw
+    Sword->updatePosition(spritePosX, spritePosY, looking_right);
+    Sword->draw();
+
+    Magic->updatePosition(spritePosX, spritePosY, looking_right);
+    Magic->draw();
+
     DrawTexturePro(sprite,
         current_anim_rect,
         { spritePosX, spritePosY, 24, 24 },
@@ -161,12 +168,7 @@ void Player::draw()
         );
     }
    
-    // Weapons draw
-    Sword->updatePosition(spritePosX, spritePosY, looking_right);
-    Sword->draw();
-
-    Magic->updatePosition(spritePosX, spritePosY, looking_right);
-    Magic->draw();
+   
 }
 
 void Player::initForLevel(const ldtk::Entity* entity, b2World* physicsWorld)

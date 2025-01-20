@@ -55,10 +55,10 @@ void Enemy::initializeAnimations()
 	};
 
 	animation_map[ENEMY_HURT] = {
-		make_enemy_frame_rect(0, 4),
-		make_enemy_frame_rect(1, 4),
+		//make_enemy_frame_rect(0, 4),
+		//make_enemy_frame_rect(1, 4),
 		make_enemy_frame_rect(2, 4),
-		make_enemy_frame_rect(3, 4)
+		//make_enemy_frame_rect(3, 4)
 	};
 
 	animation_map[ENEMY_DEAD] = {

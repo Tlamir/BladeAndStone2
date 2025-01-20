@@ -4,6 +4,7 @@
 #include <memory>
 #include "BulletManager.hpp"
 #include <box2d/box2d.h>
+#include <string>
 
 class Weapon : public BaseEntity
 {
@@ -57,6 +58,7 @@ private:
     bool isReturning{ false };
     static std::unique_ptr<BulletManager> bulletManager;
     bool isMagicWeapon{ false };
+    std::string soundName{};
 
     // Physics
     b2Body* weaponBody = nullptr;

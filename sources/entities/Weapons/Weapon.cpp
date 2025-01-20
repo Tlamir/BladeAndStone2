@@ -2,6 +2,7 @@
 #include "Constants.hpp"
 #include "BulletManager.hpp"
 #include <physics/PhysicsTypes.hpp>
+#include <utils/SoundManager.hpp>
 
 std::unique_ptr<BulletManager> Weapon::bulletManager = nullptr;
 
@@ -49,7 +50,10 @@ Weapon::Weapon(
         fixtureDef.filter.maskBits = PhysicsTypes::Categories::ENEMY;
 
         weaponBody->CreateFixture(&fixtureDef);
+
+        isMagicWeapon ? soundName="spell" : soundName="sword";
     }
+
 }
 
 Weapon::~Weapon()
@@ -120,6 +124,9 @@ void Weapon::attack(float dt)
     const float WAIT_TIME = attackWaitingAtPeak;
     const float RETURN_TIME = attackReloadSpeed;
     const float ATTACK_ANGLE = attackRotation;
+    // Initialize sound manager and play start sound
+    auto soundManager = SoundManager::getInstance();
+    
 
     elapsedTime += dt;
 
@@ -135,7 +142,9 @@ void Weapon::attack(float dt)
             {
                 Vector2 bulletStartPos = { position.x + positionBuffer.x, position.y + positionBuffer.y / 2 };
                 bulletManager->fireBullet(bulletStartPos, physicsWorld);
+                
             }
+            soundManager->playSoundEffect(soundName);
         }
         else
         {

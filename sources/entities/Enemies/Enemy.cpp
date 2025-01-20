@@ -9,6 +9,9 @@ Enemy::Enemy(Texture2D sprite,int enemyType)
 	enemyType(enemyType)
 {
 	initializeAnimations();
+
+	health = GameConstants::enemyHealth;
+	speed = GameConstants::enemySpeed;
 }
 
 Enemy::~Enemy()

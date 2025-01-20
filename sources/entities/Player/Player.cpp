@@ -63,6 +63,11 @@ Player::Player()
         make_frame_rect(3, 5),  // Frame 1 (DEAD)
     };
 
+    // Load Player variables
+    health = GameConstants::playerHealth;
+    playerSpeed = GameConstants::playerSpeed * GameConstants::scale;
+
+
 }
 
 Player::~Player()
@@ -244,31 +249,31 @@ void Player::setVelocityXY(float vx, float vy)
 
 void Player::checkIfMove()
 {
-    const auto effective_speed = 6.0f * GameConstants::scale;
+    
 
     float vx = 0.0f;
     float vy = 0.0f;
 
     if (IsKeyDown(KEY_A))
     {
-        vx -= effective_speed;
+        vx -= playerSpeed;
         looking_right = false;
     }
 
     if (IsKeyDown(KEY_D))
     {
-        vx += effective_speed;
+        vx += playerSpeed;
         looking_right = true;
     }
 
     if (IsKeyDown(KEY_W))
     {
-        vy -= effective_speed;
+        vy -= playerSpeed;
     }
 
     if (IsKeyDown(KEY_S))
     {
-        vy += effective_speed;
+        vy += playerSpeed;
     }
 
     setVelocityXY(vx, vy);
@@ -313,31 +318,32 @@ void Player::intializeInventory(b2World* physicsWorld)
     Sword = std::make_unique<Weapon>(
         swordTexture,
         swordPosBuffer,
-        -140.f,
-        4,
-        0.1f,
-        2.1f,
-        0.2f,
+        GameConstants::swordActivationAngle,
+        GameConstants::swordWeaponTextureGrid,
+        GameConstants::swordSpeed,
+        GameConstants::swordReloadSpeed,
+        GameConstants::swordWaitingAtPeak,
         false,
-        8,
+        GameConstants::swordSelectWeaponFromGrid,
         physicsWorld,
-        50
+        GameConstants::swordDamage
     );
 
     // Load the texture for the magic weapon
     Texture2D magicTexture = LoadTexture(AppConstants::GetAssetPath("Weapons/weapons_.png").c_str());
     Vector2 magicPosBuffer{ 28.f,22.f };
-    Magic = std::make_unique<Weapon>(magicTexture,
+    Magic = std::make_unique<Weapon>(
+        magicTexture,
         magicPosBuffer,
-        90.f,
-        5,
-        0.2f,
-        0.8f,
-        0.1f,
+        GameConstants::magicActivationAngle,
+        GameConstants::magicWeaponTextureGrid,
+        GameConstants::magicSpeed,
+        GameConstants::magicReloadTime,
+        GameConstants::magicWaitingAtPeakTime,
         true,
-        18,
+        GameConstants::magicSelectWeaponFromGrid,
         physicsWorld,
-        1
+        GameConstants::magicDamage
     );
 }
 

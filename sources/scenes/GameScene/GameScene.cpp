@@ -359,13 +359,13 @@ void GameScene::CheckCollisions(std::unique_ptr<EnemySpawner>& enemySpawner)
 		// Check collision with the player
 		if (player->checkCollisionWithEnemy(enemy->getHitbox()))
 		{
-			player->getDamage(1);
+			player->getDamage(GameConstants::enemyDamage);
 		}
 
 		// Check collision with the player's weapon
 		if (enemy->checkCollisionWithWeapon(player->getWeapon()->getHitbox()))
 		{
-			enemy->onHit(50);
+			enemy->onHit(GameConstants::swordDamage);
 			if (!enemy->isAlive())
 			{
 				it = enemies.erase(it);
@@ -379,7 +379,7 @@ void GameScene::CheckCollisions(std::unique_ptr<EnemySpawner>& enemySpawner)
 		{
 			if (enemy->checkCollisionWithWeapon(*bulletHitbox))
 			{
-				enemy->onHit(25);
+				enemy->onHit(GameConstants::magicDamage);
 				if (!enemy->isAlive())
 				{
 					it = enemies.erase(it);

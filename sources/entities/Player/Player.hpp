@@ -46,7 +46,7 @@ private:
     static std::unique_ptr<Weapon> Magic;
 
     // Player health
-    int health = 100;
+    int health = 10000;
 
     // Movement and physics utilities
     void setVelocityX(float vx);
@@ -85,4 +85,7 @@ public:
     void getDamage(int damage);
     bool isAlive();
     int getHealth();
+
+    // Player variables
+    float playerSpeed;
 };

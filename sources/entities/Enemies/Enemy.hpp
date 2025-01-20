@@ -33,11 +33,11 @@ private:
     EnemyAnimationState anim_state = EnemyAnimationState::ENEMY_IDLE;
     std::unordered_map<EnemyAnimationState, std::vector<Rectangle>> animation_map;
     Vector2 targetPos{};
-    float speed{ 1.5f };
+    float speed;
 
     // Combat variables
     bool isHit = false;
-    int health = 99;
+    int health;
     float hitCooldown = 0.5f;
     float currentHitCooldown = 0.0f;
 

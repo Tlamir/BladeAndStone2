@@ -58,7 +58,7 @@ void Enemy::initializeAnimations()
 	animation_map[ENEMY_HURT] = {
 		//make_enemy_frame_rect(0, 4),
 		//make_enemy_frame_rect(1, 4),
-		make_enemy_frame_rect(2, (enemyType >= 5 ? 5 : 4)),
+		make_enemy_frame_rect(2, (enemyType >= 5 ? 5 : 4)), // DRAGON SLIME SKELETON has different postion of frames in texture
 		//make_enemy_frame_rect(3, 4)
 	};
 

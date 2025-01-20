@@ -13,6 +13,7 @@
 #include "../../physics/PhysicsTypes.hpp"
 #include "../../scenes/GameScene/GameScene.hpp"
 #include "../../physics/RaycastUtils.hpp"
+#include <utils/SoundManager.hpp>
 
 using namespace std;
 
@@ -216,6 +217,8 @@ void Player::getDamage(int damage)
 {
     anim_state = HURT;
     health -= damage;
+    auto soundManager = SoundManager::getInstance();
+    soundManager->playSoundEffect("hurt");
 }
 
 void Player::setVelocityX(float vx)

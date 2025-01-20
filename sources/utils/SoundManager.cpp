@@ -30,6 +30,7 @@ void SoundManager::initialize()
     loadSoundEffect("spell", AppConstants::GetAssetPath("Audio/spell.ogg"));
     loadSoundEffect("gameStart", AppConstants::GetAssetPath("Audio/gameStart.wav"));
     loadSoundEffect("gameOver", AppConstants::GetAssetPath("Audio/gameOver.wav"));
+    loadSoundEffect("hurt", AppConstants::GetAssetPath("Audio/hurt.wav"));
 }
 
 void SoundManager::cleanup()

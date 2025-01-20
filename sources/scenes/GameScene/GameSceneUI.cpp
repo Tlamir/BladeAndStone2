@@ -22,12 +22,25 @@ void GameSceneUI::drawGameUI(int playerHealth, int enemyKilled)
 
 void GameSceneUI::displayHealth(int playerHealth)
 {
-    // Upper-left corner text
-    const std::string upperLeftText = "Health: "+std::to_string(playerHealth);
     const int upperLeftFontSize = 20 * GameConstants::cameraZoom;
     const int upperLeftX = 10;
     const int upperLeftY = 10;
-    drawWithBackdrop(upperLeftText, upperLeftX, upperLeftY, upperLeftFontSize, GOLD, BLACK);
+
+    Color healthColor = GOLD;
+    if (previousHealth != -1 && playerHealth < previousHealth)
+    {
+        healthColor = RED;
+    }
+    previousHealth = playerHealth;
+
+
+    const std::string label = "Health: ";
+    const std::string healthValue = std::to_string(playerHealth);
+
+    drawWithBackdrop(label, upperLeftX, upperLeftY, upperLeftFontSize, GOLD, BLACK);
+
+    int valueX = upperLeftX + MeasureText(label.c_str(), upperLeftFontSize);
+    drawWithBackdrop(healthValue, valueX, upperLeftY, upperLeftFontSize, healthColor, BLACK);
 }
 
 void GameSceneUI::displayKilledEnemy(int enemyKilled)

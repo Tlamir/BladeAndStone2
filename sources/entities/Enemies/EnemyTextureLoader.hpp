@@ -10,13 +10,13 @@ public:
     enum EnemyTextures
     {
         DEMON,
-        DRAGON,
         GHOST,
         GOBLIN,
         HOBGOBLIN,
         ORC,
         SKELETON,
-        SLIMEBALL
+        SLIMEBALL,
+        DRAGON
     };
 
     static EnemyTextureLoader& getInstance();

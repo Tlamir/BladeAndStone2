@@ -43,7 +43,7 @@ void EnemySpawner::DrawEnemies()
 
 void EnemySpawner::spawnEnemies()
 {
-	if (spawnType < EnemyTextureLoader::DEMON || spawnType > EnemyTextureLoader::SLIMEBALL)
+	if (spawnType < EnemyTextureLoader::DEMON || spawnType > EnemyTextureLoader::DRAGON)
 		throw std::out_of_range("Invalid spawnType provided.");
 
 	auto enemyType = static_cast<EnemyTextureLoader::EnemyTextures>(spawnType);
@@ -56,7 +56,7 @@ void EnemySpawner::spawnEnemies()
 		float spawnY = posY + (rand() % 21 - 10);
 		b2Vec2 spawnPosition(spawnX, spawnY);
 
-		auto enemy = std::make_unique<Enemy>(enemyTexture);
+		auto enemy = std::make_unique<Enemy>(enemyTexture, spawnType);
 		enemy->initForLevel(spawnPosition, physicsWorld);
 
 		enemies.emplace_back(std::move(enemy));

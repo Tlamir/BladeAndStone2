@@ -4,8 +4,9 @@
 #include "../Player/Player.hpp"
 #include <physics/PhysicsTypes.hpp>
 
-Enemy::Enemy(Texture2D sprite)
-	: sprite(sprite)
+Enemy::Enemy(Texture2D sprite,int enemyType)
+	: sprite(sprite),
+	enemyType(enemyType)
 {
 	initializeAnimations();
 }
@@ -57,7 +58,7 @@ void Enemy::initializeAnimations()
 	animation_map[ENEMY_HURT] = {
 		//make_enemy_frame_rect(0, 4),
 		//make_enemy_frame_rect(1, 4),
-		make_enemy_frame_rect(2, 4),
+		make_enemy_frame_rect(2, (enemyType >= 5 ? 5 : 4)),
 		//make_enemy_frame_rect(3, 4)
 	};
 

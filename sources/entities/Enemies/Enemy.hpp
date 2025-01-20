@@ -45,17 +45,16 @@ private:
     void initializeAnimations();
     void updateHitState(float dt);
 
+    // Enemy types
+    const int enemyType{};
+
 public:
-    Enemy(Texture2D sprite);
+    Enemy(Texture2D sprite, int enemyType);
     ~Enemy();
     void initForLevel(const b2Vec2& position, b2World* physicsWorld);
     void update(float dt) override;
     void draw() override;
     void move();
-    void set_velocity_x(float vx);
-    void set_velocity_y(float vy);
-    void set_velocity_xy(float vx, float vy);
-    void check_if_move();
     void setTargetPos(Vector2 playerPos);
     Rectangle getHitbox() const;
     bool checkCollisionWithWeapon(const Rectangle& weaponHitbox) const;

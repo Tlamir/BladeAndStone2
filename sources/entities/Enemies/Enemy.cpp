@@ -18,7 +18,6 @@ Enemy::~Enemy()
 	{
 		currentWorld->DestroyBody(body);
 		body = nullptr;
-		std::cout << "============ENEMYBODYDELETED" << endl;
 	}
 }
 

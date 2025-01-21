@@ -52,8 +52,8 @@ void EnemySpawner::spawnEnemies()
 	// Create random are for enemy pos
 	for (int i = 0; i < spawnAmount; i++)
 	{
-		float spawnX = posX + (rand() % 40 - 10);
-		float spawnY = posY + (rand() % 21 - 10);
+		float spawnX = posX + (rand() % 21 - 10);
+		float spawnY = posY + (rand() % 10 - 1);
 		b2Vec2 spawnPosition(spawnX, spawnY);
 
 		auto enemy = std::make_unique<Enemy>(enemyTexture, spawnType);

@@ -32,7 +32,7 @@ GameScene::GameScene()
 	player = std::make_unique<Player>();
 	ldtkProject = std::make_unique<ldtk::Project>();
 
-	ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneMap2.ldtk"));
+	ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneMap.ldtk"));
 
 	ldtkWorld = &ldtkProject->getWorld();
 

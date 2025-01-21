@@ -51,5 +51,5 @@ void TitleScene::draw()
     const int startTextWidth = MeasureText(startText.c_str(), startFontSize);
     const int startTextX = (GameConstants::WorldWidth - startTextWidth) / 2;
     const int startTextY = GameConstants::WorldHeight / 1.3f;
-    draw_with_backdrop(startText, startTextX, startTextY, startFontSize, DARKGRAY, BLACK);
+    draw_with_backdrop(startText, startTextX, startTextY, startFontSize, ORANGE, BLACK);
 }

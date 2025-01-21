@@ -1,13 +1,11 @@
 # Blade And Stone 2
 
-A top-down roguelike game built in C++. This project demonstrates the integration of modern C++ techniques with libraries like Raylib, Box2D, and LDtk. The main goal is to showcase the versatility of C++ in game development by creating a efficient, and extensible game engine capable of handling physics, rendering, and automated systems.
+A top-down roguelike game built in C++. This project demonstrates the integration of modern C++ techniques with libraries like Raylib, Box2D, and LDtk. The main goal is to showcase the versatility of C++ in game development by creating an efficient, and extensible game engine capable of handling physics, rendering, and automated systems.
 
 ![BladeAndStone2Image](https://i.imgur.com/Fh7ytZA.png)
 
 ## Platforms & Downloads
-
-### 🎮 Play Now
-- [Play on Itch.io](https://tlamir.itch.io/blade-and-stone-2) - Play in browser or download
+- [Play on Itch.io](https://tlamir.itch.io/blade-and-stone-2) - Web build is work in progress or download
 - [Windows Build](https://github.com/Tlamir/BladeAndStone2/releases/tag/Windows) - Direct download from GitHub
 
 ### 📺 Gameplay Video
@@ -18,7 +16,6 @@ For building the game yourself, check the [Building](#building) section below.
 [Download Latest Release](https://github.com/Tlamir/BladeAndStone2/releases/tag/Windows)
 
 ## Features
-
 - Top-down roguelike gameplay with automatic combat
 - Level design powered by LDtk with automatic collision handling
 - Physics-based movement and collisions using Box2D
@@ -27,35 +24,23 @@ For building the game yourself, check the [Building](#building) section below.
 - Debug visualization options for developers
 
 ## Built With
-
-- **C++20**: Modern features like constexpr, ranges, and smart pointers enhance performance and code clarity.
-- **[Raylib](https://www.raylib.com/)** (v5.0): Lightweight graphics library for 2D rendering.
-- **[Box2D](https://box2d.org/)** (v2.4.1): Physics engine for realistic collisions and interactions.
-- **[LDtkLoader](https://github.com/Madour/LDtkLoader)** (v1.5.3.1): Seamless integration with the LDtk level editor.
-
+- **C++20**: Modern features like constexpr, ranges, and smart pointers
+- **[Raylib](https://www.raylib.com/)** (v5.0): 2D graphics library
+- **[Box2D](https://box2d.org/)** (v2.4.1): Physics engine
+- **[LDtkLoader](https://github.com/Madour/LDtkLoader)** (v1.5.3.1): LDtk level editor integration
+- **[{fmt}](https://github.com/fmtlib/fmt)** (v10.2.1): String formatting library
 
 ## Project Structure
-
 ```
 ├── sources/
 │   ├── entities/       # Game entities
 │   ├── physics/       # Box2D integration
 │   ├── scenes/        # Scene management
 │   ├── utils/         # Utilities
-│   ├── Constants.hpp  # Game constants (camera resolution, gameplay variables)
+│   ├── Constants.hpp  # Game constants
 ├── assets/            # Game resources
 └── CMakeLists.txt    # Build configuration
 ```
-
-### Key File: Constants.hpp
-The `Constants.hpp` file is the central hub for game configurations, offering developers flexibility to fine-tune gameplay mechanics and technical settings:
-
-- **Resolution and Scaling**: Control world dimensions (`WorldWidth`, `WorldHeight`) and camera zoom levels.
-- **Gameplay Balance**: Adjust player speed, health, and combat variables (e.g., `playerSpeed`, `swordDamage`).
-- **Weapon Customization**: Define weapon behavior with variables like attack speed, reload time, and damage for both sword and magic systems.
-- **Debugging Tools**: Enable or disable collision visualization with `debugModeCollision`.
-
-By centralizing these configurations, developers can rapidly prototype and iterate on gameplay mechanics.
 
 ## Building
 
@@ -64,10 +49,23 @@ By centralizing these configurations, developers can rapidly prototype and itera
 - C++20 compatible compiler
 - Git
 
-### Build Steps
+### Debug Build
 ```bash
 mkdir build && cd build
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+cmake --build . --config Debug
+```
+
+### Release Build
+```bash
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake --build . --config Release
+```
+
+### Web Build
+```bash
+cmake -DPLATFORM=Web ..
 cmake --build .
 ```
 
@@ -77,59 +75,34 @@ cmake --build .
 - Web build (requires Emscripten): `-DPLATFORM=Web`
 
 ## Controls
-
 - WASD - Movement
 - Space - Start/Reset game
 
 ## Editing LDtk Maps
-
-The game relies on LDtk maps for level design, including automatic collision and entity management. To edit the maps effectively, follow these guidelines:
+The game uses LDtk for level design. Here's how to edit maps:
 
 ### Entities
-
-1. **Player**:  
-   - Set the player's starting position by placing the `Player` entity in the desired location on the map.  
-
-2. **Enemy Spawner**:  
-   - Adjust the spawn rate, number, and type of enemies by modifying the properties of the `EnemySpawner` entity directly in LDtk. These properties are customizable per spawner.
+1. **Player**: Place the `Player` entity where you want them to start
+2. **Enemy Spawner**: Add spawners and customize their properties in LDtk
 
 ### Tile Layers
-
-- Ensure tiles are placed correctly within layers.
-- Collision is automatically handled for tiles in the `Ground` layer marked with the `Solid` enum. No extra configuration is needed for collision behavior.
-
-### Saving and Testing
-
-- Save your changes in LDtk and export the project to ensure the updated map is loaded correctly into the game.
-- Launch the game to test the map and verify the placement of entities and collision behavior.
+- Place tiles in their correct layers
+- Tiles in the `Ground` layer marked as `Solid` automatically handle collision
 
 ## Why Raylib and C++?
-
-Raylib provides an intuitive framework for 2D graphics while remaining lightweight and fast, making it an excellent choice for a C++ project focused on efficiency. C++'s performance and control over system resources allow for:
-
-- Precise memory management
-- Advanced object-oriented programming patterns
-- Seamless integration with external libraries like Box2D and LDtk
-
-This project is an example of how C++ can be used to build a complex system with clear abstractions and high performance, demonstrating skills in game engine development and modern programming practices.
+Raylib provides fast 2D graphics with a clean API, while C++ offers the performance and control needed for development.
 
 ## Assets
 - Character sprites: [Link](https://kevins-moms-house.itch.io/dungeonsprites)
 - Weapon sprites: [Link](https://kevins-moms-house.itch.io/tundra)
 - Environment sprites: [Link](https://scracho.itch.io/bright-colored-fantasy-swords-32bit)
-- Thanks to the asset creators for providing the resources used in this game. 😎
+- Thanks to the asset creators for providing the resources used in this game.
 
-## Related Projects
-
-### Libraries
-- [Raylib](https://github.com/raysan5/raylib)
-- [Box2D](https://github.com/erincatto/box2d)
-- [LDtk](https://ldtk.io/)
-- [LDtkLoader](https://github.com/Madour/LDtkLoader)
+### Template
+This project was built using the [raylib-cpp-cmake-template](https://github.com/tupini07/raylib-cpp-cmake-template) as a starting point. Special thanks to tupini07 for providing this excellent template that helped jumpstart the development process.
 
 ### Wait BladeAndStone2 ?? Where is the first one?
 - [BladeAndStone](https://github.com/Tlamir/BladeAndStone) - The first version of the game had a much simpler design and far fewer features compared to this.
 
 ## License
 [MIT License](https://github.com/Tlamir/BladeAndStone2/blob/main/LICENSE)
-

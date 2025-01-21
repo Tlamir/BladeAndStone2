@@ -4,6 +4,7 @@
 #include <LDtkLoader/World.hpp>
 #include <memory>
 #include <raylib.h>
+#include <ranges>
 
 #include <Constants.hpp>
 #include <utils/DebugUtils.hpp>
@@ -31,7 +32,7 @@ GameScene::GameScene()
 	player = std::make_unique<Player>();
 	ldtkProject = std::make_unique<ldtk::Project>();
 
-	ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneMapTest.ldtk"));
+	ldtkProject->loadFromFile(AppConstants::GetAssetPath("BladeAndStoneMap2.ldtk"));
 
 	ldtkWorld = &ldtkProject->getWorld();
 
@@ -221,11 +222,12 @@ void GameScene::setSelectedLevel(int lvl)
 		}
 	}
 
-	for (auto&& layer : currentLdtkLevel->allLayers())
+	for (auto&& layer : std::ranges::reverse_view(currentLdtkLevel->allLayers()))
 	{
 		if (layer.hasTileset())
 		{
 			currentTilesetTexture = LoadTexture(AppConstants::GetAssetPath(layer.getTileset().path).c_str());
+
 			for (auto&& tile : layer.allTiles())
 			{
 				auto source_pos = tile.getTextureRect();

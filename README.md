@@ -2,6 +2,8 @@
 
 A top-down roguelike game built in C++. This project demonstrates the integration of modern C++ techniques with libraries like Raylib, Box2D, and LDtk. The main goal is to showcase the versatility of C++ in game development by creating a efficient, and extensible game engine capable of handling physics, rendering, and automated systems.
 
+![BladeAndStone2Image](https://i.imgur.com/Fh7ytZA.png)
+
 [Download Latest Release](https://github.com/Tlamir/BladeAndStone2/releases/tag/Windows)
 
 ## Features

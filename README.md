@@ -94,8 +94,8 @@ Raylib provides fast 2D graphics with a clean API, while C++ offers the performa
 
 ## Assets
 - Character sprites: [Link](https://kevins-moms-house.itch.io/dungeonsprites)
-- Weapon sprites: [Link](https://kevins-moms-house.itch.io/tundra)
-- Environment sprites: [Link](https://scracho.itch.io/bright-colored-fantasy-swords-32bit)
+- Environment sprites: [Link](https://kevins-moms-house.itch.io/tundra)
+- Weapon sprites: [Link](https://scracho.itch.io/bright-colored-fantasy-swords-32bit)
 - Thanks to the asset creators for providing the resources used in this game.
 
 ### Template

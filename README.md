@@ -5,7 +5,7 @@ A top-down roguelike game built in C++. This project demonstrates the integratio
 ![BladeAndStone2Image](https://i.imgur.com/Fh7ytZA.png)
 
 ## Platforms & Downloads
-- [Play on Itch.io](https://tlamir.itch.io/blade-and-stone-2) - Web build is work in progress or download
+- [Play on Itch.io](https://tlamir.itch.io/blade-and-stone-2) - Web assembly build or download
 - [Windows Build](https://github.com/Tlamir/BladeAndStone2/releases/tag/Windows) - Direct download from GitHub
 
 ### 📺 Gameplay Video

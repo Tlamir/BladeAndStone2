@@ -100,6 +100,7 @@ endif()
 # Set common compiler flags
 # SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wswitch")
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -Wall")
+SET(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/VitaToolchain.cmake)
 
 if (${PLATFORM} STREQUAL "Web")
     # Tell Emscripten to build an .html file.

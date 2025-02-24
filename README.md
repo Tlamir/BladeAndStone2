@@ -43,7 +43,7 @@ For building the game yourself, check the [Building](#building) section below.
 ```
 
 ## Building
-
+- On Windows i suggest building visual studio project files with cmake gui.
 ### Prerequisites
 - CMake 3.22 or higher
 - C++20 compatible compiler

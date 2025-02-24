@@ -1,5 +1,7 @@
 #include "BulletManager.hpp"
 #include "Constants.hpp"
+#include <algorithm>
+
 BulletManager::BulletManager()
 {
 	bulletSprite = LoadTexture(AppConstants::GetAssetPath("Weapons/Projectile.png").c_str());

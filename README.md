@@ -1,6 +1,6 @@
 # Blade And Stone 2
 
-A top-down roguelike game built in C++. This project demonstrates the integration of modern C++ techniques with libraries like Raylib, Box2D, and LDtk. The main goal is to showcase the versatility of C++ in game development by creating an efficient, and extensible game engine capable of handling physics, rendering, and automated systems.
+A top-down roguelike game built in C++. This project demonstrates the integration of modern C++ techniques with libraries like Raylib, Box2D, and LDtk. The main goal is to showcase the versatility of C++ in game development by creating an efficient, and extensible game capable of handling physics, rendering, and automated systems.
 
 ![BladeAndStone2Image](https://i.imgur.com/Fh7ytZA.png)
 
@@ -33,47 +33,123 @@ For building the game yourself, check the [Building](#building) section below.
 ## Project Structure
 ```
 ├── sources/
-│   ├── entities/       # Game entities
+│   ├── entities/      # Game entities
 │   ├── physics/       # Box2D integration
 │   ├── scenes/        # Scene management
 │   ├── utils/         # Utilities
 │   ├── Constants.hpp  # Game constants
 ├── assets/            # Game resources
-└── CMakeLists.txt    # Build configuration
+└── CMakeLists.txt     # Build configuration
 ```
 
 ## Building
-- On Windows i suggest building visual studio project files with cmake gui.
-### Prerequisites
+
+### Windows
+
+I recommend using **CMake GUI** to generate Visual Studio project files for a smoother build process.
+
+#### Prerequisites
+
+- CMake 3.22 or higher
+- Visual Studio (with C++ development tools installed)
+- Git
+
+#### Steps
+
+1. **Open CMake GUI**
+2. Set the **source code** path to the project folder
+3. Set the **build directory** to a new folder
+4. Click **Configure** and select the appropriate Visual Studio version
+5. Click **Generate** to create Visual Studio project files
+6. Open the generated `.sln` file in Visual Studio
+7. Build the project by selecting **Build Solution
+8. Run the executable from the `build/Debug` or `build/Release` folder
+
+#### Command Line Alternative
+
+You can also build directly using the terminal:
+
+```bash
+mkdir build && cd build
+cmake -G "Visual Studio 17 2022" ..
+cmake --build . --config Release
+```
+
+---
+
+### 🐧 On Linux
+
+#### Prerequisites
+
 - CMake 3.22 or higher
 - C++20 compatible compiler
 - Git
 
-### Debug Build
+#### Install Dependencies
+
+These libraries are required for rendering and window management:
+
+The following commands install essential system libraries needed for the game:
+
+- `libgl1-mesa-dev`: Provides OpenGL support for rendering graphics.
+- `libX11-devel`, `libXrandr-devel`, `libXinerama-devel`, `libXcursor-devel`, `libXi-devel`: These libraries handle window creation, input events, and screen resizing using the X11 windowing system, which is standard for Linux graphical applications.
+
+```bash
+sudo apt-get install libgl1-mesa-dev       # OpenGL support
+sudo dnf install libX11-devel libXrandr-devel libXinerama-devel libXcursor-devel libXi-devel  # X11 windowing system
+```
+
+#### Debug Build
+
 ```bash
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Debug ..
 cmake --build . --config Debug
 ```
 
-### Release Build
+#### Release Build
+
 ```bash
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build . --config Release
 ```
 
-### Web Build
+---
+
+### Web Build (Using Emscripten)
+
 ```bash
 cmake -DPLATFORM=Web ..
 cmake --build .
 ```
 
+---
+
 ### Build Options
+
 - Debug build: `-DCMAKE_BUILD_TYPE=Debug`
 - Release build: `-DCMAKE_BUILD_TYPE=Release`
 - Web build (requires Emscripten): `-DPLATFORM=Web`
 
+---
+
+### Running the Game (After Build)
+
+#### Asset Folder for Release Builds
+
+In release builds, make sure to move the `assets` folder into the build folder, where the executable is located.
+
+After building, navigate to the `build` directory and run:
+
+```bash
+./BladeAndStone2
+```
+
+On Windows:
+
+- Find and run the executable in `build/Debug` or `build/Release` folders.
+  
 ## Controls
 - WASD - Movement
 - Space - Start/Reset game
